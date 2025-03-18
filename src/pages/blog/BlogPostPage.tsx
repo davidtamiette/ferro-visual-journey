@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -63,7 +62,7 @@ const BlogPostPage = () => {
       }
       
       // Transform the data
-      const transformedPost = {
+      const transformedPost: Post = {
         ...data,
         author_name: data.profiles?.full_name || 'Anonymous',
         category_name: data.blog_categories?.name || 'Uncategorized'
@@ -83,30 +82,35 @@ const BlogPostPage = () => {
       if (!tagsError && tagsData) {
         const formattedTags = tagsData.map(item => item.blog_tags as Tag);
         setTags(formattedTags);
-        transformedPost.tags = formattedTags;
+        
+        // Update post with tags
+        const postWithTags = { ...transformedPost, tags: formattedTags };
+        setPost(postWithTags);
       }
       
       // Fetch related posts (same category or with the same tags)
-      const { data: relatedData, error: relatedError } = await supabase
-        .from('blog_posts')
-        .select(`
-          *,
-          profiles:author_id(full_name),
-          blog_categories:category_id(name)
-        `)
-        .eq('status', 'published')
-        .neq('id', data.id)
-        .eq('category_id', data.category_id)
-        .limit(3);
-      
-      if (!relatedError && relatedData) {
-        const transformedRelated = relatedData.map(post => ({
-          ...post,
-          author_name: post.profiles?.full_name || 'Anonymous',
-          category_name: post.blog_categories?.name || 'Uncategorized'
-        }));
+      if (transformedPost.category_id) {
+        const { data: relatedData, error: relatedError } = await supabase
+          .from('blog_posts')
+          .select(`
+            *,
+            profiles:author_id(full_name),
+            blog_categories:category_id(name)
+          `)
+          .eq('status', 'published')
+          .neq('id', data.id)
+          .eq('category_id', data.category_id)
+          .limit(3);
         
-        setRelatedPosts(transformedRelated);
+        if (!relatedError && relatedData) {
+          const transformedRelated = relatedData.map(post => ({
+            ...post,
+            author_name: post.profiles?.full_name || 'Anonymous',
+            category_name: post.blog_categories?.name || 'Uncategorized'
+          })) as Post[];
+          
+          setRelatedPosts(transformedRelated);
+        }
       }
       
       setIsLoading(false);
@@ -220,10 +224,10 @@ const BlogPostPage = () => {
             </Link>
             
             {/* Categories */}
-            {post.category_id && (
+            {post?.category_id && post?.blog_categories && (
               <div className="mb-4">
                 <Link 
-                  to={`/blog?category=${post.blog_categories?.slug}`}
+                  to={`/blog?category=${post.blog_categories.slug}`}
                   className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full hover:bg-primary/20 transition-colors"
                 >
                   {post.category_name}

@@ -72,8 +72,12 @@ const BlogIndexPage = () => {
       }
       
       // Get total count for pagination
-      const { count } = await query.count();
-      setTotalPages(Math.ceil((count || 0) / postsPerPage));
+      const countQuery = query;
+      const { count, error: countError } = await countQuery.count();
+      
+      if (!countError) {
+        setTotalPages(Math.ceil((count || 0) / postsPerPage));
+      }
       
       // Get the actual data with pagination
       const { data, error } = await query
@@ -87,7 +91,7 @@ const BlogIndexPage = () => {
           ...post,
           author_name: post.profiles?.full_name || 'Anonymous',
           category_name: post.blog_categories?.name || 'Uncategorized'
-        })) || [];
+        })) as Post[];
         
         setPosts(transformedData);
       }

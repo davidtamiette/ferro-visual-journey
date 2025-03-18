@@ -34,6 +34,9 @@ export interface Post {
   author_name?: string;
   category_name?: string;
   tags?: Tag[];
+  // Fields that might come from Supabase joins
+  profiles?: { full_name: string };
+  blog_categories?: { name: string; slug?: string };
 }
 
 export interface PostFormData {

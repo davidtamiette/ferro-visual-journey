@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -299,7 +298,6 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Comece a escrever...',
         contentEditable
         style={{ minHeight }}
         onInput={handleInput}
-        placeholder={placeholder}
         data-placeholder={placeholder}
       />
     </div>
