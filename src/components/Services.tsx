@@ -94,7 +94,11 @@ const Services = () => {
               className="h-full flex flex-col group hover:scale-[1.02] transition-all duration-300"
               glass={true}
             >
-              <div className="text-4xl mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-12">{service.icon}</div>
+              <div className="flex items-center mb-4">
+                <div className="text-4xl mr-3 transition-transform duration-300 group-hover:translate-x-2">
+                  {service.icon}
+                </div>
+              </div>
               <p className="text-toti-slate dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
               <AnimatedButton variant="outline" size="sm" className="self-start mt-auto">
                 Saiba Mais

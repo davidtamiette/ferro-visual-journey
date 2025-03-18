@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
@@ -19,11 +19,31 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 
-const DashboardSidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+interface DashboardSidebarProps {
+  onToggle?: (collapsed: boolean) => void;
+}
+
+const DashboardSidebar = ({ onToggle }: DashboardSidebarProps) => {
+  const [collapsed, setCollapsed] = useState(() => {
+    // Check if localStorage has a saved preference
+    return localStorage.getItem('sidebarCollapsed') === 'true';
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const { isAdmin } = useAuth();
+  
+  useEffect(() => {
+    // Call onToggle when collapsed changes
+    if (onToggle) {
+      onToggle(collapsed);
+    }
+  }, [collapsed, onToggle]);
+  
+  const toggleCollapsed = () => {
+    const newState = !collapsed;
+    setCollapsed(newState);
+    localStorage.setItem('sidebarCollapsed', String(newState));
+  };
   
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -125,7 +145,7 @@ const DashboardSidebar = () => {
               variant="ghost"
               size="icon"
               className="md:flex hidden"
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={toggleCollapsed}
             >
               <ArrowLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
             </Button>
