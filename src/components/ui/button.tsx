@@ -19,7 +19,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        success: "bg-toti-teal text-white hover:bg-toti-teal/90", // Added success variant
+        success: "bg-toti-teal text-white hover:bg-toti-teal/90", // Success variant
       },
       size: {
         default: "h-10 px-4 py-2",

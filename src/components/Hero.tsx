@@ -10,7 +10,9 @@ const Hero = () => {
 
   useEffect(() => {
     // Trigger animations after component mount
-    setIsLoaded(true);
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
     
     // Hide scroll indicator when user scrolls
     const handleScroll = () => {
@@ -22,7 +24,10 @@ const Hero = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -45,8 +50,8 @@ const Hero = () => {
           {/* Subtitle */}
           <span 
             className={cn(
-              "toti-subtitle mb-4 opacity-0", 
-              isLoaded && "animate-fade-in-down"
+              "toti-subtitle mb-4", 
+              isLoaded ? "animate-fade-in-down opacity-100" : "opacity-0"
             )}
             style={{ animationDelay: "200ms" }}
           >
@@ -56,8 +61,8 @@ const Hero = () => {
           {/* Main heading */}
           <h1 
             className={cn(
-              "toti-heading mb-6 opacity-0", 
-              isLoaded && "animate-fade-in"
+              "toti-heading mb-6", 
+              isLoaded ? "animate-fade-in opacity-100" : "opacity-0"
             )}
             style={{ animationDelay: "400ms" }}
           >
@@ -67,8 +72,8 @@ const Hero = () => {
           {/* Subheading */}
           <p 
             className={cn(
-              "toti-subheading mb-8 opacity-0", 
-              isLoaded && "animate-fade-in-up"
+              "toti-subheading mb-8", 
+              isLoaded ? "animate-fade-in-up opacity-100" : "opacity-0"
             )}
             style={{ animationDelay: "600ms" }}
           >
@@ -78,8 +83,8 @@ const Hero = () => {
           {/* CTA Buttons */}
           <div 
             className={cn(
-              "flex flex-col sm:flex-row gap-4 mt-2 opacity-0", 
-              isLoaded && "animate-fade-in-up"
+              "flex flex-col sm:flex-row gap-4 mt-2", 
+              isLoaded ? "animate-fade-in-up opacity-100" : "opacity-0"
             )}
             style={{ animationDelay: "800ms" }}
           >
@@ -96,8 +101,8 @@ const Hero = () => {
           scrollIndicator ? "opacity-100" : "opacity-0"
         )}
       >
-        <span className="text-xs text-toti-navy/60 dark:text-white/60 mb-2">Rolar para mais</span>
-        <ArrowDown className="text-toti-navy/60 dark:text-white/60 animate-bounce h-5 w-5" />
+        <span className="text-xs text-toti-navy/80 dark:text-white/80 mb-2">Rolar para mais</span>
+        <ArrowDown className="text-toti-navy/80 dark:text-white/80 animate-bounce h-5 w-5" />
       </div>
     </section>
   );

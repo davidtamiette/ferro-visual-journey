@@ -21,9 +21,8 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
 
   const toggleTheme = () => {
     setIsAnimating(true);
-    setTimeout(() => {
-      setTheme(theme === 'dark' ? 'light' : 'dark');
-    }, 100);
+    // Force the theme update to be synchronous
+    setTheme(theme === 'dark' ? 'light' : 'dark');
     
     // Reset animation state after animation completes
     setTimeout(() => {
@@ -43,7 +42,7 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
         "relative p-2 rounded-full transition-colors hover:bg-muted",
         className
       )}
-      aria-label="Toggle theme"
+      aria-label={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
     >
       <Sun className={cn(
         "h-4 w-4 absolute transition-all duration-500 rotate-0 scale-100",
@@ -55,7 +54,7 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
         theme === 'dark' ? "opacity-100 scale-100 rotate-0" : "opacity-0",
         isAnimating && "animate-spin"
       )} />
-      <span className="sr-only">Toggle theme</span>
+      <span className="sr-only">{theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}</span>
     </Toggle>
   );
 };
