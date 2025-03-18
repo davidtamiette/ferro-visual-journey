@@ -23,7 +23,6 @@ const ThemeToggle = ({ className }: ThemeToggleProps) => {
     setIsAnimating(true);
     // Determine current theme accounting for system preference
     const currentTheme = resolvedTheme || theme;
-    // Force the theme update to be synchronous
     setTheme(currentTheme === 'dark' ? 'light' : 'dark');
     
     // Reset animation state after animation completes
