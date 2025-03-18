@@ -110,6 +110,18 @@ export default {
 				'blur-in': {
 					'0%': { filter: 'blur(8px)', opacity: '0' },
 					'100%': { filter: 'blur(0)', opacity: '1' }
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-20px)' }
+				},
+				'pulse-slow': {
+					'0%, 100%': { opacity: '0.6' },
+					'50%': { opacity: '0.3' }
+				},
+				'rotate-slow': {
+					'0%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(360deg)' }
 				}
 			},
 			animation: {
@@ -123,7 +135,10 @@ export default {
 				'slide-in-bottom': 'slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
 				'slide-in-top': 'slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
 				'scale-in': 'scale-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
-				'blur-in': 'blur-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both'
+				'blur-in': 'blur-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
+				'float': 'float 8s ease-in-out infinite',
+				'pulse-slow': 'pulse-slow 5s ease-in-out infinite',
+				'rotate-slow': 'rotate-slow 20s linear infinite'
 			},
 			fontFamily: {
 				sans: ['SF Pro Display', 'Inter', 'system-ui', 'sans-serif'],

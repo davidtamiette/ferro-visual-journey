@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [scrollIndicator, setScrollIndicator] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     // Trigger animations after component mount
@@ -23,9 +24,20 @@ const Hero = () => {
       }
     };
 
+    // Track mouse position for parallax effect
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX / window.innerWidth - 0.5,
+        y: e.clientY / window.innerHeight - 0.5
+      });
+    };
+
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
       clearTimeout(timer);
     };
   }, []);
@@ -39,11 +51,30 @@ const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white dark:from-toti-navy/30 dark:to-black -z-10 transition-colors duration-700"></div>
       <div 
         className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-10 dark:opacity-5 -z-10 transition-opacity duration-700"
+        style={{ 
+          transform: `translate(${mousePosition.x * -20}px, ${mousePosition.y * -20}px)`
+        }}
       ></div>
       
-      {/* Abstract shape */}
+      {/* Decorative elements that respond to mouse movement */}
+      <div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-toti-teal/5 blur-3xl -z-5"
+        style={{ transform: `translate(${mousePosition.x * 40}px, ${mousePosition.y * 40}px)` }}></div>
+      <div className="absolute bottom-1/4 left-1/4 w-48 h-48 rounded-full bg-toti-navy/5 blur-3xl -z-5"
+        style={{ transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -30}px)` }}></div>
+      
+      {/* Abstract shapes */}
       <div className="absolute top-1/3 right-0 w-1/3 h-1/3 bg-toti-teal/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
       <div className="absolute bottom-0 left-1/4 w-1/4 h-1/4 bg-toti-navy/10 dark:bg-toti-teal/10 rounded-full blur-3xl -z-10"></div>
+      
+      {/* Floating metal elements */}
+      <div className="absolute top-1/3 left-[15%] w-8 h-8 rotate-12 opacity-20 dark:opacity-10">
+        <img src="/images/hero-bg.jpg" alt="" className="w-full h-full object-cover rounded-lg" 
+          style={{ transform: `rotate(${mousePosition.y * 20}deg) translate(${mousePosition.x * -15}px, ${mousePosition.y * -15}px)` }} />
+      </div>
+      <div className="absolute bottom-1/4 right-[20%] w-10 h-10 -rotate-12 opacity-20 dark:opacity-10">
+        <img src="/images/hero-bg.jpg" alt="" className="w-full h-full object-cover rounded-lg" 
+          style={{ transform: `rotate(${mousePosition.y * -20}deg) translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px)` }} />
+      </div>
       
       <div className="container mx-auto">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
@@ -66,7 +97,10 @@ const Hero = () => {
             )}
             style={{ animationDelay: "400ms" }}
           >
-            Transformando Metais em <span className="text-toti-teal">Novas Oportunidades</span>
+            Transformando Metais em <span className="text-toti-teal relative inline-block">
+              Novas Oportunidades
+              <span className="absolute -bottom-1 left-0 w-full h-1 bg-toti-teal/30 rounded-full transform"></span>
+            </span>
           </h1>
           
           {/* Subheading */}

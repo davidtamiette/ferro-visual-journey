@@ -11,7 +11,7 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
     setMounted(true);
   }, []);
 
-  // Only render children once mounted to avoid hydration mismatch
+  // Always render the provider to avoid context issues, but conditionally render children
   return (
     <NextThemesProvider 
       {...props}
@@ -22,7 +22,10 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
       storageKey="toti-theme"
       disableTransitionOnChange={false}
     >
-      {mounted ? children : null}
+      {mounted ? children : 
+        // Render a placeholder with the same structure during SSR/hydration
+        <div className="min-h-screen bg-background">{children}</div>
+      }
     </NextThemesProvider>
   );
 }

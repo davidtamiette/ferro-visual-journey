@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -8,8 +8,19 @@ import Contact from '@/components/Contact';
 import RecentBlogPosts from '@/components/RecentBlogPosts';
 import Footer from '@/components/Footer';
 import { Helmet } from 'react-helmet';
+import { cn } from '@/lib/utils';
 
 const Index = () => {
+  const [activeSection, setActiveSection] = useState('home');
+  const [scrollY, setScrollY] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  // Fade in animation on page load
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Smooth scrolling for anchor links
   useEffect(() => {
     const handleAnchorClick = (e: MouseEvent) => {
@@ -33,8 +44,41 @@ const Index = () => {
     return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
+  // Track scroll position and active section
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+      
+      // Determine which section is currently in view
+      const sections = ['home', 'about', 'services', 'blog', 'contact'];
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          // Section is considered "active" when its top is near the viewport top
+          if (rect.top <= 100 && rect.bottom >= 100) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Call once to set initial state
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Parallax effect values
+  const parallaxOffset = scrollY * 0.15;
+  
   return (
-    <div className="flex flex-col min-h-screen overflow-hidden">
+    <div className={cn(
+      "flex flex-col min-h-screen overflow-hidden transition-opacity duration-1000",
+      loaded ? "opacity-100" : "opacity-0"
+    )}>
       <Helmet>
         <title>Ferro Velho Toti - Especialistas em Reciclagem de Metais em Betim</title>
         <meta name="description" content="A Ferro Velho Toti é especialista em compra de sucatas metálicas, oferecendo serviços de coleta, transporte e gestão de resíduos com compromisso ambiental em Betim, MG." />
@@ -72,7 +116,32 @@ const Index = () => {
         </script>
       </Helmet>
       
-      <Navbar />
+      {/* Animated background elements */}
+      <div className="fixed inset-0 pointer-events-none -z-10">
+        {/* Floating particles */}
+        <div className="absolute w-4 h-4 bg-toti-teal/20 rounded-full top-1/4 left-1/4 animate-float" style={{ animationDelay: '0s' }}></div>
+        <div className="absolute w-6 h-6 bg-toti-navy/10 rounded-full top-1/3 right-1/4 animate-float" style={{ animationDelay: '1.5s' }}></div>
+        <div className="absolute w-3 h-3 bg-toti-teal/15 rounded-full bottom-1/4 right-1/3 animate-float" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute w-5 h-5 bg-toti-navy/10 rounded-full bottom-1/3 left-1/3 animate-float" style={{ animationDelay: '4.5s' }}></div>
+        
+        {/* Parallax gradient blobs */}
+        <div 
+          className="absolute w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-toti-teal/10 to-transparent blur-3xl"
+          style={{ 
+            top: `calc(20% + ${parallaxOffset * 0.3}px)`, 
+            right: `calc(10% + ${parallaxOffset * -0.2}px)` 
+          }}
+        ></div>
+        <div 
+          className="absolute w-[35vw] h-[35vw] rounded-full bg-gradient-to-tl from-toti-navy/10 to-transparent blur-3xl"
+          style={{ 
+            bottom: `calc(15% + ${parallaxOffset * -0.4}px)`, 
+            left: `calc(5% + ${parallaxOffset * 0.1}px)` 
+          }}
+        ></div>
+      </div>
+      
+      <Navbar activeSection={activeSection} />
       <main>
         <Hero />
         <About />

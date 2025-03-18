@@ -41,11 +41,15 @@ const About = () => {
             <div 
               ref={ref as React.RefObject<HTMLDivElement>}
               className={cn(
-                "opacity-0",
-                isVisible && "animate-fade-in-right"
+                "transition-opacity duration-700",
+                isVisible || true ? "opacity-100" : "opacity-0" // Always show content
               )}
             >
-              <span className="toti-subtitle mb-4">Sobre Nós</span>
+              <span className="toti-subtitle mb-4 inline-block relative">
+                Sobre Nós
+                <span className="absolute bottom-0 left-0 h-0.5 bg-toti-teal/30 w-full transform origin-left transition-transform duration-700 scale-x-0" 
+                  style={{ transform: isVisible ? 'scaleX(1)' : 'scaleX(0)' }}></span>
+              </span>
               <h2 className="toti-heading mb-6">Expertise e <span className="text-toti-teal">Compromisso</span></h2>
               <p className="toti-subheading mb-8">
                 Desde 2001, o Ferro Velho Toti tem sido referência na compra e venda de sucatas metálicas, 
@@ -69,8 +73,8 @@ const About = () => {
           <div 
             ref={ref2 as React.RefObject<HTMLDivElement>}
             className={cn(
-              "lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-6 opacity-0",
-              isVisible2 && "animate-fade-in-left"
+              "lg:w-1/2 grid grid-cols-1 md:grid-cols-2 gap-6 transition-opacity duration-700",
+              isVisible2 || true ? "opacity-100" : "opacity-0" // Always show content
             )}
           >
             {valueProps.map((prop, index) => (
