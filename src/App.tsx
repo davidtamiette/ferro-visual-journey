@@ -71,6 +71,12 @@ function App() {
               } />
               
               {/* Blog Management Routes */}
+              {/* Add missing "/dashboard/blog" route */}
+              <Route path="blog" element={
+                <ProtectedRoute adminOnly>
+                  <BlogPostsPage />
+                </ProtectedRoute>
+              } />
               <Route path="blog/posts" element={
                 <ProtectedRoute adminOnly>
                   <BlogPostsPage />
