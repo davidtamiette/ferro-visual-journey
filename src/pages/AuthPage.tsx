@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -9,10 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import AnimatedButton from '@/components/ui/AnimatedButton';
+import { useAuth } from '@/contexts/AuthContext';
 
 const AuthPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -20,28 +21,10 @@ const AuthPage = () => {
   
   // Check if user is already logged in
   useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        navigate('/dashboard');
-      }
-    };
-    
-    checkSession();
-    
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          navigate('/dashboard');
-        }
-      }
-    );
-    
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate]);
+    if (user && !isLoading) {
+      navigate('/dashboard');
+    }
+  }, [user, isLoading, navigate]);
   
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,13 +42,14 @@ const AuthPage = () => {
         title: "Login realizado com sucesso!",
         description: "Você está sendo redirecionado para o dashboard.",
       });
+      
+      // Navigation will happen automatically via the useEffect above
     } catch (error: any) {
       toast({
         title: "Erro ao fazer login",
         description: error.message || "Verifique suas credenciais e tente novamente.",
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };
@@ -101,16 +85,24 @@ const AuthPage = () => {
         title: "Cadastro realizado com sucesso!",
         description: "Por favor, verifique seu email para confirmar o cadastro.",
       });
+      setLoading(false);
     } catch (error: any) {
       toast({
         title: "Erro no cadastro",
         description: error.message || "Ocorreu um erro ao criar sua conta.",
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };
+  
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-toti-teal"></div>
+      </div>
+    );
+  }
   
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -235,3 +227,4 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+
