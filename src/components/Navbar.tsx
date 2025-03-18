@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -74,22 +75,28 @@ const Navbar = () => {
               Home
             </Link>
             <Link
-              to="/sobre"
+              to="/about"
               className="text-sm font-medium transition-colors hover:text-toti-teal"
             >
               Sobre
             </Link>
             <Link
-              to="/servicos"
+              to="/services"
               className="text-sm font-medium transition-colors hover:text-toti-teal"
             >
               Serviços
             </Link>
             <Link
-              to="/contato"
+              to="/contact"
               className="text-sm font-medium transition-colors hover:text-toti-teal"
             >
               Contato
+            </Link>
+            <Link
+              to="/blog"
+              className="text-sm font-medium transition-colors hover:text-toti-teal"
+            >
+              Blog
             </Link>
             
             {user ? (
@@ -155,25 +162,32 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            to="/sobre"
+            to="/about"
             className="block py-2 text-sm font-medium"
             onClick={closeMenu}
           >
             Sobre
           </Link>
           <Link
-            to="/servicos"
+            to="/services"
             className="block py-2 text-sm font-medium"
             onClick={closeMenu}
           >
             Serviços
           </Link>
           <Link
-            to="/contato"
+            to="/contact"
             className="block py-2 text-sm font-medium"
             onClick={closeMenu}
           >
             Contato
+          </Link>
+          <Link
+            to="/blog"
+            className="block py-2 text-sm font-medium"
+            onClick={closeMenu}
+          >
+            Blog
           </Link>
           {!user && (
             <Link
