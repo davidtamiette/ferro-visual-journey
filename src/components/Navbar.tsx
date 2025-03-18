@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ui/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -47,13 +49,18 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-
-  const handleDashboardClick = () => {
-    console.log("Dashboard link clicked");
-    window.location.href = '/dashboard';
-    closeMenu();
+  
+  const handleDashboardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/dashboard');
   };
-
+  
+  const handleSignOut = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await signOut();
+    navigate('/');
+  };
+  
   return (
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
@@ -131,7 +138,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
                     Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut()}>
+                  <DropdownMenuItem onClick={handleSignOut}>
                     Sair
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -231,16 +238,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
           {user && (
             <button
               className="block w-full text-left py-2 text-sm font-medium"
-              onClick={handleDashboardClick}
-            >
-              Dashboard
-            </button>
-          )}
-          {user && (
-            <button
-              className="block w-full text-left py-2 text-sm font-medium"
-              onClick={() => {
-                signOut();
+              onClick={(e) => {
+                handleSignOut(e);
                 closeMenu();
               }}
             >

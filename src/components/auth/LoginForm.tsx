@@ -21,28 +21,28 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
     setLoading(true);
     
     try {
-      console.log("Attempting login with email:", email);
-      const { error, data } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) throw error;
       
-      console.log("Login successful, user:", data.user?.id);
       toast({
         title: "Login realizado com sucesso!",
         description: "Você está sendo redirecionado para o dashboard.",
       });
       
+      // Call success callback after successful login
       onLoginSuccess();
     } catch (error: any) {
-      console.error("Login error:", error.message);
+      console.error("Login error:", error);
       toast({
         title: "Erro ao fazer login",
         description: error.message || "Verifique suas credenciais e tente novamente.",
         variant: "destructive",
       });
+    } finally {
       setLoading(false);
     }
   };
