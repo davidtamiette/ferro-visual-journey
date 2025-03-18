@@ -3,8 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { SiteConfigurationProvider } from './components/SiteConfigurationProvider';
-import { SidebarProvider } from './components/SidebarProvider';
 
 // Main pages
 import Index from '@/pages/Index';
@@ -36,125 +34,75 @@ import BlogTagsPage from '@/pages/dashboard/blog/BlogTagsPage';
 function App() {
   return (
     <BrowserRouter>
-      <ThemeProvider defaultTheme="light" storageKey="ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="toti-theme">
         <AuthProvider>
-          <SiteConfigurationProvider>
-            <SidebarProvider>
-              <Toaster />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/blog" element={<BlogIndexPage />} />
-                <Route path="/blog/:slug" element={<BlogPostPage />} />
-                <Route path="/auth" element={<AuthPage />} />
-                
-                {/* Dashboard Routes */}
-                <Route
-                  path="/dashboard"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardLayout>
-                        <DashboardPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/settings"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardLayout>
-                        <SettingsPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/analytics"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardLayout>
-                        <AnalyticsPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/appearance"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <AppearancePage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/content"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <ContentPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/blog/posts"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <BlogPostsPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/blog/posts/new"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <BlogPostForm />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/blog/posts/edit/:postId"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <BlogPostForm />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/blog/categories"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <BlogCategoriesPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/blog/tags"
-                  element={
-                    <ProtectedRoute adminOnly>
-                      <DashboardLayout>
-                        <BlogTagsPage />
-                      </DashboardLayout>
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </SidebarProvider>
-          </SiteConfigurationProvider>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            
+            {/* Blog Routes */}
+            <Route path="/blog" element={<BlogIndexPage />} />
+            <Route path="/blog/:slug" element={<BlogPostPage />} />
+            
+            {/* Dashboard Routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }>
+              <Route index element={<DashboardPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              <Route path="analytics" element={<AnalyticsPage />} />
+              
+              {/* Admin Only Routes */}
+              <Route path="appearance" element={
+                <ProtectedRoute adminOnly>
+                  <AppearancePage />
+                </ProtectedRoute>
+              } />
+              <Route path="content" element={
+                <ProtectedRoute adminOnly>
+                  <ContentPage />
+                </ProtectedRoute>
+              } />
+              
+              {/* Blog Management Routes */}
+              <Route path="blog/posts" element={
+                <ProtectedRoute adminOnly>
+                  <BlogPostsPage />
+                </ProtectedRoute>
+              } />
+              <Route path="blog/posts/new" element={
+                <ProtectedRoute adminOnly>
+                  <BlogPostForm />
+                </ProtectedRoute>
+              } />
+              <Route path="blog/posts/edit/:postId" element={
+                <ProtectedRoute adminOnly>
+                  <BlogPostForm />
+                </ProtectedRoute>
+              } />
+              <Route path="blog/categories" element={
+                <ProtectedRoute adminOnly>
+                  <BlogCategoriesPage />
+                </ProtectedRoute>
+              } />
+              <Route path="blog/tags" element={
+                <ProtectedRoute adminOnly>
+                  <BlogTagsPage />
+                </ProtectedRoute>
+              } />
+            </Route>
+            
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          
+          <Toaster />
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

@@ -33,16 +33,13 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
         description: "Você está sendo redirecionado para o dashboard.",
       });
       
-      // Call success callback after successful login
       onLoginSuccess();
     } catch (error: any) {
-      console.error("Login error:", error);
       toast({
         title: "Erro ao fazer login",
         description: error.message || "Verifique suas credenciais e tente novamente.",
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };

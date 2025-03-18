@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import ThemeToggle from './ui/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -25,7 +24,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   
   const { user, profile, signOut } = useAuth();
-  const navigate = useNavigate();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -48,17 +46,6 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
 
   const closeMenu = () => {
     setIsMenuOpen(false);
-  };
-  
-  const handleDashboardClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate('/dashboard');
-  };
-  
-  const handleSignOut = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    await signOut();
-    navigate('/');
   };
   
   return (
@@ -134,11 +121,11 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleDashboardClick}>
+                  <DropdownMenuItem onClick={() => window.location.href = '/dashboard'}>
                     Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
+                  <DropdownMenuItem onClick={() => signOut()}>
                     Sair
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -156,12 +143,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
 
           <div className="flex md:hidden items-center space-x-2">
             {user && (
-              <Button 
-                variant="ghost" 
-                className="relative h-8 w-8 rounded-full mr-1" 
-                size="icon"
-                onClick={handleDashboardClick}
-              >
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full mr-1" size="icon"
+                onClick={() => window.location.href = '/dashboard'}>
                 <User className="h-5 w-5" />
               </Button>
             )}
@@ -238,8 +221,8 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
           {user && (
             <button
               className="block w-full text-left py-2 text-sm font-medium"
-              onClick={(e) => {
-                handleSignOut(e);
+              onClick={() => {
+                signOut();
                 closeMenu();
               }}
             >

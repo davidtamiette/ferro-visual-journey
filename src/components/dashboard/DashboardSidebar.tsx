@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SidebarProvider, useSidebar } from '@/contexts/SidebarContext';
+import { SidebarProvider } from '@/contexts/SidebarContext';
 import SidebarHeader from './SidebarHeader';
 import SidebarNavItems from './SidebarNavItems';
 import SidebarFooter from './SidebarFooter';

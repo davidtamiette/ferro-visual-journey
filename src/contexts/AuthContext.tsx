@@ -97,7 +97,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(true);
     try {
       await supabase.auth.signOut();
-      // Clear all auth state to prevent stale data
       setProfile(null);
       setUser(null);
       setSession(null);

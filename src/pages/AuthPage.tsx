@@ -14,13 +14,12 @@ const AuthPage = () => {
   useEffect(() => {
     if (user && !isLoading) {
       console.log("User is authenticated, redirecting to dashboard");
-      navigate('/dashboard', { replace: true });
+      navigate('/dashboard');
     }
   }, [user, isLoading, navigate]);
   
   const handleAuthSuccess = () => {
     // Navigation will happen automatically via the useEffect above
-    console.log("Auth success callback called");
   };
   
   if (isLoading) {
