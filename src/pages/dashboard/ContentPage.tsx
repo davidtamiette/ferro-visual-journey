@@ -204,7 +204,7 @@ const ContentPage = () => {
               <div className="pt-4">
                 <p className="text-sm font-medium mb-2">Serviços Individuais</p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Para adicionar, editar ou remover serviços específicos, use a seção "Gerenciamento de Serviços" 
+                  Para adicionar, editar ou remover serviços específicos, use a seção &quot;Gerenciamento de Serviços&quot; 
                   (Esta funcionalidade seria implementada em uma fase posterior).
                 </p>
               </div>
@@ -245,7 +245,7 @@ const ContentPage = () => {
               <div className="pt-4">
                 <p className="text-sm font-medium">Informações de Contato</p>
                 <p className="text-sm text-muted-foreground mt-1 mb-2">
-                  As informações de contato como telefone, email e endereço podem ser editadas na seção "Aparência" > "Informações".
+                  As informações de contato como telefone, email e endereço podem ser editadas na seção &quot;Aparência&quot; &gt; &quot;Informações&quot;.
                 </p>
               </div>
             </CardContent>
