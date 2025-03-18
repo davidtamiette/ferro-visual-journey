@@ -1,27 +1,29 @@
-
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import AnimatedButton from './ui/AnimatedButton';
 import ThemeToggle from './ui/ThemeToggle';
-import { cn } from '@/lib/utils';
-import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+
+import { useAuth } from '@/contexts/AuthContext'; 
+import { User } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
   
-  const links = [
-    { name: 'Home', href: '/' },
-    { name: 'Sobre', href: '/sobre' },
-    { name: 'Serviços', href: '/servicos' },
-    { name: 'Contato', href: '/contato' },
-  ];
-
-  // Track scrolling for navbar appearance
+  const { user, profile, signOut } = useAuth();
+  
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 10) {
+      if (window.scrollY > 50) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -29,98 +31,172 @@ const Navbar = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
-  const isActive = (path: string) => {
-    if (path === '/' && location.pathname === '/') return true;
-    if (path !== '/' && location.pathname.startsWith(path)) return true;
-    return false;
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+  
   return (
     <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-out-expo',
-        isScrolled 
-          ? 'py-3 bg-white/80 dark:bg-toti-navy/80 backdrop-blur-md shadow-subtle' 
-          : 'py-6 bg-transparent'
-      )}
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        isScrolled
+          ? 'bg-white/80 dark:bg-toti-navy/80 backdrop-blur-md shadow-subtle'
+          : ''
+      }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <span className="text-xl font-bold text-toti-navy dark:text-white">Ferro Velho <span className="text-toti-teal">Toti</span></span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          {links.map((link) => (
-            <Link
-              key={link.name}
-              to={link.href}
-              className={cn(
-                "text-sm font-medium hover:text-toti-navy dark:hover:text-white transition-colors relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-toti-teal after:transition-all after:duration-300",
-                isActive(link.href) 
-                  ? "text-toti-navy dark:text-white after:w-full" 
-                  : "text-toti-navy/80 dark:text-white/80"
-              )}
-            >
-              {link.name}
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center space-x-2">
+              <img
+                src="/placeholder.svg"
+                alt="Ferro Velho Toti"
+                className="h-8 w-8"
+              />
+              <span className="text-lg font-semibold">Ferro Velho Toti</span>
             </Link>
-          ))}
-          
-          <ThemeToggle className="mr-2" />
-          
-          <Link to="/contato">
-            <AnimatedButton size="sm" glass>Solicitar Orçamento</AnimatedButton>
-          </Link>
-        </nav>
+          </div>
 
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center space-x-4">
-          <ThemeToggle />
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link
+              to="/"
+              className="text-sm font-medium transition-colors hover:text-toti-teal"
+            >
+              Home
+            </Link>
+            <Link
+              to="/sobre"
+              className="text-sm font-medium transition-colors hover:text-toti-teal"
+            >
+              Sobre
+            </Link>
+            <Link
+              to="/servicos"
+              className="text-sm font-medium transition-colors hover:text-toti-teal"
+            >
+              Serviços
+            </Link>
+            <Link
+              to="/contato"
+              className="text-sm font-medium transition-colors hover:text-toti-teal"
+            >
+              Contato
+            </Link>
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full" size="icon">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => window.location.href = '/dashboard'}>
+                    Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Sair
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button asChild>
+                <Link to="/auth">
+                  Acessar
+                </Link>
+              </Button>
+            )}
+            
+            <ThemeToggle />
+          </nav>
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden items-center space-x-2">
+            {user && (
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full mr-1" size="icon"
+                onClick={() => window.location.href = '/dashboard'}>
+                <User className="h-5 w-5" />
+              </Button>
+            )}
           
-          <button
-            className="text-toti-navy dark:text-white"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <ThemeToggle />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleMenu}
+              className="h-8 w-8"
+            >
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
-      <div
-        className={cn(
-          'fixed inset-0 bg-white/90 dark:bg-toti-navy/95 backdrop-blur-lg z-40 flex flex-col pt-24 px-6 transition-transform duration-500 ease-out-expo md:hidden',
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        )}
-      >
-        <nav className="flex flex-col space-y-6">
-          {links.map((link) => (
-            <Link
-              key={link.name}
-              to={link.href}
-              className={cn(
-                "text-xl font-medium py-2 border-b border-toti-navy/10 dark:border-white/10",
-                isActive(link.href)
-                  ? "text-toti-navy dark:text-white" 
-                  : "text-toti-navy/90 dark:text-white/90 hover:text-toti-navy dark:hover:text-white"
-              )}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <Link to="/contato" onClick={() => setIsMenuOpen(false)}>
-            <AnimatedButton className="mt-4" glass>
-              Solicitar Orçamento
-            </AnimatedButton>
+      {/* Mobile Menu */}
+      {isMenuOpen && (
+        <div className="md:hidden px-4 py-3 space-y-2 bg-white dark:bg-toti-navy shadow-md">
+          <Link
+            to="/"
+            className="block py-2 text-sm font-medium"
+            onClick={closeMenu}
+          >
+            Home
           </Link>
-        </nav>
-      </div>
+          <Link
+            to="/sobre"
+            className="block py-2 text-sm font-medium"
+            onClick={closeMenu}
+          >
+            Sobre
+          </Link>
+          <Link
+            to="/servicos"
+            className="block py-2 text-sm font-medium"
+            onClick={closeMenu}
+          >
+            Serviços
+          </Link>
+          <Link
+            to="/contato"
+            className="block py-2 text-sm font-medium"
+            onClick={closeMenu}
+          >
+            Contato
+          </Link>
+          {!user && (
+            <Link
+              to="/auth"
+              className="block py-2 text-sm font-medium"
+              onClick={closeMenu}
+            >
+              Acessar
+            </Link>
+          )}
+          {user && (
+            <button
+              className="block w-full text-left py-2 text-sm font-medium"
+              onClick={() => {
+                signOut();
+                closeMenu();
+              }}
+            >
+              Sair
+            </button>
+          )}
+        </div>
+      )}
     </header>
   );
 };

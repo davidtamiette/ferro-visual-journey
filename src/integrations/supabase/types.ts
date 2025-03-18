@@ -9,13 +9,122 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      analytics: {
+        Row: {
+          avg_session_duration: number | null
+          bounce_rate: number | null
+          created_at: string | null
+          date: string
+          id: string
+          page_views: number | null
+          source: string | null
+          unique_visitors: number | null
+        }
+        Insert: {
+          avg_session_duration?: number | null
+          bounce_rate?: number | null
+          created_at?: string | null
+          date: string
+          id?: string
+          page_views?: number | null
+          source?: string | null
+          unique_visitors?: number | null
+        }
+        Update: {
+          avg_session_duration?: number | null
+          bounce_rate?: number | null
+          created_at?: string | null
+          date?: string
+          id?: string
+          page_views?: number | null
+          source?: string | null
+          unique_visitors?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          role: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          role?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          address: string | null
+          company_description: string | null
+          company_name: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string | null
+          id: string
+          logo_url: string | null
+          primary_color: string | null
+          secondary_color: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address?: string | null
+          company_description?: string | null
+          company_name?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string | null
+          company_description?: string | null
+          company_name?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
