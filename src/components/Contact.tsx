@@ -18,7 +18,7 @@ const Contact = () => {
     {
       icon: <Phone className="h-5 w-5 text-toti-teal" />,
       title: 'Telefone',
-      details: '(11) 4035-1413',
+      details: '(31) 99946-0492',
     },
     {
       icon: <Mail className="h-5 w-5 text-toti-teal" />,
@@ -28,7 +28,7 @@ const Contact = () => {
     {
       icon: <MapPin className="h-5 w-5 text-toti-teal" />,
       title: 'Endereço',
-      details: 'Rua Antônio Blasques Romeiro, 120 - Socorro, São Paulo',
+      details: 'R. do Rosário, 1165 - Angola, Betim - MG',
     },
   ];
 
@@ -170,11 +170,11 @@ const Contact = () => {
                 <div className="space-y-2">
                   <p className="flex justify-between">
                     <span>Segunda - Sexta:</span>
-                    <span>8:00 - 18:00</span>
+                    <span>08:00 - 17:00</span>
                   </p>
                   <p className="flex justify-between">
                     <span>Sábados:</span>
-                    <span>8:00 - 12:00</span>
+                    <span>Fechado</span>
                   </p>
                   <p className="flex justify-between">
                     <span>Domingos e Feriados:</span>

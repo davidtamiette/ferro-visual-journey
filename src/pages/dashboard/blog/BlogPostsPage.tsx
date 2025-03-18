@@ -1,206 +1,178 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/integrations/supabase/client';
-import { Post } from '@/types/blog';
-import { 
-  PlusCircle, 
-  Pencil, 
-  Trash2, 
-  Eye, 
-  Search,
-  ChevronDown,
-  Filter,
-  Check,
-  XCircle,
-  CircleCheck
-} from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { PlusCircle, Search, MoreHorizontal, Pencil, Trash, Eye } from 'lucide-react';
+import { Post } from '@/types/blog';
 
 const BlogPostsPage = () => {
-  const { user } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string | null>(null);
-  const [postToDelete, setPostToDelete] = useState<Post | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [postToDelete, setPostToDelete] = useState<string | null>(null);
+  const [totalPosts, setTotalPosts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const postsPerPage = 10;
-  
-  useEffect(() => {
-    fetchPosts();
-  }, [searchQuery, filterStatus, currentPage]);
   
   const fetchPosts = async () => {
     setIsLoading(true);
-    
     try {
-      // Calculate offset for pagination
-      const offset = (currentPage - 1) * postsPerPage;
+      // Fetch count separately
+      const { count: totalCount, error: countError } = await supabase
+        .from('blog_posts')
+        .select('*', { count: 'exact', head: true });
       
-      // Start building the query
+      if (countError) throw countError;
+      setTotalPosts(totalCount || 0);
+      
+      // Fetch the posts with pagination
+      const from = (currentPage - 1) * postsPerPage;
+      const to = from + postsPerPage - 1;
+      
       let query = supabase
         .from('blog_posts')
         .select(`
           *,
           profiles:author_id(full_name),
-          blog_categories:category_id(name)
+          blog_categories:category_id(name, slug)
         `)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .range(from, to);
       
       // Apply search filter if provided
       if (searchQuery) {
-        query = query.ilike('title', `%${searchQuery}%`);
+        query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
       }
       
-      // Apply status filter if provided
-      if (filterStatus) {
-        query = query.eq('status', filterStatus);
-      }
-      
-      // Get total count for pagination
-      const countQuery = query;
-      const { count, error: countError } = await countQuery.count();
-      
-      if (!countError) {
-        setTotalPages(Math.ceil((count || 0) / postsPerPage));
-      }
-      
-      // Get the actual data with pagination
-      const { data, error } = await query
-        .range(offset, offset + postsPerPage - 1);
+      const { data, error } = await query;
       
       if (error) throw error;
       
-      // Transform the data to include author_name and category_name
-      const transformedData = data?.map(post => ({
+      // Format the posts data
+      const formattedPosts = data.map(post => ({
         ...post,
-        author_name: post.profiles?.full_name || 'Anonymous',
-        category_name: post.blog_categories?.name || 'Uncategorized'
+        author_name: post.profiles?.full_name || 'Autor Desconhecido',
+        category_name: post.blog_categories?.name || 'Sem Categoria',
+        status: post.status as 'draft' | 'published' | 'archived',
       })) as Post[];
       
-      setPosts(transformedData);
+      setPosts(formattedPosts);
     } catch (error) {
       console.error('Error fetching posts:', error);
       toast({
+        variant: "destructive",
         title: "Erro ao carregar posts",
-        description: "Ocorreu um erro ao carregar os posts do blog.",
-        variant: "destructive"
+        description: "Não foi possível carregar a lista de posts.",
       });
     } finally {
       setIsLoading(false);
     }
   };
   
-  const handleDeletePost = async () => {
+  useEffect(() => {
+    fetchPosts();
+  }, [currentPage, searchQuery]);
+  
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+  
+  const handleDeleteClick = (postId: string) => {
+    setPostToDelete(postId);
+    setDeleteDialogOpen(true);
+  };
+  
+  const handleDeleteConfirm = async () => {
     if (!postToDelete) return;
     
     try {
-      // Delete the post
       const { error } = await supabase
         .from('blog_posts')
         .delete()
-        .eq('id', postToDelete.id);
+        .eq('id', postToDelete);
       
       if (error) throw error;
       
-      toast({
-        title: "Post excluído com sucesso",
-        description: "O post foi excluído permanentemente."
-      });
+      // Remove the post from the state
+      setPosts(prev => prev.filter(post => post.id !== postToDelete));
       
-      // Refresh the posts list
-      fetchPosts();
+      toast({
+        title: "Post excluído",
+        description: "O post foi excluído com sucesso.",
+      });
     } catch (error) {
       console.error('Error deleting post:', error);
       toast({
+        variant: "destructive",
         title: "Erro ao excluir post",
-        description: "Ocorreu um erro ao excluir o post.",
-        variant: "destructive"
+        description: "Não foi possível excluir o post. Tente novamente.",
       });
     } finally {
       setPostToDelete(null);
+      setDeleteDialogOpen(false);
     }
   };
   
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '-';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    return format(new Date(dateString), 'dd/MM/yyyy', { locale: ptBR });
   };
   
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'published':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
-            <CircleCheck className="w-3 h-3 mr-1" />
-            Publicado
-          </span>
-        );
-      case 'draft':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100">
-            <Pencil className="w-3 h-3 mr-1" />
-            Rascunho
-          </span>
-        );
-      case 'archived':
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-            <XCircle className="w-3 h-3 mr-1" />
-            Arquivado
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            {status}
-          </span>
-        );
-    }
+  const getStatusBadge = (status: 'draft' | 'published' | 'archived') => {
+    const statusConfig = {
+      draft: {
+        label: 'Rascunho',
+        variant: 'outline' as const
+      },
+      published: {
+        label: 'Publicado',
+        variant: 'success' as const
+      },
+      archived: {
+        label: 'Arquivado',
+        variant: 'secondary' as const
+      }
+    };
+    
+    return (
+      <Badge variant={statusConfig[status].variant}>
+        {statusConfig[status].label}
+      </Badge>
+    );
   };
   
   return (
@@ -209,7 +181,7 @@ const BlogPostsPage = () => {
         <title>Gerenciar Posts | Dashboard | Ferro Velho Toti</title>
       </Helmet>
       
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Gerenciar Posts</h1>
           <p className="text-muted-foreground">
@@ -218,206 +190,156 @@ const BlogPostsPage = () => {
         </div>
         
         <Button onClick={() => navigate('/dashboard/blog/posts/new')}>
-          <PlusCircle className="mr-2 h-4 w-4" /> Novo Post
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Novo Post
         </Button>
       </div>
       
-      {/* Search and filters */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+      <div className="flex items-center py-4">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Buscar posts..."
-            className="pl-9"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8"
           />
         </div>
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="w-full sm:w-auto">
-              <Filter className="mr-2 h-4 w-4" />
-              {filterStatus ? (
-                filterStatus === 'published' ? 'Publicados' : 
-                filterStatus === 'draft' ? 'Rascunhos' : 
-                filterStatus === 'archived' ? 'Arquivados' : 'Filtrar'
-              ) : 'Filtrar'}
-              <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-[200px]">
-            <DropdownMenuItem onClick={() => setFilterStatus(null)}>
-              {!filterStatus && <Check className="mr-2 h-4 w-4" />}
-              <span className={!filterStatus ? "font-medium" : ""}>Todos os Posts</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setFilterStatus('published')}>
-              {filterStatus === 'published' && <Check className="mr-2 h-4 w-4" />}
-              <span className={filterStatus === 'published' ? "font-medium" : ""}>Publicados</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilterStatus('draft')}>
-              {filterStatus === 'draft' && <Check className="mr-2 h-4 w-4" />}
-              <span className={filterStatus === 'draft' ? "font-medium" : ""}>Rascunhos</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setFilterStatus('archived')}>
-              {filterStatus === 'archived' && <Check className="mr-2 h-4 w-4" />}
-              <span className={filterStatus === 'archived' ? "font-medium" : ""}>Arquivados</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       
-      {/* Posts table */}
-      <div className="border rounded-md">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[300px]">Título</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Título</TableHead>
               <TableHead>Categoria</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Data</TableHead>
               <TableHead>Autor</TableHead>
-              <TableHead className="hidden md:table-cell">Data de Criação</TableHead>
-              <TableHead>Ações</TableHead>
+              <TableHead className="w-[80px]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              Array.from({ length: 5 }).map((_, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <div className="h-4 bg-muted rounded animate-pulse w-3/4"></div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="h-4 bg-muted rounded animate-pulse w-1/3"></div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <div className="h-4 bg-muted rounded animate-pulse w-1/2"></div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="h-4 bg-muted rounded animate-pulse w-2/3"></div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : posts.length > 0 ? (
-              posts.map((post) => (
-                <TableRow key={post.id}>
-                  <TableCell className="font-medium">{post.title}</TableCell>
-                  <TableCell>{getStatusBadge(post.status)}</TableCell>
-                  <TableCell>{post.category_name}</TableCell>
-                  <TableCell>{post.author_name}</TableCell>
-                  <TableCell className="hidden md:table-cell">{formatDate(post.created_at)}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => navigate(`/blog/${post.slug}`)}
-                        title="Visualizar"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => navigate(`/dashboard/blog/posts/edit/${post.id}`)}
-                        title="Editar"
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setPostToDelete(post)}
-                        title="Excluir"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  Nenhum post encontrado.
+                <TableCell colSpan={6} className="text-center py-8">
+                  <div className="flex justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-toti-teal"></div>
+                  </div>
+                  <p className="mt-2 text-sm text-muted-foreground">Carregando posts...</p>
                 </TableCell>
               </TableRow>
+            ) : posts.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-8">
+                  <p className="text-muted-foreground">Nenhum post encontrado</p>
+                  <Button 
+                    variant="link" 
+                    onClick={() => navigate('/dashboard/blog/posts/new')}
+                    className="mt-2"
+                  >
+                    Criar seu primeiro post
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ) : (
+              posts.map((post) => (
+                <TableRow key={post.id}>
+                  <TableCell className="font-medium max-w-[300px] truncate">
+                    {post.title}
+                  </TableCell>
+                  <TableCell>{post.category_name}</TableCell>
+                  <TableCell>{getStatusBadge(post.status)}</TableCell>
+                  <TableCell>
+                    {post.status === 'published' ? formatDate(post.published_at) : formatDate(post.created_at)}
+                  </TableCell>
+                  <TableCell>{post.author_name}</TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem asChild>
+                          <Link to={`/blog/${post.slug}`} target="_blank" className="cursor-pointer">
+                            <Eye className="mr-2 h-4 w-4" />
+                            Visualizar
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate(`/dashboard/blog/posts/edit/${post.id}`)}>
+                          <Pencil className="mr-2 h-4 w-4" />
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          className="text-red-600 focus:text-red-600" 
+                          onClick={() => handleDeleteClick(post.id)}
+                        >
+                          <Trash className="mr-2 h-4 w-4" />
+                          Excluir
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>
       </div>
       
       {/* Pagination */}
-      {totalPages > 1 && (
-        <Pagination className="mt-6">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious 
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-              />
-            </PaginationItem>
-            
-            {Array.from({ length: totalPages }).map((_, index) => {
-              const page = index + 1;
-              
-              // Display first page, last page, and pages around current page
-              if (
-                page === 1 ||
-                page === totalPages ||
-                (page >= currentPage - 1 && page <= currentPage + 1)
-              ) {
-                return (
-                  <PaginationItem key={page}>
-                    <PaginationLink
-                      onClick={() => setCurrentPage(page)}
-                      isActive={page === currentPage}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                );
-              }
-              
-              return null;
-            })}
-            
-            <PaginationItem>
-              <PaginationNext 
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+      {totalPosts > postsPerPage && (
+        <div className="flex justify-center space-x-2 mt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Anterior
+          </Button>
+          
+          {Array.from({ length: Math.ceil(totalPosts / postsPerPage) }).map((_, index) => (
+            <Button
+              key={index}
+              variant={currentPage === index + 1 ? "default" : "outline"}
+              size="sm"
+              onClick={() => handlePageChange(index + 1)}
+            >
+              {index + 1}
+            </Button>
+          ))}
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === Math.ceil(totalPosts / postsPerPage)}
+          >
+            Próximo
+          </Button>
+        </div>
       )}
       
-      {/* Delete confirmation dialog */}
-      <Dialog open={!!postToDelete} onOpenChange={(open) => !open && setPostToDelete(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar exclusão</DialogTitle>
-            <DialogDescription>
-              Você está prestes a excluir o post "{postToDelete?.title}". Esta ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setPostToDelete(null)}>
-              Cancelar
-            </Button>
-            <Button variant="destructive" onClick={handleDeletePost}>
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. Isso excluirá permanentemente este post.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-600 hover:bg-red-700">
               Excluir
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

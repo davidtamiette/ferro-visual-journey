@@ -14,7 +14,7 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-6">Ferro Velho <span className="text-toti-teal">Toti</span></h3>
             <p className="text-white/70 mb-6 max-w-xs">
               Especialistas em reciclagem de metais, oferecendo soluções sustentáveis para 
-              empresas e indústrias desde 2001.
+              empresas e indústrias desde 1995.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-white/70 hover:text-toti-teal transition-colors" aria-label="Facebook">
@@ -36,12 +36,12 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-medium mb-6">Links Rápidos</h4>
             <nav className="space-y-3">
-              <a href="#home" className="block text-white/70 hover:text-toti-teal transition-colors">Home</a>
-              <a href="#about" className="block text-white/70 hover:text-toti-teal transition-colors">Sobre Nós</a>
-              <a href="#services" className="block text-white/70 hover:text-toti-teal transition-colors">Serviços</a>
-              <a href="#contact" className="block text-white/70 hover:text-toti-teal transition-colors">Contato</a>
-              <a href="#" className="block text-white/70 hover:text-toti-teal transition-colors">Política de Privacidade</a>
-              <a href="#" className="block text-white/70 hover:text-toti-teal transition-colors">Termos de Serviço</a>
+              <a href="/" className="block text-white/70 hover:text-toti-teal transition-colors">Home</a>
+              <a href="/sobre" className="block text-white/70 hover:text-toti-teal transition-colors">Sobre Nós</a>
+              <a href="/servicos" className="block text-white/70 hover:text-toti-teal transition-colors">Serviços</a>
+              <a href="/contato" className="block text-white/70 hover:text-toti-teal transition-colors">Contato</a>
+              <a href="/blog" className="block text-white/70 hover:text-toti-teal transition-colors">Blog</a>
+              <a href="/privacidade" className="block text-white/70 hover:text-toti-teal transition-colors">Política de Privacidade</a>
             </nav>
           </div>
           
@@ -49,10 +49,10 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-medium mb-6">Contato</h4>
             <address className="not-italic space-y-3 text-white/70">
-              <p>Rua Antônio Blasques Romeiro, 120</p>
-              <p>Socorro, São Paulo - SP</p>
-              <p>CEP: 04763-030</p>
-              <p className="pt-2">Telefone: (11) 4035-1413</p>
+              <p>R. do Rosário, 1165 - Angola</p>
+              <p>Betim - MG</p>
+              <p>CEP: 32604-115</p>
+              <p className="pt-2">Telefone: (31) 99946-0492</p>
               <p>Email: contato@ferrovelhototi.com.br</p>
             </address>
           </div>

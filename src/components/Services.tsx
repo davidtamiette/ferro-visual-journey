@@ -18,7 +18,7 @@ const Services = () => {
     {
       title: 'Coleta e Transporte',
       subtitle: 'Logística Completa',
-      description: 'Realizamos a coleta e transporte dos materiais com agilidade e segurança, utilizando veículos adequados e equipe especializada.',
+      description: 'Realizamos a coleta e transporte dos materiais com agilidade e segurança, utilizando veículos adequados e equipe especializada. Prestamos serviços especializados no transporte de resíduos classes I e II.',
       delay: 200
     },
     {
@@ -30,7 +30,7 @@ const Services = () => {
     {
       title: 'Gestão de Resíduos',
       subtitle: 'Consultoria Ambiental',
-      description: 'Assessoria e consultoria para gestão adequada de resíduos metálicos, com emissão de documentação ambiental necessária.',
+      description: 'Assessoria e consultoria para gestão adequada de resíduos metálicos, com emissão de documentação ambiental necessária. Garantimos a destinação correta em áreas licenciadas para transbordo, triagem e aterros.',
       delay: 400
     },
     {
@@ -59,9 +59,14 @@ const Services = () => {
         >
           <span className="toti-subtitle mb-4">Nossos Serviços</span>
           <h2 className="toti-heading mb-6">Soluções <span className="text-toti-teal">Completas</span> em Reciclagem</h2>
-          <p className="toti-subheading">
+          <p className="toti-subheading mb-8">
             Oferecemos um portfólio abrangente de serviços para atender às suas necessidades de reciclagem e 
             gestão de resíduos metálicos com responsabilidade ambiental.
+          </p>
+          <p className="text-toti-slate dark:text-gray-300 text-base">
+            Operamos com todas as autorizações e certificações necessárias, incluindo alvará de localização e funcionamento, 
+            licença ambiental, licença de transporte, cadastro no IBAMA, AVCB e registro na ANTT. 
+            Esses atributos reafirmam nosso compromisso com a conformidade legal e a proteção ambiental.
           </p>
         </div>
 

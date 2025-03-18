@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import FeatureCard from '@/components/ui/FeatureCard';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import { Helmet } from 'react-helmet';
-import { ArrowRight, AlertCircle } from 'lucide-react';
+import { ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 
 const ServicesPage = () => {
   const detailedServices = [
@@ -21,20 +21,20 @@ const ServicesPage = () => {
         'Atendimento a empresas e indústrias',
         'Possibilidade de contratos contínuos'
       ],
-      excluded: 'Não compramos sucata automotiva, apenas metais industriais, comerciais e residenciais.'
+      excluded: 'Consulte-nos sobre os tipos específicos de materiais que trabalhamos.'
     },
     {
       id: 'coleta-transporte',
       title: 'Coleta e Transporte',
       subtitle: 'Logística Completa',
-      description: 'Realizamos a coleta e transporte dos materiais com agilidade e segurança, utilizando veículos adequados e equipe especializada. Emitimos toda a documentação necessária para o transporte.',
+      description: 'Realizamos a coleta e transporte dos materiais com agilidade e segurança, utilizando veículos adequados e equipe especializada. Oferecemos serviços especializados no transporte de resíduos de classes I e II, assegurando a destinação correta desses materiais em áreas devidamente licenciadas para transbordo, triagem e aterros.',
       benefits: [
         'Frota própria e especializada',
         'Equipe treinada e uniformizada',
-        'Coleta programada ou emergencial',
-        'Atendimento em toda a região metropolitana'
+        'Transporte de resíduos classes I e II',
+        'Atendimento em toda a região'
       ],
-      excluded: 'Não realizamos coleta de peças e componentes automotivos.'
+      excluded: 'Operamos com todas as licenças e autorizações necessárias, incluindo registro na ANTT.'
     },
     {
       id: 'descaracterizacao',
@@ -47,20 +47,20 @@ const ServicesPage = () => {
         'Proteção de marca e imagem',
         'Conformidade com normas ambientais'
       ],
-      excluded: 'Não realizamos serviços em veículos ou peças automotivas.'
+      excluded: 'Garantimos a descaracterização completa e segura dos materiais, com documentação adequada.'
     },
     {
       id: 'gestao-residuos',
       title: 'Gestão de Resíduos',
       subtitle: 'Consultoria Ambiental',
-      description: 'Assessoria e consultoria para gestão adequada de resíduos metálicos, com emissão de documentação ambiental necessária. Auxílio no planejamento de descarte responsável e sustentável.',
+      description: 'Assessoria e consultoria para gestão adequada de resíduos metálicos, com emissão de documentação ambiental necessária. Asseguramos a destinação correta em áreas licenciadas para transbordo, triagem e aterros, sempre em conformidade com a legislação ambiental vigente.',
       benefits: [
         'Consultoria ambiental especializada',
         'Emissão de relatórios e certificados',
         'Planos de gerenciamento de resíduos',
         'Conformidade com legislação ambiental'
       ],
-      excluded: 'Não gerenciamos resíduos automotivos.'
+      excluded: 'Todas as nossas operações são realizadas de acordo com as normas e regulamentações ambientais.'
     },
     {
       id: 'desmontagem-industrial',
@@ -73,27 +73,36 @@ const ServicesPage = () => {
         'Desmontagem controlada e segura',
         'Remoção completa de estruturas'
       ],
-      excluded: 'Não realizamos desmontagem de veículos ou estruturas automotivas.'
+      excluded: 'Realizamos serviços de desmontagem com toda a segurança e documentação necessárias.'
     },
     {
       id: 'reciclagem-metais',
       title: 'Reciclagem de Metais',
       subtitle: 'Processo Sustentável',
-      description: 'Processamento completo dos materiais metálicos, direcionando-os para o ciclo de reciclagem e contribuindo para a economia circular. Transformamos resíduos em matéria-prima.',
+      description: 'Processamento completo dos materiais metálicos, direcionando-os para o ciclo de reciclagem e contribuindo para a economia circular. Transformamos resíduos em matéria-prima de forma responsável.',
       benefits: [
         'Redução de impacto ambiental',
         'Economia de recursos naturais',
         'Contribuição para a economia circular',
         'Soluções completas e sustentáveis'
       ],
-      excluded: 'Não processamos materiais automotivos em nosso ciclo de reciclagem.'
+      excluded: 'Nossa reciclagem segue processos certificados, garantindo o máximo aproveitamento dos materiais.'
     }
+  ];
+  
+  const certifications = [
+    'Alvará de localização e funcionamento',
+    'Licença ambiental',
+    'Licença de transporte',
+    'Cadastro no IBAMA',
+    'AVCB (Auto de Vistoria do Corpo de Bombeiros)',
+    'Registro na ANTT'
   ];
   
   const faq = [
     {
       question: 'Quais tipos de metais vocês compram?',
-      answer: 'Compramos diversos tipos de metais, como ferro, alumínio, cobre, bronze, latão, inox, entre outros. Não compramos sucata automotiva, apenas metais industriais, comerciais e residenciais.'
+      answer: 'Compramos diversos tipos de metais, como ferro, alumínio, cobre, bronze, latão, inox, entre outros. Entre em contato conosco para consultar sobre materiais específicos.'
     },
     {
       question: 'Como é feita a avaliação do material?',
@@ -105,15 +114,15 @@ const ServicesPage = () => {
     },
     {
       question: 'Qual a área de atendimento para coleta?',
-      answer: 'Atendemos toda a região metropolitana de São Paulo. Para outras localidades, consulte-nos sobre disponibilidade e condições.'
+      answer: 'Atendemos toda a região de Betim e cidades vizinhas em Minas Gerais. Para outras localidades, consulte-nos sobre disponibilidade e condições.'
     },
     {
       question: 'Qual o volume mínimo para coleta?',
       answer: 'O volume mínimo para coleta varia conforme o tipo de material e a distância. Entre em contato conosco para uma avaliação personalizada.'
     },
     {
-      question: 'Vocês compram sucata de automóveis?',
-      answer: 'Não, não trabalhamos com sucata automotiva. Nosso foco é exclusivamente em metais industriais, comerciais e residenciais.'
+      question: 'Quais licenças e autorizações vocês possuem?',
+      answer: 'Possuímos todas as licenças e autorizações necessárias para nossa operação, incluindo alvará de funcionamento, licença ambiental, licença de transporte, cadastro no IBAMA, AVCB e registro na ANTT, garantindo total conformidade legal.'
     }
   ];
 
@@ -121,8 +130,8 @@ const ServicesPage = () => {
     <div className="flex flex-col min-h-screen overflow-hidden">
       <Helmet>
         <title>Serviços | Ferro Velho Toti - Reciclagem de Metais</title>
-        <meta name="description" content="Conheça nossos serviços de compra de sucatas metálicas, coleta e transporte, descaracterização, gestão de resíduos, desmontagem industrial e reciclagem. Não trabalhamos com sucata automotiva." />
-        <meta name="keywords" content="reciclagem metais, sucata metálica, coleta de sucata, descaracterização materiais, gestão resíduos, desmontagem industrial" />
+        <meta name="description" content="Conheça nossos serviços de compra de sucatas metálicas, coleta e transporte, descaracterização, gestão de resíduos, desmontagem industrial e reciclagem." />
+        <meta name="keywords" content="reciclagem metais, sucata metálica, coleta de sucata, descaracterização materiais, gestão resíduos, desmontagem industrial, Betim, Minas Gerais" />
         <link rel="canonical" href="https://ferrovelhototi.com.br/servicos" />
         <script type="application/ld+json">
           {`
@@ -138,7 +147,7 @@ const ServicesPage = () => {
               "description": "Serviços de reciclagem de metais, incluindo compra de sucatas, coleta e transporte, descaracterização, gestão de resíduos e desmontagem industrial.",
               "areaServed": {
                 "@type": "City",
-                "name": "São Paulo"
+                "name": "Betim"
               },
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",
@@ -207,12 +216,12 @@ const ServicesPage = () => {
                 de reciclagem e gestão de resíduos metálicos com responsabilidade ambiental.
               </p>
               
-              <div className="mt-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl p-4 flex items-start gap-3 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                <AlertCircle className="h-6 w-6 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-700 dark:text-red-300 text-left">
-                  <strong>Importante:</strong> O Ferro Velho Toti não trabalha com sucata automotiva. 
-                  Nossos serviços são dedicados exclusivamente à reciclagem de metais 
-                  industriais, comerciais e residenciais.
+              <div className="mt-8 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 rounded-xl p-4 flex items-start gap-3 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+                <CheckCircle className="h-6 w-6 text-toti-teal dark:text-toti-teal flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-700 dark:text-blue-300 text-left">
+                  <strong>Certificações e Licenças:</strong> Operamos com todas as autorizações necessárias, 
+                  incluindo alvará de localização e funcionamento, licença ambiental, licença de transporte, 
+                  cadastro no IBAMA, AVCB e registro na ANTT.
                 </p>
               </div>
             </div>
@@ -224,6 +233,47 @@ const ServicesPage = () => {
         
         {/* Brief overview of services */}
         <Services />
+        
+        {/* Certifications Section */}
+        <section className="py-16 bg-gray-50 dark:bg-toti-navy/20">
+          <div className="container mx-auto px-6">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <span className="toti-subtitle mb-4">Nossas Credenciais</span>
+              <h2 className="toti-heading mb-6">Certificações e <span className="text-toti-teal">Licenças</span></h2>
+              <p className="toti-subheading">
+                Operamos em total conformidade com as exigências legais e ambientais, garantindo 
+                segurança e confiabilidade em todos os nossos serviços.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {certifications.map((certification, index) => (
+                <div key={index} className="glass dark:glass-dark p-6 flex items-center gap-4">
+                  <div className="bg-toti-teal/10 p-2 rounded-full">
+                    <CheckCircle className="h-6 w-6 text-toti-teal" />
+                  </div>
+                  <span className="text-lg font-medium text-toti-navy dark:text-white">{certification}</span>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-10 glass dark:glass-dark p-6 max-w-3xl mx-auto">
+              <div className="flex items-start gap-4">
+                <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-full flex-shrink-0 mt-1">
+                  <AlertCircle className="h-6 w-6 text-blue-500" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-medium text-toti-navy dark:text-white mb-2">Transporte de Resíduos Especializado</h3>
+                  <p className="text-toti-slate dark:text-gray-300">
+                    Oferecemos serviços especializados no transporte de resíduos de classes I e II, assegurando 
+                    a destinação correta desses materiais em áreas devidamente licenciadas para transbordo, 
+                    triagem e aterros. Nossa operação segue rigorosamente as normas da ANTT e legislação ambiental.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
         
         {/* Detailed Services Section */}
         <section className="py-24">
@@ -250,9 +300,9 @@ const ServicesPage = () => {
                         </p>
                         
                         {service.excluded && (
-                          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 rounded-xl p-4 flex items-start gap-3">
-                            <AlertCircle className="h-5 w-5 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                            <p className="text-sm text-red-700 dark:text-red-300">
+                          <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 rounded-xl p-4 flex items-start gap-3">
+                            <CheckCircle className="h-5 w-5 text-toti-teal dark:text-toti-teal flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-blue-700 dark:text-blue-300">
                               {service.excluded}
                             </p>
                           </div>
