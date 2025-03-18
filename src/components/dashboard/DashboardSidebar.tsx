@@ -10,7 +10,10 @@ import {
   FileText,
   Menu,
   X,
-  ArrowLeft
+  ArrowLeft,
+  BookOpen,
+  Tag,
+  BookMarked
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -37,6 +40,26 @@ const DashboardSidebar = () => {
       title: 'Analytics',
       icon: <LineChart className="h-5 w-5" />,
       href: '/dashboard/analytics',
+    },
+    {
+      title: 'Blog',
+      icon: <BookOpen className="h-5 w-5" />,
+      href: '/dashboard/blog',
+      adminOnly: true,
+      subItems: [
+        {
+          title: 'Posts',
+          href: '/dashboard/blog/posts',
+        },
+        {
+          title: 'Categorias',
+          href: '/dashboard/blog/categories',
+        },
+        {
+          title: 'Tags',
+          href: '/dashboard/blog/tags',
+        }
+      ]
     },
     {
       title: 'Aparência',
@@ -121,21 +144,42 @@ const DashboardSidebar = () => {
         <ScrollArea className="flex-1 py-4">
           <nav className="grid gap-1 px-2">
             {navItems.map((item, index) => (
-              <NavLink
-                key={index}
-                to={item.href}
-                end={item.exact}
-                className={({ isActive }) =>
-                  cn(
-                    "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground",
-                    isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
-                    collapsed && "justify-center px-0"
-                  )
-                }
-              >
-                {item.icon}
-                {!collapsed && <span>{item.title}</span>}
-              </NavLink>
+              <React.Fragment key={index}>
+                <NavLink
+                  to={item.href}
+                  end={item.exact}
+                  className={({ isActive }) =>
+                    cn(
+                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground",
+                      isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+                      collapsed && "justify-center px-0"
+                    )
+                  }
+                >
+                  {item.icon}
+                  {!collapsed && <span>{item.title}</span>}
+                </NavLink>
+                
+                {/* Render sub-items if they exist and sidebar is not collapsed */}
+                {!collapsed && item.subItems && (
+                  <div className="ml-8 grid gap-1 mt-1">
+                    {item.subItems.map((subItem, subIndex) => (
+                      <NavLink
+                        key={subIndex}
+                        to={subItem.href}
+                        className={({ isActive }) =>
+                          cn(
+                            "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs transition-all hover:bg-accent hover:text-accent-foreground",
+                            isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+                          )
+                        }
+                      >
+                        <span>{subItem.title}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </nav>
         </ScrollArea>
