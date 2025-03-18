@@ -21,12 +21,15 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
     setLoading(true);
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log("Attempting login with email:", email);
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) throw error;
+      
+      console.log("Login successful, user:", data?.user?.id);
       
       toast({
         title: "Login realizado com sucesso!",

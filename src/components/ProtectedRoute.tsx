@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
@@ -14,6 +14,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { user, isAdmin, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Log status for debugging
+  console.log("ProtectedRoute status:", {
+    isLoading,
+    user: !!user,
+    isAdmin,
+    path: location.pathname
+  });
   
   // Effect to ensure we're not stuck in loading state
   useEffect(() => {
@@ -21,12 +30,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     const timeoutId = setTimeout(() => {
       if (isLoading && !user) {
         console.log("Protection timeout reached, redirecting to auth");
-        navigate('/auth', { replace: true });
+        navigate('/auth', { replace: true, state: { from: location.pathname } });
       }
     }, 3000);
     
     return () => clearTimeout(timeoutId);
-  }, [isLoading, user, navigate]);
+  }, [isLoading, user, navigate, location.pathname]);
   
   if (isLoading) {
     // Show a loading spinner or placeholder
@@ -40,7 +49,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (!user) {
     // Redirect to login if not authenticated
     console.log("User not authenticated, redirecting to auth");
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
   }
   
   if (adminOnly && !isAdmin) {

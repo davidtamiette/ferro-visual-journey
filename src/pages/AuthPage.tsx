@@ -19,8 +19,9 @@ const AuthPage = () => {
   }, [user, isLoading, navigate]);
   
   const handleAuthSuccess = () => {
-    // Navigation will happen automatically via the useEffect above
+    // Explicitly navigate to dashboard on successful auth
     console.log("Auth success callback called");
+    navigate('/dashboard', { replace: true });
   };
   
   if (isLoading) {
@@ -31,7 +32,10 @@ const AuthPage = () => {
     );
   }
   
-  // If we're already logged in and not loading, the useEffect will redirect
+  // Only show login/register form if not authenticated
+  if (user) {
+    return null; // The useEffect will handle redirection
+  }
   
   return (
     <AuthPageLayout
