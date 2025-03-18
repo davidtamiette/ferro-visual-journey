@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -22,6 +23,7 @@ const AuthPage = () => {
   // Check if user is already logged in
   useEffect(() => {
     if (user && !isLoading) {
+      console.log("User is authenticated, redirecting to dashboard");
       navigate('/dashboard');
     }
   }, [user, isLoading, navigate]);
@@ -103,6 +105,8 @@ const AuthPage = () => {
       </div>
     );
   }
+  
+  // If we're already logged in and not loading, the useEffect will redirect
   
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -227,4 +231,3 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
-
