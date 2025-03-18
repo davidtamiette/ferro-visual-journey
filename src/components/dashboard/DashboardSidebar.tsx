@@ -1,23 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { 
-  LayoutDashboard, 
-  Settings, 
-  LineChart, 
-  Palette, 
-  FileText,
-  Menu,
-  X,
-  ArrowLeft,
-  BookOpen,
-  Tag,
-  BookMarked
-} from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useAuth } from '@/contexts/AuthContext';
+import SidebarHeader from './SidebarHeader';
+import SidebarNavItems from './SidebarNavItems';
+import SidebarFooter from './SidebarFooter';
 
 interface DashboardSidebarProps {
   onToggle?: (collapsed: boolean) => void;
@@ -30,7 +20,6 @@ const DashboardSidebar = ({ onToggle }: DashboardSidebarProps) => {
   });
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { isAdmin } = useAuth();
   
   useEffect(() => {
     // Call onToggle when collapsed changes
@@ -45,60 +34,9 @@ const DashboardSidebar = ({ onToggle }: DashboardSidebarProps) => {
     localStorage.setItem('sidebarCollapsed', String(newState));
   };
   
-  const isActive = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(`${path}/`);
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
   };
-  
-  const navItems = [
-    {
-      title: 'Visão Geral',
-      icon: <LayoutDashboard className="h-5 w-5" />,
-      href: '/dashboard',
-      exact: true,
-    },
-    {
-      title: 'Analytics',
-      icon: <LineChart className="h-5 w-5" />,
-      href: '/dashboard/analytics',
-    },
-    {
-      title: 'Blog',
-      icon: <BookOpen className="h-5 w-5" />,
-      href: '/dashboard/blog',
-      adminOnly: true,
-      subItems: [
-        {
-          title: 'Posts',
-          href: '/dashboard/blog/posts',
-        },
-        {
-          title: 'Categorias',
-          href: '/dashboard/blog/categories',
-        },
-        {
-          title: 'Tags',
-          href: '/dashboard/blog/tags',
-        }
-      ]
-    },
-    {
-      title: 'Aparência',
-      icon: <Palette className="h-5 w-5" />,
-      href: '/dashboard/appearance',
-      adminOnly: true,
-    },
-    {
-      title: 'Conteúdo',
-      icon: <FileText className="h-5 w-5" />,
-      href: '/dashboard/content',
-      adminOnly: true,
-    },
-    {
-      title: 'Configurações',
-      icon: <Settings className="h-5 w-5" />,
-      href: '/dashboard/settings',
-    },
-  ].filter(item => !item.adminOnly || isAdmin);
   
   return (
     <>
@@ -116,7 +54,7 @@ const DashboardSidebar = ({ onToggle }: DashboardSidebarProps) => {
       {mobileOpen && (
         <div 
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden"
-          onClick={() => setMobileOpen(false)}
+          onClick={closeMobileMenu}
         />
       )}
       
@@ -128,97 +66,17 @@ const DashboardSidebar = ({ onToggle }: DashboardSidebarProps) => {
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
-        <div className="flex h-14 items-center justify-between px-4 border-b">
-          <div className={cn("flex items-center", collapsed && "justify-center w-full")}>
-            <img
-              src="/placeholder.svg"
-              alt="Logo"
-              className="h-8 w-8"
-            />
-            {!collapsed && (
-              <span className="ml-2 text-lg font-semibold">Toti Admin</span>
-            )}
-          </div>
-          
-          <div className="flex items-center">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:flex hidden"
-              onClick={toggleCollapsed}
-            >
-              <ArrowLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
-            </Button>
-            
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileOpen(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+        <SidebarHeader 
+          collapsed={collapsed} 
+          toggleCollapsed={toggleCollapsed} 
+          closeMobileMenu={closeMobileMenu}
+        />
         
         <ScrollArea className="flex-1 py-4">
-          <nav className="grid gap-1 px-2">
-            {navItems.map((item, index) => (
-              <React.Fragment key={index}>
-                <NavLink
-                  to={item.href}
-                  end={item.exact}
-                  className={({ isActive }) =>
-                    cn(
-                      "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground",
-                      isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
-                      collapsed && "justify-center px-0"
-                    )
-                  }
-                >
-                  {item.icon}
-                  {!collapsed && <span>{item.title}</span>}
-                </NavLink>
-                
-                {/* Render sub-items if they exist and sidebar is not collapsed */}
-                {!collapsed && item.subItems && (
-                  <div className="ml-8 grid gap-1 mt-1">
-                    {item.subItems.map((subItem, subIndex) => (
-                      <NavLink
-                        key={subIndex}
-                        to={subItem.href}
-                        className={({ isActive }) =>
-                          cn(
-                            "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs transition-all hover:bg-accent hover:text-accent-foreground",
-                            isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                          )
-                        }
-                      >
-                        <span>{subItem.title}</span>
-                      </NavLink>
-                    ))}
-                  </div>
-                )}
-              </React.Fragment>
-            ))}
-          </nav>
+          <SidebarNavItems collapsed={collapsed} currentPath={location.pathname} />
         </ScrollArea>
         
-        <div className="border-t p-4">
-          <NavLink
-            to="/"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-all hover:bg-accent hover:text-accent-foreground"
-          >
-            {!collapsed ? (
-              <>
-                <ArrowLeft className="h-4 w-4" />
-                <span>Voltar ao site</span>
-              </>
-            ) : (
-              <ArrowLeft className="h-5 w-5" />
-            )}
-          </NavLink>
-        </div>
+        <SidebarFooter collapsed={collapsed} />
       </aside>
     </>
   );
