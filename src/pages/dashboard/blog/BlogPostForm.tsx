@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -295,7 +294,7 @@ const BlogPostForm = () => {
         seo_keywords: data.seo_keywords || null,
       };
       
-      let postId;
+      let newPostId;
       
       if (isEditMode) {
         // Update existing post
@@ -307,7 +306,7 @@ const BlogPostForm = () => {
           .single();
         
         if (error) throw error;
-        postId = updatedPost.id;
+        newPostId = updatedPost.id;
         
         toast({
           title: "Post atualizado com sucesso",
@@ -322,7 +321,7 @@ const BlogPostForm = () => {
           .single();
         
         if (error) throw error;
-        postId = newPost.id;
+        newPostId = newPost.id;
         
         toast({
           title: "Post criado com sucesso",
@@ -331,17 +330,17 @@ const BlogPostForm = () => {
       }
       
       // Update tags for the post
-      if (postId) {
+      if (newPostId) {
         // First, delete all existing tag associations
         await supabase
           .from('blog_posts_tags')
           .delete()
-          .eq('post_id', postId);
+          .eq('post_id', newPostId);
         
         // Then, add the new tag associations
         if (selectedTags.length > 0) {
           const tagAssociations = selectedTags.map(tagId => ({
-            post_id: postId,
+            post_id: newPostId,
             tag_id: tagId
           }));
           
