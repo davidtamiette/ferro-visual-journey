@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -48,6 +49,8 @@ function App() {
                 <Route path="/blog" element={<BlogIndexPage />} />
                 <Route path="/blog/:slug" element={<BlogPostPage />} />
                 <Route path="/auth" element={<AuthPage />} />
+                
+                {/* Dashboard Routes */}
                 <Route path="/dashboard" element={
                   <ProtectedRoute>
                     <DashboardLayout>
@@ -55,43 +58,70 @@ function App() {
                     </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="settings" element={<SettingsPage />} />
-                <Route path="analytics" element={<AnalyticsPage />} />
-                <Route path="appearance" element={
-                  <ProtectedRoute adminOnly>
-                    <AppearancePage />
+                <Route path="/settings" element={
+                  <ProtectedRoute>
+                    <DashboardLayout>
+                      <SettingsPage />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="content" element={
-                  <ProtectedRoute adminOnly>
-                    <ContentPage />
+                <Route path="/analytics" element={
+                  <ProtectedRoute>
+                    <DashboardLayout>
+                      <AnalyticsPage />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="blog/posts" element={
+                <Route path="/appearance" element={
                   <ProtectedRoute adminOnly>
-                    <BlogPostsPage />
+                    <DashboardLayout>
+                      <AppearancePage />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="blog/posts/new" element={
+                <Route path="/content" element={
                   <ProtectedRoute adminOnly>
-                    <BlogPostForm />
+                    <DashboardLayout>
+                      <ContentPage />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="blog/posts/edit/:postId" element={
+                <Route path="/blog/posts" element={
                   <ProtectedRoute adminOnly>
-                    <BlogPostForm />
+                    <DashboardLayout>
+                      <BlogPostsPage />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="blog/categories" element={
+                <Route path="/blog/posts/new" element={
                   <ProtectedRoute adminOnly>
-                    <BlogCategoriesPage />
+                    <DashboardLayout>
+                      <BlogPostForm />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
-                <Route path="blog/tags" element={
+                <Route path="/blog/posts/edit/:postId" element={
                   <ProtectedRoute adminOnly>
-                    <BlogTagsPage />
+                    <DashboardLayout>
+                      <BlogPostForm />
+                    </DashboardLayout>
                   </ProtectedRoute>
                 } />
+                <Route path="/blog/categories" element={
+                  <ProtectedRoute adminOnly>
+                    <DashboardLayout>
+                      <BlogCategoriesPage />
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/blog/tags" element={
+                  <ProtectedRoute adminOnly>
+                    <DashboardLayout>
+                      <BlogTagsPage />
+                    </DashboardLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </SidebarProvider>
           </SiteConfigurationProvider>

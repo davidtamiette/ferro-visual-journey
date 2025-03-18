@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, forwardRef, ElementType } from 'react';
 import { cn } from '@/lib/utils';
 
 interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -7,16 +7,19 @@ interface AnimatedButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   size?: 'sm' | 'default' | 'lg';
   children: React.ReactNode;
   glass?: boolean;
+  as?: ElementType;
+  to?: string;
 }
 
-const AnimatedButton = ({
+const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(({
   className,
   variant = 'default',
   size = 'default',
   children,
   glass = false,
+  as: Component = 'button',
   ...props
-}: AnimatedButtonProps) => {
+}, ref) => {
   const [isHovering, setIsHovering] = useState(false);
 
   const baseClass = "relative inline-flex items-center justify-center rounded-xl font-medium transition-all duration-300 ease-out-expo";
@@ -36,7 +39,8 @@ const AnimatedButton = ({
   const glassClass = glass ? "backdrop-blur-md bg-white/10 border border-white/20 dark:bg-black/20 dark:border-white/10" : "";
 
   return (
-    <button
+    <Component
+      ref={ref}
       className={cn(
         baseClass,
         sizeClasses[size],
@@ -62,8 +66,10 @@ const AnimatedButton = ({
         )} 
         aria-hidden="true"
       />
-    </button>
+    </Component>
   );
-};
+});
+
+AnimatedButton.displayName = 'AnimatedButton';
 
 export default AnimatedButton;
