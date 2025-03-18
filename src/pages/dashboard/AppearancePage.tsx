@@ -54,6 +54,14 @@ const AppearancePage = () => {
         if (data.logo_url) {
           setLogoPreview(data.logo_url);
         }
+        
+        // Apply colors to CSS variables
+        if (data.primary_color) {
+          document.documentElement.style.setProperty('--primary-color', data.primary_color);
+        }
+        if (data.secondary_color) {
+          document.documentElement.style.setProperty('--secondary-color', data.secondary_color);
+        }
       } catch (error) {
         console.error('Error fetching settings:', error);
         toast({
@@ -93,6 +101,12 @@ const AppearancePage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    
+    // Update CSS variables immediately for color changes
+    if (name === 'primary_color' || name === 'secondary_color') {
+      document.documentElement.style.setProperty(`--${name.replace('_', '-')}`, value);
+    }
+    
     setSettings((prev) => ({
       ...prev!,
       [name]: value,

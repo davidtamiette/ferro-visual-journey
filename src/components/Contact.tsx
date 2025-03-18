@@ -1,222 +1,153 @@
 
-import React, { useState } from 'react';
-import AnimatedButton from './ui/AnimatedButton';
-import { useScrollAnimation } from '@/lib/animations';
-import { Phone, Mail, MapPin, Send } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from 'react';
+import { useSiteConfiguration } from './SiteConfigurationProvider';
 
 const Contact = () => {
-  const { ref, isVisible } = useScrollAnimation();
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { settings } = useSiteConfiguration();
 
-  const contactInfo = [
-    {
-      icon: <Phone className="h-5 w-5 text-toti-teal" />,
-      title: 'Telefone',
-      details: '(31) 99946-0492',
-    },
-    {
-      icon: <Mail className="h-5 w-5 text-toti-teal" />,
-      title: 'Email',
-      details: 'contato@ferrovelhototi.com.br',
-    },
-    {
-      icon: <MapPin className="h-5 w-5 text-toti-teal" />,
-      title: 'Endereço',
-      details: 'R. do Rosário, 1165 - Angola, Betim - MG',
-    },
-  ];
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormState(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission with delay
-    setTimeout(() => {
-      console.log('Form submitted:', formState);
-      // Here you would typically send the form data to a server
-      alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-      setFormState({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-      });
-      setIsSubmitting(false);
-    }, 1500);
-  };
+  // Valores padrão
+  const contactTitle = settings?.contact_email ? 'Entre em Contato' : 'Entre em Contato';
+  const contactDescription = 'Estamos prontos para atender suas necessidades de reciclagem de metais e oferecer as melhores soluções para seu negócio. Entre em contato conosco hoje mesmo.';
+  const contactEmail = settings?.contact_email || 'contato@ferrovelhometal.com.br';
+  const contactPhone = settings?.contact_phone || '(11) 3456-7890';
+  const address = settings?.address || 'Av. da Sucata, 123 - São Paulo/SP';
 
   return (
-    <section id="contact" className="py-24 bg-gray-50 dark:bg-toti-navy/20 transition-colors duration-500 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        <div className="absolute top-10 left-10 w-40 h-40 bg-toti-teal/5 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-20 right-20 w-60 h-60 bg-toti-navy/5 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
-      </div>
-      
-      <div className="container mx-auto px-6 relative z-10">
-        <div 
-          ref={ref as React.RefObject<HTMLDivElement>}
-          className={cn(
-            "text-center max-w-3xl mx-auto mb-16 transition-opacity duration-700",
-            isVisible || true ? "opacity-100" : "opacity-0" // Always show content
-          )}
-        >
-          <span className="toti-subtitle mb-4 inline-block relative">
-            Contato
-            <span className="absolute -bottom-1 left-0 h-0.5 bg-toti-teal/30 w-full transform origin-left transition-transform duration-700" 
-              style={{ transform: isVisible ? 'scaleX(1)' : 'scaleX(0)' }}></span>
-          </span>
-          <h2 className="toti-heading mb-6">Fale <span className="text-toti-teal">Conosco</span></h2>
-          <p className="toti-subheading">
-            Estamos à disposição para esclarecer dúvidas, fazer orçamentos e proporcionar um atendimento 
-            personalizado às suas necessidades.
+    <section id="contact" className="py-20">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{contactTitle}</h2>
+          <div className="w-20 h-1 bg-toti-teal mx-auto mb-6"></div>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+            {contactDescription}
           </p>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact form */}
-          <div className="glass dark:glass-dark p-8 animate-fade-in-right hover:shadow-elevated transition-all duration-300" style={{ animationDelay: '200ms' }}>
-            <h3 className="text-2xl font-bold text-toti-navy dark:text-white mb-6">Envie uma mensagem</h3>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
-                  Nome completo
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formState.name}
-                  onChange={handleInputChange}
-                  required
-                  className="toti-input focus:scale-[1.01] transition-transform"
-                  placeholder="Seu nome"
-                />
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="col-span-1 lg:col-span-2 bg-white rounded-lg shadow-lg p-8">
+            <form>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formState.email}
-                    onChange={handleInputChange}
-                    required
-                    className="toti-input focus:scale-[1.01] transition-transform"
-                    placeholder="seu@email.com"
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                  <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-toti-teal focus:border-toti-teal"
+                    placeholder="Seu nome"
                   />
                 </div>
-                
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
-                    Telefone
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formState.phone}
-                    onChange={handleInputChange}
-                    className="toti-input focus:scale-[1.01] transition-transform"
-                    placeholder="(00) 00000-0000"
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-toti-teal focus:border-toti-teal"
+                    placeholder="Seu email"
                   />
                 </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    name="phone" 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-toti-teal focus:border-toti-teal"
+                    placeholder="Seu telefone"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">Assunto</label>
+                  <input 
+                    type="text" 
+                    id="subject" 
+                    name="subject" 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-toti-teal focus:border-toti-teal"
+                    placeholder="Assunto da mensagem"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Mensagem</label>
+                  <textarea 
+                    id="message" 
+                    name="message" 
+                    rows={5} 
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-toti-teal focus:border-toti-teal"
+                    placeholder="Sua mensagem"
+                  ></textarea>
+                </div>
+                <div className="md:col-span-2">
+                  <button 
+                    type="submit" 
+                    className="w-full bg-toti-teal text-white py-3 px-6 rounded-md hover:bg-toti-teal-dark transition-colors font-medium"
+                  >
+                    Enviar Mensagem
+                  </button>
+                </div>
               </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
-                  Mensagem
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formState.message}
-                  onChange={handleInputChange}
-                  required
-                  rows={5}
-                  className="toti-input resize-none focus:scale-[1.01] transition-transform"
-                  placeholder="Como podemos ajudar?"
-                />
-              </div>
-              
-              <AnimatedButton 
-                type="submit" 
-                className={cn(
-                  "w-full sm:w-auto relative overflow-hidden",
-                  isSubmitting && "pointer-events-none"
-                )} 
-                glass
-              >
-                <span className={cn(
-                  "flex items-center transition-transform duration-300",
-                  isSubmitting && "translate-y-10"
-                )}>
-                  Enviar mensagem
-                  <Send className="ml-2 h-4 w-4" />
-                </span>
-                
-                {isSubmitting && (
-                  <span className="absolute inset-0 flex items-center justify-center text-white">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Enviando...
-                  </span>
-                )}
-              </AnimatedButton>
             </form>
           </div>
           
-          {/* Contact information */}
-          <div className="flex flex-col justify-between">
-            <div className="space-y-8 animate-fade-in-left" style={{ animationDelay: '400ms' }}>
-              {contactInfo.map((item, index) => (
-                <div key={index} className="flex items-start group">
-                  <div className="bg-toti-navy/5 dark:bg-white/5 p-3 rounded-xl mr-4 group-hover:bg-toti-teal/10 transition-colors duration-300">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-toti-navy dark:text-white">{item.title}</h4>
-                    <p className="text-toti-slate dark:text-gray-300">{item.details}</p>
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Informações de Contato</h3>
+            
+            <div className="space-y-6">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 bg-toti-teal-light rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-toti-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
                   </div>
                 </div>
-              ))}
-            </div>
-            
-            <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '600ms' }}>
-              <div className="glass dark:glass-dark bg-toti-navy dark:bg-toti-navy/70 p-8 text-white transform hover:scale-[1.02] transition-transform duration-300 hover:shadow-elevated">
-                <h3 className="text-xl font-bold mb-4">Horário de Atendimento</h3>
-                <div className="space-y-2">
-                  <p className="flex justify-between">
-                    <span>Segunda - Sexta:</span>
-                    <span>08:00 - 17:00</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>Sábados:</span>
-                    <span>Fechado</span>
-                  </p>
-                  <p className="flex justify-between">
-                    <span>Domingos e Feriados:</span>
-                    <span>Fechado</span>
-                  </p>
+                <div className="ml-4">
+                  <h4 className="text-md font-medium text-gray-900">Endereço</h4>
+                  <p className="text-gray-600 mt-1">{address}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 bg-toti-teal-light rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-toti-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-md font-medium text-gray-900">Telefone</h4>
+                  <p className="text-gray-600 mt-1">{contactPhone}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 bg-toti-teal-light rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-toti-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-md font-medium text-gray-900">Email</h4>
+                  <p className="text-gray-600 mt-1">{contactEmail}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 bg-toti-teal-light rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-toti-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-md font-medium text-gray-900">Horário de Funcionamento</h4>
+                  <p className="text-gray-600 mt-1">Segunda a Sexta: 8h às 18h</p>
+                  <p className="text-gray-600">Sábado: 8h às 12h</p>
                 </div>
               </div>
             </div>
