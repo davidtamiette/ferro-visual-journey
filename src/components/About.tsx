@@ -1,3 +1,4 @@
+
 import React from 'react';
 import FeatureCard from './ui/FeatureCard';
 import { useScrollAnimation } from '@/lib/animations';
@@ -32,7 +33,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-24 bg-gray-50">
+    <section id="about" className="py-24 bg-gray-50 dark:bg-toti-navy/20 transition-colors duration-500">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-16">
           {/* Left column - About text */}
@@ -51,13 +52,13 @@ const About = () => {
                 oferecendo soluções sustentáveis para empresas e indústrias.
               </p>
               
-              <p className="text-toti-slate mb-6">
+              <p className="text-toti-slate dark:text-gray-300 mb-6">
                 Nossa equipe altamente qualificada trabalha com compromisso e transparência, 
                 garantindo que todo o processo de reciclagem seja realizado com responsabilidade 
                 ambiental e eficiência operacional.
               </p>
               
-              <p className="text-toti-slate">
+              <p className="text-toti-slate dark:text-gray-300">
                 Atendemos indústrias, construções civis, condomínios e residências com a mesma 
                 dedicação, adaptando nossos serviços às necessidades específicas de cada cliente.
               </p>
@@ -78,12 +79,13 @@ const About = () => {
                 className="flex flex-col items-start" 
                 delay={index * 100}
                 animationDirection="none"
+                glass={true}
               >
-                <div className="bg-toti-navy/5 p-3 rounded-xl mb-4">
+                <div className="bg-toti-navy/5 dark:bg-white/5 p-3 rounded-xl mb-4">
                   {prop.icon}
                 </div>
-                <h3 className="text-lg font-bold text-toti-navy mb-2">{prop.title}</h3>
-                <p className="text-toti-slate">{prop.description}</p>
+                <h3 className="text-lg font-bold text-toti-navy dark:text-white mb-2">{prop.title}</h3>
+                <p className="text-toti-slate dark:text-gray-300">{prop.description}</p>
               </FeatureCard>
             ))}
           </div>

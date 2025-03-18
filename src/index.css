@@ -69,11 +69,11 @@
 
 @layer base {
   * {
-    @apply border-border selection:bg-toti-navy/20 selection:text-toti-navy;
+    @apply border-border selection:bg-toti-navy/20 selection:text-toti-navy dark:selection:bg-toti-teal/20 dark:selection:text-toti-teal;
   }
   
   body {
-    @apply bg-background text-foreground antialiased overflow-x-hidden;
+    @apply bg-background text-foreground antialiased overflow-x-hidden transition-colors duration-300;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
   }
 
@@ -88,11 +88,11 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl;
+    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl shadow-subtle;
   }
   
   .glass-dark {
-    @apply bg-black/20 backdrop-blur-md border border-white/5 rounded-2xl;
+    @apply bg-black/20 backdrop-blur-md border border-white/5 rounded-2xl shadow-elevated;
   }
   
   .mask-radial {
@@ -128,15 +128,15 @@
   }
   
   .toti-btn-outline {
-    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-all duration-300 ease-out-expo bg-transparent border border-toti-navy text-toti-navy rounded-xl hover:bg-toti-navy/5 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-all duration-300 ease-out-expo bg-transparent border border-toti-navy text-toti-navy dark:border-white dark:text-white rounded-xl hover:bg-toti-navy/5 dark:hover:bg-white/5 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none;
   }
   
   .toti-heading {
-    @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-tight tracking-tight text-toti-navy;
+    @apply font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight md:leading-tight lg:leading-tight tracking-tight text-toti-navy dark:text-white;
   }
   
   .toti-subheading {
-    @apply font-display text-xl md:text-2xl text-toti-slate max-w-3xl;
+    @apply font-display text-xl md:text-2xl text-toti-slate dark:text-gray-300 max-w-3xl;
   }
   
   .toti-subtitle {
@@ -144,10 +144,10 @@
   }
   
   .toti-card {
-    @apply bg-white dark:bg-toti-navy/30 rounded-2xl shadow-subtle transition-all duration-300 ease-out-expo hover:shadow-elevated;
+    @apply bg-white dark:bg-toti-navy/30 rounded-2xl shadow-subtle transition-all duration-300 ease-out-expo hover:shadow-elevated dark:shadow-none dark:hover:shadow-subtle dark:hover:shadow-toti-teal/5;
   }
   
   .toti-input {
-    @apply w-full px-4 py-3 rounded-xl border border-border bg-background transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-toti-teal/30 focus:border-toti-teal;
+    @apply w-full px-4 py-3 rounded-xl border border-border bg-background dark:bg-black/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-toti-teal/30 focus:border-toti-teal;
   }
 }

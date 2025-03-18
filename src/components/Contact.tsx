@@ -51,7 +51,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-gray-50">
+    <section id="contact" className="py-24 bg-gray-50 dark:bg-toti-navy/20 transition-colors duration-500">
       <div className="container mx-auto px-6">
         <div 
           ref={ref as React.RefObject<HTMLDivElement>}
@@ -70,12 +70,12 @@ const Contact = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact form */}
-          <div className="bg-white rounded-2xl shadow-subtle p-8 animate-fade-in-right" style={{ animationDelay: '200ms' }}>
-            <h3 className="text-2xl font-bold text-toti-navy mb-6">Envie uma mensagem</h3>
+          <div className="glass dark:glass-dark p-8 animate-fade-in-right" style={{ animationDelay: '200ms' }}>
+            <h3 className="text-2xl font-bold text-toti-navy dark:text-white mb-6">Envie uma mensagem</h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-toti-slate mb-1">
+                <label htmlFor="name" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
                   Nome completo
                 </label>
                 <input
@@ -92,7 +92,7 @@ const Contact = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-toti-slate mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
                     Email
                   </label>
                   <input
@@ -108,7 +108,7 @@ const Contact = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-toti-slate mb-1">
+                  <label htmlFor="phone" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
                     Telefone
                   </label>
                   <input
@@ -124,7 +124,7 @@ const Contact = () => {
               </div>
               
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-toti-slate mb-1">
+                <label htmlFor="message" className="block text-sm font-medium text-toti-slate dark:text-gray-300 mb-1">
                   Mensagem
                 </label>
                 <textarea
@@ -139,7 +139,7 @@ const Contact = () => {
                 />
               </div>
               
-              <AnimatedButton type="submit" className="w-full sm:w-auto">
+              <AnimatedButton type="submit" className="w-full sm:w-auto" glass>
                 <span className="flex items-center">
                   Enviar mensagem
                   <Send className="ml-2 h-4 w-4" />
@@ -153,19 +153,19 @@ const Contact = () => {
             <div className="space-y-8 animate-fade-in-left" style={{ animationDelay: '400ms' }}>
               {contactInfo.map((item, index) => (
                 <div key={index} className="flex items-start">
-                  <div className="bg-toti-navy/5 p-3 rounded-xl mr-4">
+                  <div className="bg-toti-navy/5 dark:bg-white/5 p-3 rounded-xl mr-4">
                     {item.icon}
                   </div>
                   <div>
-                    <h4 className="font-medium text-toti-navy">{item.title}</h4>
-                    <p className="text-toti-slate">{item.details}</p>
+                    <h4 className="font-medium text-toti-navy dark:text-white">{item.title}</h4>
+                    <p className="text-toti-slate dark:text-gray-300">{item.details}</p>
                   </div>
                 </div>
               ))}
             </div>
             
             <div className="mt-12 animate-fade-in-up" style={{ animationDelay: '600ms' }}>
-              <div className="bg-toti-navy rounded-2xl p-8 text-white">
+              <div className="glass dark:glass-dark bg-toti-navy dark:bg-toti-navy/70 p-8 text-white">
                 <h3 className="text-xl font-bold mb-4">Horário de Atendimento</h3>
                 <div className="space-y-2">
                   <p className="flex justify-between">

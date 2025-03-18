@@ -48,7 +48,7 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="py-24">
+    <section id="services" className="py-24 dark:bg-toti-navy/10">
       <div className="container mx-auto px-6">
         <div 
           ref={ref as React.RefObject<HTMLDivElement>}
@@ -73,8 +73,9 @@ const Services = () => {
               subtitle={service.subtitle}
               delay={service.delay}
               className="h-full flex flex-col"
+              glass={true}
             >
-              <p className="text-toti-slate mb-6 flex-grow">{service.description}</p>
+              <p className="text-toti-slate dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
               <AnimatedButton variant="outline" size="sm" className="self-start mt-auto">
                 Saiba Mais
               </AnimatedButton>

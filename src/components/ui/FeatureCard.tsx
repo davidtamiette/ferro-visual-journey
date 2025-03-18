@@ -10,6 +10,7 @@ interface CardProps {
   children: React.ReactNode;
   animationDirection?: 'up' | 'down' | 'left' | 'right' | 'none';
   delay?: number; // in milliseconds
+  glass?: boolean;
 }
 
 const Card = ({
@@ -18,7 +19,8 @@ const Card = ({
   subtitle,
   children,
   animationDirection = 'up',
-  delay = 0
+  delay = 0,
+  glass = false
 }: CardProps) => {
   const { ref, isVisible } = useScrollAnimation();
   
@@ -34,14 +36,16 @@ const Card = ({
     <div
       ref={ref as React.RefObject<HTMLDivElement>}
       className={cn(
-        'toti-card p-6 md:p-8',
+        'transition-all duration-300',
+        glass ? 'glass dark:glass-dark' : 'toti-card',
+        'p-6 md:p-8',
         isVisible ? animationClasses[animationDirection] : 'opacity-0',
         className
       )}
       style={{ animationDelay: `${delay}ms` }}
     >
       {subtitle && <div className="toti-subtitle mb-2">{subtitle}</div>}
-      {title && <h3 className="text-xl md:text-2xl font-bold mb-4 text-toti-navy">{title}</h3>}
+      {title && <h3 className="text-xl md:text-2xl font-bold mb-4 text-toti-navy dark:text-white">{title}</h3>}
       {children}
     </div>
   );

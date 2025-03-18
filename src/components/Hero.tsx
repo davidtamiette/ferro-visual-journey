@@ -31,14 +31,14 @@ const Hero = () => {
       className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 pb-16 px-6"
     >
       {/* Background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white -z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-white dark:from-toti-navy/30 dark:to-black -z-10 transition-colors duration-700"></div>
       <div 
-        className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-10 -z-10"
+        className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center bg-no-repeat opacity-10 dark:opacity-5 -z-10 transition-opacity duration-700"
       ></div>
       
       {/* Abstract shape */}
       <div className="absolute top-1/3 right-0 w-1/3 h-1/3 bg-toti-teal/10 rounded-full blur-3xl -z-10 animate-pulse"></div>
-      <div className="absolute bottom-0 left-1/4 w-1/4 h-1/4 bg-toti-navy/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-0 left-1/4 w-1/4 h-1/4 bg-toti-navy/10 dark:bg-toti-teal/10 rounded-full blur-3xl -z-10"></div>
       
       <div className="container mx-auto">
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
@@ -83,7 +83,7 @@ const Hero = () => {
             )}
             style={{ animationDelay: "800ms" }}
           >
-            <AnimatedButton>Solicitar Orçamento</AnimatedButton>
+            <AnimatedButton glass>Solicitar Orçamento</AnimatedButton>
             <AnimatedButton variant="outline">Conheça Nossos Serviços</AnimatedButton>
           </div>
         </div>
@@ -96,8 +96,8 @@ const Hero = () => {
           scrollIndicator ? "opacity-100" : "opacity-0"
         )}
       >
-        <span className="text-xs text-toti-navy/60 mb-2">Rolar para mais</span>
-        <ArrowDown className="text-toti-navy/60 animate-bounce h-5 w-5" />
+        <span className="text-xs text-toti-navy/60 dark:text-white/60 mb-2">Rolar para mais</span>
+        <ArrowDown className="text-toti-navy/60 dark:text-white/60 animate-bounce h-5 w-5" />
       </div>
     </section>
   );
