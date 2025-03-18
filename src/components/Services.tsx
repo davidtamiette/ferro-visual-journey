@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Card from './ui/Card';
+import FeatureCard from './ui/FeatureCard';
 import AnimatedButton from './ui/AnimatedButton';
 import { useScrollAnimation } from '@/lib/animations';
 import { cn } from '@/lib/utils';
@@ -67,7 +67,7 @@ const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card 
+            <FeatureCard 
               key={index}
               title={service.title}
               subtitle={service.subtitle}
@@ -78,7 +78,7 @@ const Services = () => {
               <AnimatedButton variant="outline" size="sm" className="self-start mt-auto">
                 Saiba Mais
               </AnimatedButton>
-            </Card>
+            </FeatureCard>
           ))}
         </div>
       </div>

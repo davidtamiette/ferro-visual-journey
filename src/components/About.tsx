@@ -1,6 +1,5 @@
-
 import React from 'react';
-import Card from './ui/Card';
+import FeatureCard from './ui/FeatureCard';
 import { useScrollAnimation } from '@/lib/animations';
 import { Clock, Shield, Award, Recycle } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -74,7 +73,7 @@ const About = () => {
             )}
           >
             {valueProps.map((prop, index) => (
-              <Card 
+              <FeatureCard 
                 key={prop.title} 
                 className="flex flex-col items-start" 
                 delay={index * 100}
@@ -85,7 +84,7 @@ const About = () => {
                 </div>
                 <h3 className="text-lg font-bold text-toti-navy mb-2">{prop.title}</h3>
                 <p className="text-toti-slate">{prop.description}</p>
-              </Card>
+              </FeatureCard>
             ))}
           </div>
         </div>
