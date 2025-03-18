@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
@@ -13,6 +13,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   adminOnly = false 
 }) => {
   const { user, isAdmin, isLoading } = useAuth();
+  const location = useLocation();
+  
+  // For debugging
+  console.log("ProtectedRoute status:", { isLoading, user: !!user, isAdmin, path: location.pathname });
   
   if (isLoading) {
     // Show a loading spinner or placeholder
@@ -25,12 +29,14 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   
   if (!user) {
     // Redirect to login if not authenticated
-    return <Navigate to="/auth" replace />;
+    console.log("User not authenticated, redirecting to /auth");
+    return <Navigate to="/auth" replace state={{ from: location.pathname }} />;
   }
   
   if (adminOnly && !isAdmin) {
     // Redirect to dashboard if not admin
-    return <Navigate to="/" replace />;
+    console.log("User not admin, redirecting to /dashboard");
+    return <Navigate to="/dashboard" replace />;
   }
   
   return <>{children}</>;

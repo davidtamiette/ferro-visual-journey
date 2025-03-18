@@ -21,13 +21,15 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
     setLoading(true);
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log("Attempting login with email:", email);
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) throw error;
       
+      console.log("Login successful, user:", data.user?.id);
       toast({
         title: "Login realizado com sucesso!",
         description: "Você está sendo redirecionado para o dashboard.",
@@ -35,6 +37,7 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
       
       onLoginSuccess();
     } catch (error: any) {
+      console.error("Login error:", error.message);
       toast({
         title: "Erro ao fazer login",
         description: error.message || "Verifique suas credenciais e tente novamente.",

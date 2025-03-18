@@ -47,7 +47,13 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
-  
+
+  const handleDashboardClick = () => {
+    console.log("Dashboard link clicked");
+    window.location.href = '/dashboard';
+    closeMenu();
+  };
+
   return (
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
@@ -121,7 +127,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => window.location.href = '/dashboard'}>
+                  <DropdownMenuItem onClick={handleDashboardClick}>
                     Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -143,8 +149,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
 
           <div className="flex md:hidden items-center space-x-2">
             {user && (
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full mr-1" size="icon"
-                onClick={() => window.location.href = '/dashboard'}>
+              <Button 
+                variant="ghost" 
+                className="relative h-8 w-8 rounded-full mr-1" 
+                size="icon"
+                onClick={handleDashboardClick}
+              >
                 <User className="h-5 w-5" />
               </Button>
             )}
@@ -217,6 +227,14 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
             >
               Acessar
             </Link>
+          )}
+          {user && (
+            <button
+              className="block w-full text-left py-2 text-sm font-medium"
+              onClick={handleDashboardClick}
+            >
+              Dashboard
+            </button>
           )}
           {user && (
             <button
