@@ -17,6 +17,7 @@ import { useBlogPosts } from '@/hooks/useBlogPosts';
 import PostList from '@/components/dashboard/blog/PostList';
 import DeletePostDialog from '@/components/dashboard/blog/DeletePostDialog';
 import PostsPagination from '@/components/dashboard/blog/PostsPagination';
+import StatusFilter from '@/components/dashboard/blog/StatusFilter';
 
 const BlogPostsPage = () => {
   const navigate = useNavigate();
@@ -30,7 +31,9 @@ const BlogPostsPage = () => {
     totalPosts, 
     currentPage, 
     searchQuery, 
-    setSearchQuery, 
+    statusFilter,
+    setSearchQuery,
+    setStatusFilter, 
     handlePageChange, 
     deletePost,
     postsPerPage
@@ -72,8 +75,8 @@ const BlogPostsPage = () => {
         </Button>
       </div>
       
-      <div className="flex items-center py-4">
-        <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 py-4">
+        <div className="relative flex-1 min-w-[250px]">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Buscar posts..."
@@ -82,6 +85,10 @@ const BlogPostsPage = () => {
             className="pl-8"
           />
         </div>
+        <StatusFilter 
+          value={statusFilter} 
+          onChange={setStatusFilter} 
+        />
       </div>
       
       <div className="rounded-md border">

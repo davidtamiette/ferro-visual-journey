@@ -9,16 +9,27 @@ export const useBlogPosts = (postsPerPage = 10) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [totalPosts, setTotalPosts] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   
   const fetchPosts = async () => {
     setIsLoading(true);
     try {
-      // Fetch count separately
-      const { count: totalCount, error: countError } = await supabase
-        .from('blog_posts')
-        .select('*', { count: 'exact', head: true });
+      // Base count query
+      let countQuery = supabase.from('blog_posts').select('*', { count: 'exact', head: true });
+      
+      // Apply filters to count query
+      if (searchQuery) {
+        countQuery = countQuery.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
+      }
+      
+      if (statusFilter) {
+        countQuery = countQuery.eq('status', statusFilter);
+      }
+      
+      // Execute count query
+      const { count: totalCount, error: countError } = await countQuery;
       
       if (countError) throw countError;
       setTotalPosts(totalCount || 0);
@@ -40,6 +51,11 @@ export const useBlogPosts = (postsPerPage = 10) => {
       // Apply search filter if provided
       if (searchQuery) {
         query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
+      }
+      
+      // Apply status filter if provided
+      if (statusFilter) {
+        query = query.eq('status', statusFilter);
       }
       
       const { data, error } = await query;
@@ -69,7 +85,7 @@ export const useBlogPosts = (postsPerPage = 10) => {
 
   useEffect(() => {
     fetchPosts();
-  }, [currentPage, searchQuery]);
+  }, [currentPage, searchQuery, statusFilter]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -110,7 +126,9 @@ export const useBlogPosts = (postsPerPage = 10) => {
     totalPosts,
     currentPage,
     searchQuery,
+    statusFilter,
     setSearchQuery,
+    setStatusFilter,
     handlePageChange,
     deletePost,
     postsPerPage,
