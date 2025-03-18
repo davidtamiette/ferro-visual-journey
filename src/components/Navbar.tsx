@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -16,7 +15,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const Navbar = () => {
+interface NavbarProps {
+  activeSection?: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
@@ -66,35 +69,44 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link
               to="/"
-              className="text-sm font-medium transition-colors hover:text-toti-teal"
+              className={`text-sm font-medium transition-colors hover:text-toti-teal ${
+                activeSection === 'home' ? 'text-toti-teal' : ''
+              }`}
             >
               Home
             </Link>
             <Link
               to="/about"
-              className="text-sm font-medium transition-colors hover:text-toti-teal"
+              className={`text-sm font-medium transition-colors hover:text-toti-teal ${
+                activeSection === 'about' ? 'text-toti-teal' : ''
+              }`}
             >
               Sobre
             </Link>
             <Link
               to="/services"
-              className="text-sm font-medium transition-colors hover:text-toti-teal"
+              className={`text-sm font-medium transition-colors hover:text-toti-teal ${
+                activeSection === 'services' ? 'text-toti-teal' : ''
+              }`}
             >
               Serviços
             </Link>
             <Link
               to="/contact"
-              className="text-sm font-medium transition-colors hover:text-toti-teal"
+              className={`text-sm font-medium transition-colors hover:text-toti-teal ${
+                activeSection === 'contact' ? 'text-toti-teal' : ''
+              }`}
             >
               Contato
             </Link>
             <Link
               to="/blog"
-              className="text-sm font-medium transition-colors hover:text-toti-teal"
+              className={`text-sm font-medium transition-colors hover:text-toti-teal ${
+                activeSection === 'blog' ? 'text-toti-teal' : ''
+              }`}
             >
               Blog
             </Link>
@@ -129,7 +141,6 @@ const Navbar = () => {
             <ThemeToggle />
           </nav>
 
-          {/* Mobile Navigation */}
           <div className="flex md:hidden items-center space-x-2">
             {user && (
               <Button variant="ghost" className="relative h-8 w-8 rounded-full mr-1" size="icon"
@@ -151,40 +162,49 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden px-4 py-3 space-y-2 bg-white dark:bg-toti-navy shadow-md">
           <Link
             to="/"
-            className="block py-2 text-sm font-medium"
+            className={`block py-2 text-sm font-medium ${
+              activeSection === 'home' ? 'text-toti-teal' : ''
+            }`}
             onClick={closeMenu}
           >
             Home
           </Link>
           <Link
             to="/about"
-            className="block py-2 text-sm font-medium"
+            className={`block py-2 text-sm font-medium ${
+              activeSection === 'about' ? 'text-toti-teal' : ''
+            }`}
             onClick={closeMenu}
           >
             Sobre
           </Link>
           <Link
             to="/services"
-            className="block py-2 text-sm font-medium"
+            className={`block py-2 text-sm font-medium ${
+              activeSection === 'services' ? 'text-toti-teal' : ''
+            }`}
             onClick={closeMenu}
           >
             Serviços
           </Link>
           <Link
             to="/contact"
-            className="block py-2 text-sm font-medium"
+            className={`block py-2 text-sm font-medium ${
+              activeSection === 'contact' ? 'text-toti-teal' : ''
+            }`}
             onClick={closeMenu}
           >
             Contato
           </Link>
           <Link
             to="/blog"
-            className="block py-2 text-sm font-medium"
+            className={`block py-2 text-sm font-medium ${
+              activeSection === 'blog' ? 'text-toti-teal' : ''
+            }`}
             onClick={closeMenu}
           >
             Blog
