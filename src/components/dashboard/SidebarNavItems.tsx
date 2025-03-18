@@ -11,6 +11,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSidebar } from '@/contexts/SidebarContext';
 
 interface NavItem {
   title: string;
@@ -22,12 +23,12 @@ interface NavItem {
 }
 
 interface SidebarNavItemsProps {
-  collapsed: boolean;
   currentPath: string;
 }
 
-const SidebarNavItems = ({ collapsed, currentPath }: SidebarNavItemsProps) => {
+const SidebarNavItems = ({ currentPath }: SidebarNavItemsProps) => {
   const { isAdmin } = useAuth();
+  const { collapsed } = useSidebar();
 
   const isActive = (path: string) => {
     return currentPath === path || currentPath.startsWith(`${path}/`);

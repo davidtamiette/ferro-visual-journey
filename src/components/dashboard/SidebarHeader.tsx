@@ -3,14 +3,11 @@ import React from 'react';
 import { ArrowLeft, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useSidebar } from '@/contexts/SidebarContext';
 
-interface SidebarHeaderProps {
-  collapsed: boolean;
-  toggleCollapsed: () => void;
-  closeMobileMenu: () => void;
-}
-
-const SidebarHeader = ({ collapsed, toggleCollapsed, closeMobileMenu }: SidebarHeaderProps) => {
+const SidebarHeader = () => {
+  const { collapsed, toggleCollapsed, closeMobileMenu } = useSidebar();
+  
   return (
     <div className="flex h-14 items-center justify-between px-4 border-b">
       <div className={cn("flex items-center", collapsed && "justify-center w-full")}>

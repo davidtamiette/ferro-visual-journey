@@ -3,13 +3,11 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { ArrowLeft, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSidebar } from '@/contexts/SidebarContext';
 
-interface SidebarFooterProps {
-  collapsed: boolean;
-}
-
-const SidebarFooter = ({ collapsed }: SidebarFooterProps) => {
+const SidebarFooter = () => {
   const { signOut } = useAuth();
+  const { collapsed } = useSidebar();
 
   return (
     <div className="border-t p-4">
