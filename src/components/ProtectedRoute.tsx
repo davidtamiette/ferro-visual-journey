@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
@@ -13,6 +13,20 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   adminOnly = false 
 }) => {
   const { user, isAdmin, isLoading } = useAuth();
+  const navigate = useNavigate();
+  
+  // Effect to ensure we're not stuck in loading state
+  useEffect(() => {
+    // If loading takes more than 3 seconds and user isn't authenticated, redirect
+    const timeoutId = setTimeout(() => {
+      if (isLoading && !user) {
+        console.log("Protection timeout reached, redirecting to auth");
+        navigate('/auth', { replace: true });
+      }
+    }, 3000);
+    
+    return () => clearTimeout(timeoutId);
+  }, [isLoading, user, navigate]);
   
   if (isLoading) {
     // Show a loading spinner or placeholder
@@ -25,12 +39,13 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   
   if (!user) {
     // Redirect to login if not authenticated
+    console.log("User not authenticated, redirecting to auth");
     return <Navigate to="/auth" replace />;
   }
   
   if (adminOnly && !isAdmin) {
     // Redirect to dashboard if not admin
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
   
   return <>{children}</>;
