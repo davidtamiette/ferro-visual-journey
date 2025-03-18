@@ -160,7 +160,7 @@ const BlogPostsPage = () => {
       },
       published: {
         label: 'Publicado',
-        variant: 'success' as const
+        variant: 'default' as const // Changed from 'success' to 'default'
       },
       archived: {
         label: 'Arquivado',
