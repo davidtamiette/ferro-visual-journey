@@ -2,25 +2,29 @@
 import { useState } from 'react'
 import './App.css'
 import './index.css'
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import About from './components/About'
-import Services from './components/Services'
-import Contact from './components/Contact'
-import Footer from './components/Footer'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './components/ThemeProvider'
+import Index from './pages/Index'
+import AboutPage from './pages/AboutPage'
+import ServicesPage from './pages/ServicesPage'
+import ContactPage from './pages/ContactPage'
+import NotFound from './pages/NotFound'
 
 function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <Hero />
-        <About />
-        <Services />
-        <Contact />
-        <Footer />
-      </div>
+      <Router>
+        <div className="min-h-screen flex flex-col">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/sobre" element={<AboutPage />} />
+            <Route path="/servicos" element={<ServicesPage />} />
+            <Route path="/contato" element={<ContactPage />} />
+            <Route path="/404" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
+          </Routes>
+        </div>
+      </Router>
     </ThemeProvider>
   )
 }
