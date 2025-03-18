@@ -1,10 +1,13 @@
 
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, ReactNode } from 'react';
 import DashboardSidebar from './DashboardSidebar';
 import DashboardHeader from './DashboardHeader';
 
-const DashboardLayout = () => {
+interface DashboardLayoutProps {
+  children: ReactNode;
+}
+
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [sidebarWidth, setSidebarWidth] = useState(() => {
     // Check if localStorage has a saved preference for sidebar state
     const savedCollapsed = localStorage.getItem('sidebarCollapsed');
@@ -27,7 +30,7 @@ const DashboardLayout = () => {
       >
         <DashboardHeader />
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <Outlet />
+          {children}
         </main>
       </div>
     </div>
