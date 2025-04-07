@@ -38,17 +38,10 @@ const Services = () => {
       icon: '♻️'
     },
     {
-      title: 'Desmontagem Industrial',
-      subtitle: 'Equipamentos Especializados',
-      description: 'Desmontagem e remoção de estruturas metálicas, máquinas e equipamentos industriais com segurança e eficiência.',
-      delay: 500,
-      icon: '🏗️'
-    },
-    {
       title: 'Reciclagem de Metais',
       subtitle: 'Processo Sustentável',
       description: 'Processamento completo dos materiais metálicos, direcionando-os para o ciclo de reciclagem e contribuindo para a economia circular.',
-      delay: 600,
+      delay: 500,
       icon: '🌱'
     }
   ];
@@ -100,9 +93,6 @@ const Services = () => {
                 </div>
               </div>
               <p className="text-toti-slate dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
-              <AnimatedButton variant="outline" size="sm" className="self-start mt-auto">
-                Saiba Mais
-              </AnimatedButton>
             </FeatureCard>
           ))}
         </div>

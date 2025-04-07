@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Services from '@/components/Services';
@@ -61,19 +60,6 @@ const ServicesPage = () => {
         'Conformidade com legislação ambiental'
       ],
       excluded: 'Todas as nossas operações são realizadas de acordo com as normas e regulamentações ambientais.'
-    },
-    {
-      id: 'desmontagem-industrial',
-      title: 'Desmontagem Industrial',
-      subtitle: 'Equipamentos Especializados',
-      description: 'Desmontagem e remoção de estruturas metálicas, máquinas e equipamentos industriais com segurança e eficiência. Contamos com equipe especializada e equipamentos adequados.',
-      benefits: [
-        'Equipe técnica qualificada',
-        'Equipamentos de última geração',
-        'Desmontagem controlada e segura',
-        'Remoção completa de estruturas'
-      ],
-      excluded: 'Realizamos serviços de desmontagem com toda a segurança e documentação necessárias.'
     },
     {
       id: 'reciclagem-metais',
@@ -179,13 +165,6 @@ const ServicesPage = () => {
                     "itemOffered": {
                       "@type": "Service",
                       "name": "Gestão de Resíduos"
-                    }
-                  },
-                  {
-                    "@type": "Offer",
-                    "itemOffered": {
-                      "@type": "Service",
-                      "name": "Desmontagem Industrial"
                     }
                   },
                   {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/integrations/supabase/client';
@@ -49,12 +48,12 @@ const ContentPage = () => {
   useEffect(() => {
     // Fetch content from a 'site_content' table if it exists
     // For now, we're just setting default values as if they came from the database
-    setHeroTitle('Especialistas em Reciclagem de Metais em São Paulo');
+    setHeroTitle('Especialistas em Reciclagem de Metais em Betim');
     setHeroSubtitle('Compra de sucatas metálicas com compromisso ambiental e melhores preços do mercado');
     setHeroButtonText('Solicite uma Avaliação');
     
     setAboutTitle('Sobre o Ferro Velho Toti');
-    setAboutContent('Com mais de 15 anos de experiência, o Ferro Velho Toti se consolidou como referência na reciclagem de metais na região de São Paulo. Focados em sustentabilidade e valorização justa das sucatas, trabalhamos com diversos tipos de metais, oferecendo os melhores preços do mercado. NÃO trabalhamos com sucata automotiva.');
+    setAboutContent('Com mais de 28 anos de experiência, o Ferro Velho Toti se consolidou como referência na reciclagem de metais na região de Betim. Focados em sustentabilidade e valorização justa das sucatas, trabalhamos com diversos tipos de metais, oferecendo os melhores preços do mercado. NÃO trabalhamos com sucata automotiva.');
     
     setServicesTitle('Nossos Serviços');
     setServicesDescription('Oferecemos uma gama completa de serviços para atender todas as suas necessidades de reciclagem de metais, com foco em qualidade e sustentabilidade.');
@@ -63,7 +62,7 @@ const ContentPage = () => {
     setContactDescription('Estamos prontos para atender suas necessidades de reciclagem de metais e oferecer as melhores soluções para seu negócio. Entre em contato conosco hoje mesmo.');
     
     // Full page content (rich text)
-    setAboutPageContent('<h2>Nossa História</h2><p>O Ferro Velho Toti iniciou suas atividades em 2005, quando seu fundador, João Toti, decidiu transformar sua paixão por reciclagem em um negócio.</p><h2>Nossa Missão</h2><p>Promover a sustentabilidade através da reciclagem de metais, oferecendo os melhores preços e um serviço de qualidade.</p>');
+    setAboutPageContent('<h2>Nossa História</h2><p>O Ferro Velho Toti iniciou suas atividades em 1995, quando seu fundador, João Toti, decidiu transformar sua paixão por reciclagem em um negócio.</p><h2>Nossa Missão</h2><p>Promover a sustentabilidade através da reciclagem de metais, oferecendo os melhores preços e um serviço de qualidade.</p>');
     
     setServicesPageContent('<h2>Compra de Metais</h2><p>Compramos diversos tipos de metais: cobre, alumínio, bronze, latão, etc.</p><h2>Coleta em Empresas</h2><p>Oferecemos serviço de coleta em empresas com grandes volumes de sucata.</p><h2>Separação e Processamento</h2><p>Temos equipamentos modernos para separação e processamento de diversos tipos de metais.</p>');
   }, []);

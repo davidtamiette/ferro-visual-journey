@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import AnimatedButton from './ui/AnimatedButton';
 import { useScrollAnimation } from '@/lib/animations';
@@ -207,11 +206,11 @@ const Contact = () => {
                 <div className="space-y-2">
                   <p className="flex justify-between">
                     <span>Segunda - Sexta:</span>
-                    <span>08:00 - 17:00</span>
+                    <span>08:00 - 18:00</span>
                   </p>
                   <p className="flex justify-between">
                     <span>Sábados:</span>
-                    <span>Fechado</span>
+                    <span>08:00 - 12:00</span>
                   </p>
                   <p className="flex justify-between">
                     <span>Domingos e Feriados:</span>

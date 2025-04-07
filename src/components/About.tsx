@@ -1,4 +1,3 @@
-
 import React from 'react';
 import FeatureCard from './ui/FeatureCard';
 import { useScrollAnimation } from '@/lib/animations';
@@ -52,7 +51,7 @@ const About = () => {
               </span>
               <h2 className="toti-heading mb-6">Expertise e <span className="text-toti-teal">Compromisso</span></h2>
               <p className="toti-subheading mb-8">
-                Desde 2001, o Ferro Velho Toti tem sido referência na compra e venda de sucatas metálicas, 
+                Desde 1995, o Ferro Velho Toti tem sido referência na compra e venda de sucatas metálicas, 
                 oferecendo soluções sustentáveis para empresas e indústrias.
               </p>
               

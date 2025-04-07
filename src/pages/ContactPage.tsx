@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Contact from '@/components/Contact';
@@ -50,7 +49,6 @@ const ContactPage = () => {
     const { name, value } = e.target;
     setFormState(prev => ({ ...prev, [name]: value }));
     
-    // Clear error when user types
     if (formErrors[name]) {
       setFormErrors(prev => {
         const newErrors = { ...prev };
@@ -75,7 +73,6 @@ const ContactPage = () => {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       console.log('Form submitted:', formState);
@@ -122,14 +119,14 @@ const ContactPage = () => {
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Ferro Velho Toti",
-                "telephone": "+551140351413",
+                "telephone": "(31) 99946-0492",
                 "email": "contato@ferrovelhototi.com.br",
                 "address": {
                   "@type": "PostalAddress",
-                  "streetAddress": "Rua Antônio Blasques Romeiro, 120",
-                  "addressLocality": "São Paulo",
-                  "addressRegion": "SP",
-                  "postalCode": "04763-030",
+                  "streetAddress": "R. do Rosário, 1165 - Angola",
+                  "addressLocality": "Betim",
+                  "addressRegion": "MG",
+                  "postalCode": "32604-115",
                   "addressCountry": "BR"
                 },
                 "openingHoursSpecification": [
@@ -167,9 +164,9 @@ const ContactPage = () => {
               </p>
               
               <div className="flex flex-wrap justify-center gap-4 mt-8 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                <a href="tel:+551140351413" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
+                <a href="tel:+5531999460492" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
                   <Phone className="h-5 w-5 text-toti-teal" />
-                  <span>(11) 4035-1413</span>
+                  <span>(31) 99946-0492</span>
                 </a>
                 
                 <a href="mailto:contato@ferrovelhototi.com.br" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
@@ -317,8 +314,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <h3 className="font-medium text-toti-navy dark:text-white">Telefone</h3>
-                        <p className="text-toti-slate dark:text-gray-300">(11) 4035-1413</p>
-                        <p className="text-toti-slate dark:text-gray-300">(11) 98765-4321</p>
+                        <p className="text-toti-slate dark:text-gray-300">(31) 99946-0492</p>
                       </div>
                     </div>
                     
@@ -329,7 +325,6 @@ const ContactPage = () => {
                       <div>
                         <h3 className="font-medium text-toti-navy dark:text-white">Email</h3>
                         <p className="text-toti-slate dark:text-gray-300">contato@ferrovelhototi.com.br</p>
-                        <p className="text-toti-slate dark:text-gray-300">comercial@ferrovelhototi.com.br</p>
                       </div>
                     </div>
                     
@@ -340,10 +335,10 @@ const ContactPage = () => {
                       <div>
                         <h3 className="font-medium text-toti-navy dark:text-white">Endereço</h3>
                         <p className="text-toti-slate dark:text-gray-300">
-                          Rua Antônio Blasques Romeiro, 120 - Socorro
+                          R. do Rosário, 1165 - Angola
                         </p>
                         <p className="text-toti-slate dark:text-gray-300">
-                          São Paulo - SP, 04763-030
+                          Betim - MG, 32604-115
                         </p>
                       </div>
                     </div>
@@ -366,7 +361,7 @@ const ContactPage = () => {
                 <div className="flex-grow glass dark:glass-dark p-4 animate-fade-in-up h-80 md:h-96">
                   <div className="h-full w-full rounded-xl overflow-hidden">
                     <iframe 
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3655.7731866806135!2d-46.7074188!3d-23.6113257!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce5712e8f8f0c1%3A0x52a13bbe5a7bc34a!2sR.%20Ant%C3%B4nio%20Blasques%20Romeiro%2C%20120%20-%20Jardim%20Sao%20Luis%20(Zona%20Sul)%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2004763-030!5e0!3m2!1sen!2sbr!4v1673963200274!5m2!1sen!2sbr" 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3751.463265444518!2d-44.203290684616265!3d-19.91770934344889!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa6c1ced09f8d4f%3A0x48c31bd0be6ba373!2sR.%20do%20Ros%C3%A1rio%2C%201165%20-%20Angola%2C%20Betim%20-%20MG%2C%2032604-115!5e0!3m2!1spt-BR!2sbr!4v1649878902489!5m2!1spt-BR!2sbr" 
                       width="100%" 
                       height="100%" 
                       style={{ border: 0 }} 
