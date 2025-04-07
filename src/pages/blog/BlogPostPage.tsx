@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -68,10 +69,10 @@ const BlogPostPage = () => {
           const tags: TagType[] = tagsData
             .filter(item => item.blog_tags) // Filter out any null entries
             .map(item => ({
-              id: item.blog_tags.id,
-              name: item.blog_tags.name,
-              slug: item.blog_tags.slug,
-              created_at: item.blog_tags.created_at || new Date().toISOString()
+              id: item.blog_tags?.id,
+              name: item.blog_tags?.name,
+              slug: item.blog_tags?.slug,
+              created_at: item.blog_tags?.created_at || new Date().toISOString()
             }));
           
           setPostTags(tags);
