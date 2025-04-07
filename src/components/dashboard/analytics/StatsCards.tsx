@@ -1,12 +1,6 @@
 
 import React from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface AnalyticsData {
   id?: string;
@@ -22,10 +16,10 @@ interface StatsCardsProps {
 
 const StatsCards = ({ analyticsData, isLoading }: StatsCardsProps) => {
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-3">
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Visitantes Totais</CardTitle>
+          <CardTitle className="text-base font-medium">Visitantes Totais</CardTitle>
           <CardDescription>Últimos 7 dias</CardDescription>
         </CardHeader>
         <CardContent>
@@ -41,7 +35,7 @@ const StatsCards = ({ analyticsData, isLoading }: StatsCardsProps) => {
       
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Visualizações de Página</CardTitle>
+          <CardTitle className="text-base font-medium">Visualizações de Página</CardTitle>
           <CardDescription>Últimos 7 dias</CardDescription>
         </CardHeader>
         <CardContent>
@@ -57,7 +51,7 @@ const StatsCards = ({ analyticsData, isLoading }: StatsCardsProps) => {
       
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Taxa de Conversão</CardTitle>
+          <CardTitle className="text-base font-medium">Taxa de Conversão</CardTitle>
           <CardDescription>Estimativa baseada em visitas</CardDescription>
         </CardHeader>
         <CardContent>

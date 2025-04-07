@@ -22,14 +22,6 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
 import SettingsPage from '@/pages/dashboard/SettingsPage';
 import AnalyticsPage from '@/pages/dashboard/AnalyticsPage';
-import AppearancePage from '@/pages/dashboard/AppearancePage';
-import ContentPage from '@/pages/dashboard/ContentPage';
-
-// Dashboard Blog Management
-import BlogPostsPage from '@/pages/dashboard/blog/BlogPostsPage';
-import BlogPostForm from '@/pages/dashboard/blog/BlogPostForm';
-import BlogCategoriesPage from '@/pages/dashboard/blog/BlogCategoriesPage';
-import BlogTagsPage from '@/pages/dashboard/blog/BlogTagsPage';
 
 function App() {
   return (
@@ -57,51 +49,6 @@ function App() {
               <Route index element={<DashboardPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="analytics" element={<AnalyticsPage />} />
-              
-              {/* Admin Only Routes */}
-              <Route path="appearance" element={
-                <ProtectedRoute adminOnly>
-                  <AppearancePage />
-                </ProtectedRoute>
-              } />
-              <Route path="content" element={
-                <ProtectedRoute adminOnly>
-                  <ContentPage />
-                </ProtectedRoute>
-              } />
-              
-              {/* Blog Management Routes */}
-              {/* Add missing "/dashboard/blog" route */}
-              <Route path="blog" element={
-                <ProtectedRoute adminOnly>
-                  <BlogPostsPage />
-                </ProtectedRoute>
-              } />
-              <Route path="blog/posts" element={
-                <ProtectedRoute adminOnly>
-                  <BlogPostsPage />
-                </ProtectedRoute>
-              } />
-              <Route path="blog/posts/new" element={
-                <ProtectedRoute adminOnly>
-                  <BlogPostForm />
-                </ProtectedRoute>
-              } />
-              <Route path="blog/posts/edit/:postId" element={
-                <ProtectedRoute adminOnly>
-                  <BlogPostForm />
-                </ProtectedRoute>
-              } />
-              <Route path="blog/categories" element={
-                <ProtectedRoute adminOnly>
-                  <BlogCategoriesPage />
-                </ProtectedRoute>
-              } />
-              <Route path="blog/tags" element={
-                <ProtectedRoute adminOnly>
-                  <BlogTagsPage />
-                </ProtectedRoute>
-              } />
             </Route>
             
             {/* 404 */}

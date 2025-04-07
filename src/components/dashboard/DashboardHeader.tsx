@@ -3,7 +3,7 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Settings, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,37 +24,29 @@ const DashboardHeader = () => {
   };
 
   return (
-    <header className="border-b bg-background z-10 py-4 px-6 flex items-center justify-between">
-      <div className="flex-1">
-        <h1 className="text-lg font-semibold">Dashboard Administrativo</h1>
+    <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
+      <div className="flex-1 text-lg font-semibold">
+        Dashboard Administrativo
       </div>
       
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center gap-4">
         <ThemeToggle />
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-              <div className="flex h-full w-full items-center justify-center rounded-full bg-muted">
-                <User className="h-5 w-5" />
-              </div>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <User className="h-5 w-5" />
+              <span className="sr-only">Perfil</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2" onClick={() => navigate('/dashboard/profile')}>
-              <User className="h-4 w-4" />
-              <span>{profile?.full_name || user?.email}</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2" onClick={() => navigate('/dashboard/settings')}>
-              <Settings className="h-4 w-4" />
-              <span>Configurações</span>
+            <DropdownMenuItem className="font-medium">
+              {profile?.full_name || user?.email}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2 text-destructive focus:text-destructive" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4" />
-              <span>Sair</span>
+            <DropdownMenuItem onClick={handleSignOut}>
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

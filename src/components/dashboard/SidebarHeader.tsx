@@ -1,45 +1,29 @@
 
 import React from 'react';
-import { ArrowLeft, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Link } from 'react-router-dom';
 import { useSidebar } from '@/contexts/SidebarContext';
+import { cn } from '@/lib/utils';
 
 const SidebarHeader = () => {
-  const { collapsed, toggleCollapsed, closeMobileMenu } = useSidebar();
+  const { collapsed } = useSidebar();
   
   return (
-    <div className="flex h-14 items-center justify-between px-4 border-b">
-      <div className={cn("flex items-center", collapsed && "justify-center w-full")}>
-        <img
-          src="/placeholder.svg"
-          alt="Logo"
-          className="h-8 w-8"
-        />
-        {!collapsed && (
-          <span className="ml-2 text-lg font-semibold">Toti Admin</span>
+    <div className="sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background px-4">
+      <Link 
+        to="/dashboard" 
+        className={cn(
+          "flex items-center gap-2 font-semibold transition-all",
+          collapsed ? "justify-center w-full" : ""
         )}
-      </div>
-      
-      <div className="flex items-center">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:flex hidden"
-          onClick={toggleCollapsed}
-        >
-          <ArrowLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
-        </Button>
+      >
+        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+          <span className="text-primary-foreground text-xl font-bold">T</span>
+        </div>
         
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={closeMobileMenu}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
+        {!collapsed && (
+          <span className="text-xl font-semibold">Toti Admin</span>
+        )}
+      </Link>
     </div>
   );
 };

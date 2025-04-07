@@ -1,14 +1,14 @@
 
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SidebarProvider, useSidebar } from '@/contexts/SidebarContext';
 import SidebarHeader from './SidebarHeader';
 import SidebarNavItems from './SidebarNavItems';
-import SidebarFooter from './SidebarFooter';
 import SidebarMobileToggle from './SidebarMobileToggle';
 import SidebarBackdrop from './SidebarBackdrop';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardSidebarProps {
   onToggle?: (collapsed: boolean) => void;
@@ -16,6 +16,21 @@ interface DashboardSidebarProps {
 
 const DashboardSidebar = ({ onToggle }: DashboardSidebarProps) => {
   const location = useLocation();
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const handleLogout = async () => {
+      await signOut();
+      navigate('/');
+    };
+    
+    window.addEventListener('sidebar-logout', handleLogout);
+    
+    return () => {
+      window.removeEventListener('sidebar-logout', handleLogout);
+    };
+  }, [signOut, navigate]);
   
   return (
     <SidebarProvider onToggle={onToggle}>
@@ -40,11 +55,9 @@ const SidebarContent = ({ currentPath }: { currentPath: string }) => {
     >
       <SidebarHeader />
       
-      <ScrollArea className="flex-1 py-4">
+      <ScrollArea className="flex-1">
         <SidebarNavItems currentPath={currentPath} />
       </ScrollArea>
-      
-      <SidebarFooter />
     </aside>
   );
 };

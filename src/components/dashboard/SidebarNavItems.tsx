@@ -4,11 +4,10 @@ import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
-  Settings, 
-  LineChart, 
-  Palette, 
-  FileText,
-  BookOpen
+  LineChart,
+  Settings,
+  ArrowLeft,
+  LogOut
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/contexts/SidebarContext';
@@ -19,7 +18,6 @@ interface NavItem {
   href: string;
   exact?: boolean;
   adminOnly?: boolean;
-  subItems?: { title: string; href: string }[];
 }
 
 interface SidebarNavItemsProps {
@@ -30,11 +28,7 @@ const SidebarNavItems = ({ currentPath }: SidebarNavItemsProps) => {
   const { isAdmin } = useAuth();
   const { collapsed } = useSidebar();
 
-  const isActive = (path: string) => {
-    return currentPath === path || currentPath.startsWith(`${path}/`);
-  };
-  
-  const navItems: NavItem[] = [
+  const mainNavItems: NavItem[] = [
     {
       title: 'Visão Geral',
       icon: LayoutDashboard,
@@ -47,58 +41,40 @@ const SidebarNavItems = ({ currentPath }: SidebarNavItemsProps) => {
       href: '/dashboard/analytics',
     },
     {
-      title: 'Blog',
-      icon: BookOpen,
-      href: '/dashboard/blog',
-      adminOnly: true,
-      subItems: [
-        {
-          title: 'Posts',
-          href: '/dashboard/blog/posts',
-        },
-        {
-          title: 'Categorias',
-          href: '/dashboard/blog/categories',
-        },
-        {
-          title: 'Tags',
-          href: '/dashboard/blog/tags',
-        }
-      ]
-    },
-    {
-      title: 'Aparência',
-      icon: Palette,
-      href: '/dashboard/appearance',
-      adminOnly: true,
-    },
-    {
-      title: 'Conteúdo',
-      icon: FileText,
-      href: '/dashboard/content',
-      adminOnly: true,
-    },
-    {
       title: 'Configurações',
       icon: Settings,
       href: '/dashboard/settings',
     },
   ].filter(item => !item.adminOnly || isAdmin);
 
+  const bottomNavItems: NavItem[] = [
+    {
+      title: 'Voltar ao site',
+      icon: ArrowLeft,
+      href: '/',
+    },
+    {
+      title: 'Sair',
+      icon: LogOut,
+      href: '#logout', // Special handling for logout
+    },
+  ];
+
   return (
-    <nav className="grid gap-1 px-2">
-      {navItems.map((item, index) => {
-        const IconComponent = item.icon;
-        
-        return (
-          <React.Fragment key={index}>
+    <div className="flex flex-col h-full justify-between">
+      <nav className="grid gap-1 px-2 pt-4">
+        {mainNavItems.map((item, index) => {
+          const IconComponent = item.icon;
+          
+          return (
             <NavLink
+              key={index}
               to={item.href}
               end={item.exact}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground",
-                  isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+                  isActive ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground",
                   collapsed && "justify-center px-0"
                 )
               }
@@ -106,30 +82,50 @@ const SidebarNavItems = ({ currentPath }: SidebarNavItemsProps) => {
               <IconComponent className="h-5 w-5" />
               {!collapsed && <span>{item.title}</span>}
             </NavLink>
-            
-            {/* Render sub-items if they exist and sidebar is not collapsed */}
-            {!collapsed && item.subItems && (
-              <div className="ml-8 grid gap-1 mt-1">
-                {item.subItems.map((subItem, subIndex) => (
-                  <NavLink
-                    key={subIndex}
-                    to={subItem.href}
-                    className={({ isActive }) =>
-                      cn(
-                        "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs transition-all hover:bg-accent hover:text-accent-foreground",
-                        isActive ? "bg-accent text-accent-foreground" : "text-muted-foreground"
-                      )
-                    }
-                  >
-                    <span>{subItem.title}</span>
-                  </NavLink>
-                ))}
-              </div>
-            )}
-          </React.Fragment>
-        );
-      })}
-    </nav>
+          );
+        })}
+      </nav>
+      
+      <nav className="grid gap-1 px-2 py-4 mt-auto">
+        {bottomNavItems.map((item, index) => {
+          const IconComponent = item.icon;
+          
+          return item.href === "#logout" ? (
+            <button
+              key={index}
+              onClick={() => {
+                const event = new CustomEvent('sidebar-logout');
+                window.dispatchEvent(event);
+              }}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground w-full text-left",
+                "text-muted-foreground",
+                collapsed && "justify-center px-0"
+              )}
+            >
+              <IconComponent className="h-5 w-5" />
+              {!collapsed && <span>{item.title}</span>}
+            </button>
+          ) : (
+            <NavLink
+              key={index}
+              to={item.href}
+              end={item.exact}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground",
+                  isActive ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground",
+                  collapsed && "justify-center px-0"
+                )
+              }
+            >
+              <IconComponent className="h-5 w-5" />
+              {!collapsed && <span>{item.title}</span>}
+            </NavLink>
+          );
+        })}
+      </nav>
+    </div>
   );
 };
 

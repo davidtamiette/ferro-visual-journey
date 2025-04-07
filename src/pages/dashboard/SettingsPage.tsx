@@ -23,14 +23,13 @@ import {
 } from '@/components/ui/tabs';
 
 const SettingsPage = () => {
-  const { user, profile, isAdmin } = useAuth();
+  const { user, profile } = useAuth();
   const { toast } = useToast();
   
   const [fullName, setFullName] = useState(profile?.full_name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [isUpdating, setIsUpdating] = useState(false);
   
-  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -99,7 +98,6 @@ const SettingsPage = () => {
       if (error) throw error;
       
       // Clear fields after successful update
-      setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
       
@@ -177,7 +175,7 @@ const SettingsPage = () => {
                   <Label htmlFor="role">Função</Label>
                   <Input
                     id="role"
-                    value={isAdmin ? 'Administrador' : 'Usuário'}
+                    value={profile?.role === 'admin' ? 'Administrador' : 'Usuário'}
                     disabled
                     className="bg-muted"
                   />

@@ -1,13 +1,7 @@
 
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface AnalyticsData {
   id?: string;
@@ -41,15 +35,15 @@ const AnalyticsChart = ({ analyticsData, isLoading }: AnalyticsChartProps) => {
   };
 
   return (
-    <Card className="col-span-3">
-      <CardHeader>
+    <Card>
+      <CardHeader className="pb-3">
         <CardTitle>Análise de Tráfego</CardTitle>
         <CardDescription>
           Visualizações de página e visitantes únicos nos últimos 7 dias
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="h-80">
+        <div className="h-[400px]">
           {isLoading ? (
             <div className="h-full w-full animate-pulse rounded bg-muted"></div>
           ) : (

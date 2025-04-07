@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { supabase } from '@/integrations/supabase/client';
@@ -317,7 +316,7 @@ const AnalyticsPage = () => {
       </div>
       
       <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-2">
-        <Card className="col-span-1 lg:col-span-2">
+        <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Visualizações de Página e Visitantes</CardTitle>
             <CardDescription>
@@ -359,77 +358,6 @@ const AnalyticsPage = () => {
                       dot={{ r: 3 }}
                     />
                   </LineChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Fontes de Tráfego</CardTitle>
-            <CardDescription>
-              De onde vêm seus visitantes
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              {isLoading ? (
-                <div className="h-full w-full animate-pulse rounded bg-muted"></div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={sourceData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {sourceData.map((_, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Taxa de Rejeição</CardTitle>
-            <CardDescription>
-              Porcentagem de visitantes que saem após ver apenas uma página
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80">
-              {isLoading ? (
-                <div className="h-full w-full animate-pulse rounded bg-muted"></div>
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={analyticsData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#888" strokeOpacity={0.2} />
-                    <XAxis 
-                      dataKey="date" 
-                      tickFormatter={formatDate}
-                      stroke="#888" 
-                      fontSize={12} 
-                    />
-                    <YAxis stroke="#888" fontSize={12} domain={[0, 100]} />
-                    <Tooltip />
-                    <Bar 
-                      dataKey="bounce_rate" 
-                      name="Taxa de Rejeição (%)" 
-                      fill="#404077" 
-                    />
-                  </BarChart>
                 </ResponsiveContainer>
               )}
             </div>

@@ -7,12 +7,10 @@ import { useDashboardData } from '@/hooks/useDashboardData';
 // Component imports
 import StatsCards from '@/components/dashboard/analytics/StatsCards';
 import AnalyticsChart from '@/components/dashboard/analytics/AnalyticsChart';
-import CompanyInfoCard from '@/components/dashboard/company/CompanyInfoCard';
-import QuickActionsCard from '@/components/dashboard/company/QuickActionsCard';
 
 const DashboardPage = () => {
   const { profile } = useAuth();
-  const { settings, analyticsData, isLoading } = useDashboardData();
+  const { analyticsData, isLoading } = useDashboardData();
   
   return (
     <div className="space-y-6">
@@ -30,11 +28,6 @@ const DashboardPage = () => {
       <StatsCards analyticsData={analyticsData} isLoading={isLoading} />
       
       <AnalyticsChart analyticsData={analyticsData} isLoading={isLoading} />
-      
-      <div className="grid gap-4 md:grid-cols-2">
-        <CompanyInfoCard settings={settings} isLoading={isLoading} />
-        <QuickActionsCard />
-      </div>
     </div>
   );
 };
