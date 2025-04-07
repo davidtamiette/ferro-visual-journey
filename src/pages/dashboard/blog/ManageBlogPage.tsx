@@ -48,7 +48,21 @@ const ManageBlogPage = () => {
           
         if (error) throw error;
         
-        setPosts(data || []);
+        // Format the posts data - ensure status is properly typed
+        const formattedPosts = data.map(post => {
+          // Ensure status is one of the allowed values or default to "draft"
+          let typedStatus: 'draft' | 'published' | 'archived' = 'draft';
+          if (post.status === 'published' || post.status === 'archived') {
+            typedStatus = post.status as 'published' | 'archived';
+          }
+          
+          return {
+            ...post,
+            status: typedStatus
+          };
+        }) as Post[];
+        
+        setPosts(formattedPosts);
       } catch (error) {
         console.error('Error fetching blog posts:', error);
         toast({
@@ -110,12 +124,21 @@ const ManageBlogPage = () => {
         description: "As alterações foram salvas com sucesso.",
       });
       
-      // Update local post data
-      setPosts(posts.map(post => 
-        post.id === selectedPost.id 
-          ? { ...post, title, summary, content, seo_title: seoTitle, seo_description: seoDescription, seo_keywords: seoKeywords }
-          : post
-      ));
+      // Update local post data - ensure status is typed correctly
+      setPosts(posts.map(post => {
+        if (post.id === selectedPost.id) {
+          return {
+            ...post,
+            title,
+            summary,
+            content,
+            seo_title: seoTitle,
+            seo_description: seoDescription,
+            seo_keywords: seoKeywords
+          };
+        }
+        return post;
+      }));
     } catch (error) {
       console.error('Error updating blog post:', error);
       toast({
