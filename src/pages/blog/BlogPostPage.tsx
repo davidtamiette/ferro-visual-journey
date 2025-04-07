@@ -48,9 +48,9 @@ const BlogPostPage = () => {
         // Process the post data
         const formattedPost = {
           ...data,
-          author_name: data.profiles?.full_name || 'Autor Desconhecido',
-          category_name: data.blog_categories?.name || 'Sem Categoria',
-          status: data.status as 'draft' | 'published' | 'archived',
+          author_name: data?.profiles?.full_name || 'Autor Desconhecido',
+          category_name: data?.blog_categories?.name || 'Sem Categoria',
+          status: data?.status as 'draft' | 'published' | 'archived',
         } as Post;
         
         setPost(formattedPost);
@@ -62,18 +62,22 @@ const BlogPostPage = () => {
             tag_id,
             blog_tags:tag_id(id, name, slug, created_at)
           `)
-          .eq('post_id', data.id);
+          .eq('post_id', data?.id);
         
         if (!tagsError && tagsData) {
-          // Fixed: Extract and map the blog_tags properly to the TagType interface
+          // Fixed: Extract tag data correctly, handling the nested structure
           const tags: TagType[] = tagsData
             .filter(item => item.blog_tags) // Filter out any null entries
-            .map(item => ({
-              id: item.blog_tags?.id,
-              name: item.blog_tags?.name,
-              slug: item.blog_tags?.slug,
-              created_at: item.blog_tags?.created_at || new Date().toISOString()
-            }));
+            .map(item => {
+              // Extract the blog_tags object correctly
+              const tagData = item.blog_tags as any;  
+              return {
+                id: tagData.id || "",
+                name: tagData.name || "",
+                slug: tagData.slug || "",
+                created_at: tagData.created_at || new Date().toISOString()
+              };
+            });
           
           setPostTags(tags);
           
@@ -82,7 +86,7 @@ const BlogPostPage = () => {
         }
         
         // Fetch related posts (posts with the same category)
-        if (data.category_id) {
+        if (data?.category_id) {
           const { data: relatedData, error: relatedError } = await supabase
             .from('blog_posts')
             .select(`
@@ -376,3 +380,4 @@ const BlogPostPage = () => {
 };
 
 export default BlogPostPage;
+
