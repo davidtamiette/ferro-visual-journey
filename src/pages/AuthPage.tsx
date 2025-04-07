@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import LoginForm from '@/components/auth/LoginForm';
-import RegisterForm from '@/components/auth/RegisterForm';
 import AuthPageLayout from '@/components/auth/AuthPageLayout';
 
 const AuthPage = () => {
@@ -32,7 +31,7 @@ const AuthPage = () => {
     );
   }
   
-  // Only show login/register form if not authenticated
+  // Only show login form if not authenticated
   if (user) {
     return null; // The useEffect will handle redirection
   }
@@ -40,7 +39,8 @@ const AuthPage = () => {
   return (
     <AuthPageLayout
       loginForm={<LoginForm onLoginSuccess={handleAuthSuccess} />}
-      registerForm={<RegisterForm onRegisterSuccess={handleAuthSuccess} />}
+      registerForm={null} // Removendo o formulário de registro
+      loginOnly={true} // Adicionando uma prop para indicar que é apenas login
     />
   );
 };
