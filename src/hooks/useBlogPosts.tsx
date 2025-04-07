@@ -62,13 +62,21 @@ export const useBlogPosts = (postsPerPage = 10) => {
       
       if (error) throw error;
       
-      // Format the posts data
-      const formattedPosts = data.map(post => ({
-        ...post,
-        author_name: post.profiles?.full_name || 'Autor Desconhecido',
-        category_name: post.blog_categories?.name || 'Sem Categoria',
-        status: post.status as 'draft' | 'published' | 'archived',
-      })) as Post[];
+      // Format the posts data - ensure status is properly typed
+      const formattedPosts = data.map(post => {
+        // Ensure status is one of the allowed values or default to "draft"
+        let typedStatus: 'draft' | 'published' | 'archived' = 'draft';
+        if (post.status === 'published' || post.status === 'archived') {
+          typedStatus = post.status as 'published' | 'archived';
+        }
+        
+        return {
+          ...post,
+          author_name: post.profiles?.full_name || 'Autor Desconhecido',
+          category_name: post.blog_categories?.name || 'Sem Categoria',
+          status: typedStatus
+        };
+      }) as Post[];
       
       setPosts(formattedPosts);
     } catch (error) {

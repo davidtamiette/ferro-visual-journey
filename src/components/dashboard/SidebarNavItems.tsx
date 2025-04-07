@@ -46,6 +46,11 @@ const SidebarNavItems = ({ currentPath }: SidebarNavItemsProps) => {
       href: '/dashboard/content',
     },
     {
+      title: 'Blog',
+      icon: FileText,
+      href: '/dashboard/blog/posts',
+    },
+    {
       title: 'Configurações',
       icon: Settings,
       href: '/dashboard/settings',
