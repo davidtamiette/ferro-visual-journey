@@ -16,7 +16,8 @@ export const supabase = createClient<Database>(
   {
     auth: {
       persistSession: true,
-      storageKey: 'toti-supabase-auth'
+      storageKey: 'toti-supabase-auth',
+      autoRefreshToken: true
     }
   }
 );

@@ -32,7 +32,9 @@ const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
     }
     
     try {
-      const { error } = await supabase.auth.signUp({
+      console.log("Tentando cadastrar usuário com:", { email, fullName });
+      
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -44,16 +46,35 @@ const RegisterForm = ({ onRegisterSuccess }: RegisterFormProps) => {
       
       if (error) throw error;
       
+      console.log("Resposta do cadastro:", data);
+      
       toast({
         title: "Cadastro realizado com sucesso!",
         description: "Por favor, verifique seu email para confirmar o cadastro.",
       });
+      
+      // Se foi bem-sucedido mas precisa de confirmação, avisamos o usuário
+      if (data?.user && !data?.session) {
+        console.log("Usuário precisa confirmar email");
+      } else if (data?.session) {
+        // Se já temos uma sessão, podemos redirecionar direto
+        console.log("Usuário autenticado diretamente:", data.user?.id);
+        onRegisterSuccess();
+      }
+      
       setLoading(false);
-      onRegisterSuccess();
     } catch (error: any) {
+      console.error("Erro no cadastro:", error);
+      
+      let errorMessage = "Ocorreu um erro ao criar sua conta.";
+      
+      if (error.message.includes("duplicate key")) {
+        errorMessage = "Este email já está cadastrado. Por favor, faça login ou use outro email.";
+      }
+      
       toast({
         title: "Erro no cadastro",
-        description: error.message || "Ocorreu um erro ao criar sua conta.",
+        description: errorMessage,
         variant: "destructive",
       });
       setLoading(false);

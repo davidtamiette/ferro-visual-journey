@@ -21,7 +21,7 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
     setLoading(true);
     
     try {
-      console.log("Attempting login with email:", email);
+      console.log("Tentando login com email:", email);
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -29,20 +29,29 @@ const LoginForm = ({ onLoginSuccess }: LoginFormProps) => {
       
       if (error) throw error;
       
-      console.log("Login successful, user:", data?.user?.id);
+      console.log("Login bem-sucedido, usuário:", data?.user?.id);
       
       toast({
         title: "Login realizado com sucesso!",
         description: "Você está sendo redirecionado para o dashboard.",
       });
       
-      // Call success callback after successful login
+      // Chama o callback de sucesso após login bem-sucedido
       onLoginSuccess();
     } catch (error: any) {
-      console.error("Login error:", error);
+      console.error("Erro no login:", error);
+      
+      let errorMessage = "Verifique suas credenciais e tente novamente.";
+      
+      if (error.message.includes("Invalid login")) {
+        errorMessage = "Email ou senha inválidos.";
+      } else if (error.message.includes("Email not confirmed")) {
+        errorMessage = "Por favor, confirme seu email antes de fazer login.";
+      }
+      
       toast({
         title: "Erro ao fazer login",
-        description: error.message || "Verifique suas credenciais e tente novamente.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
