@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -60,12 +59,21 @@ const BlogPostPage = () => {
           .from('blog_posts_tags')
           .select(`
             tag_id,
-            blog_tags:tag_id(id, name, slug)
+            blog_tags:tag_id(id, name, slug, created_at)
           `)
           .eq('post_id', data.id);
         
         if (!tagsError && tagsData) {
-          const tags = tagsData.map(item => item.blog_tags) as TagType[];
+          // Fixed: Extract and map the blog_tags properly to the TagType interface
+          const tags: TagType[] = tagsData
+            .filter(item => item.blog_tags) // Filter out any null entries
+            .map(item => ({
+              id: item.blog_tags.id,
+              name: item.blog_tags.name,
+              slug: item.blog_tags.slug,
+              created_at: item.blog_tags.created_at || new Date().toISOString()
+            }));
+          
           setPostTags(tags);
           
           // Update the post with tags
