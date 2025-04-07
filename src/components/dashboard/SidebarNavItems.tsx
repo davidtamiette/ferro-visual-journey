@@ -7,7 +7,8 @@ import {
   LineChart,
   Settings,
   ArrowLeft,
-  LogOut
+  LogOut,
+  FileText
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSidebar } from '@/contexts/SidebarContext';
@@ -17,7 +18,6 @@ interface NavItem {
   icon: React.ElementType;
   href: string;
   exact?: boolean;
-  adminOnly?: boolean;
 }
 
 interface SidebarNavItemsProps {
@@ -41,11 +41,16 @@ const SidebarNavItems = ({ currentPath }: SidebarNavItemsProps) => {
       href: '/dashboard/analytics',
     },
     {
+      title: 'Conteúdo',
+      icon: FileText,
+      href: '/dashboard/content',
+    },
+    {
       title: 'Configurações',
       icon: Settings,
       href: '/dashboard/settings',
     },
-  ].filter(item => !item.adminOnly || isAdmin);
+  ];
 
   const bottomNavItems: NavItem[] = [
     {

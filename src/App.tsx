@@ -22,6 +22,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
 import SettingsPage from '@/pages/dashboard/SettingsPage';
 import AnalyticsPage from '@/pages/dashboard/AnalyticsPage';
+import ContentPage from '@/pages/dashboard/ContentPage';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
               <Route index element={<DashboardPage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="analytics" element={<AnalyticsPage />} />
+              <Route path="content" element={<ContentPage />} />
             </Route>
             
             {/* 404 */}
