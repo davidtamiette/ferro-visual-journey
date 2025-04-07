@@ -94,7 +94,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } else if (data) {
         console.log('Profile loaded:', data);
-        setProfile(data);
+        // Add email from the user object to match our Profile interface
+        const profileWithEmail = {
+          ...data,
+          email: user?.email || null
+        };
+        setProfile(profileWithEmail);
       } else {
         console.log('No profile found for user:', userId);
         setProfile(null);
