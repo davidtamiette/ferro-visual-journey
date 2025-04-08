@@ -31,6 +31,7 @@ export const useGoogleAnalytics = () => {
             console.error('Error fetching Google Analytics ID:', error);
           } else if (data && 
                     typeof data === 'object' && 
+                    data !== null &&
                     'google_analytics_id' in data && 
                     typeof data.google_analytics_id === 'string') {
             setTrackingId(data.google_analytics_id);
