@@ -29,7 +29,8 @@ const formSchema = z.object({
 
 interface GoogleAnalyticsFormProps {
   initialData: {
-    google_analytics_id: string | null;
+    google_analytics_id?: string | null;
+    [key: string]: any;
   };
   onUpdate: () => void;
 }

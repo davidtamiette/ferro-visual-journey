@@ -9,16 +9,28 @@ export const useGoogleAnalytics = () => {
   useEffect(() => {
     const fetchGoogleAnalyticsSettings = async () => {
       try {
-        const { data, error } = await supabase
+        // First check if the column exists
+        const { data: columnCheck, error: columnError } = await supabase
           .from('site_settings')
-          .select('google_analytics_id')
-          .single();
+          .select('*')
+          .limit(1);
         
-        if (error) {
-          console.error('Error fetching Google Analytics ID:', error);
-          // Don't try to access google_analytics_id if there was an error
-        } else if (data && data.google_analytics_id) {
-          setTrackingId(data.google_analytics_id);
+        // Check if the column exists by examining if it's in the returned data structure
+        if (columnCheck && columnCheck.length > 0 && 'google_analytics_id' in columnCheck[0]) {
+          // Column exists, fetch the value
+          const { data, error } = await supabase
+            .from('site_settings')
+            .select('google_analytics_id')
+            .single();
+          
+          if (error) {
+            console.error('Error fetching Google Analytics ID:', error);
+          } else if (data && typeof data.google_analytics_id === 'string') {
+            setTrackingId(data.google_analytics_id);
+          }
+        } else {
+          console.log('google_analytics_id column not found in site_settings table');
+          // Leave trackingId as null since the column doesn't exist yet
         }
       } catch (error) {
         console.error('Failed to fetch Google Analytics settings:', error);
