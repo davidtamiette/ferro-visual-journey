@@ -14,8 +14,9 @@ export const useGoogleAnalytics = () => {
           .select('google_analytics_id')
           .single();
         
-        if (error && error.code !== 'PGRST116') {
+        if (error) {
           console.error('Error fetching Google Analytics ID:', error);
+          // Don't try to access google_analytics_id if there was an error
         } else if (data && data.google_analytics_id) {
           setTrackingId(data.google_analytics_id);
         }

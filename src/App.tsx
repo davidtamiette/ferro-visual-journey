@@ -29,13 +29,13 @@ import BlogPostsPage from '@/pages/dashboard/blog/BlogPostsPage';
 import NewPostPage from '@/pages/dashboard/blog/NewPostPage';
 
 function App() {
-  const { trackingId } = useGoogleAnalytics();
+  const { trackingId, isLoading } = useGoogleAnalytics();
   
   return (
     <BrowserRouter>
       <ThemeProvider defaultTheme="light" storageKey="toti-theme">
         <AuthProvider>
-          {trackingId && <GoogleAnalytics trackingId={trackingId} />}
+          {trackingId && !isLoading && <GoogleAnalytics trackingId={trackingId} />}
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />

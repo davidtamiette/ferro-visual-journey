@@ -73,9 +73,7 @@ const SettingsPage = () => {
         
         <TabsContent value="analytics" className="space-y-4 mt-4">
           <GoogleAnalyticsForm 
-            initialData={{ 
-              google_analytics_id: settings?.google_analytics_id || null 
-            }} 
+            initialData={settings || { google_analytics_id: null }} 
             onUpdate={fetchSettings} 
           />
         </TabsContent>

@@ -41,7 +41,7 @@ const GoogleAnalyticsForm = ({ initialData, onUpdate }: GoogleAnalyticsFormProps
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      google_analytics_id: initialData.google_analytics_id || '',
+      google_analytics_id: initialData?.google_analytics_id || '',
     },
   });
 
@@ -49,15 +49,36 @@ const GoogleAnalyticsForm = ({ initialData, onUpdate }: GoogleAnalyticsFormProps
     setIsLoading(true);
     
     try {
-      const { error } = await supabase
+      // Check if settings already exist
+      const { data: existingSettings } = await supabase
         .from('site_settings')
-        .update({
-          google_analytics_id: values.google_analytics_id,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', '1');  // Assumindo que há apenas um registro de configurações
+        .select('id')
+        .limit(1);
       
-      if (error) throw error;
+      let result;
+      
+      if (existingSettings && existingSettings.length > 0) {
+        // Update existing settings
+        result = await supabase
+          .from('site_settings')
+          .update({
+            google_analytics_id: values.google_analytics_id,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', existingSettings[0].id);
+      } else {
+        // Insert new settings
+        result = await supabase
+          .from('site_settings')
+          .insert({
+            google_analytics_id: values.google_analytics_id,
+            company_name: 'Ferro Velho Toti', // Default value for required field
+            updated_at: new Date().toISOString(),
+          })
+          .select();
+      }
+      
+      if (result.error) throw result.error;
       
       toast({
         title: "Configurações atualizadas",
