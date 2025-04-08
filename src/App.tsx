@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
+import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 
 // Main pages
 import Index from '@/pages/Index';
@@ -27,10 +29,13 @@ import BlogPostsPage from '@/pages/dashboard/blog/BlogPostsPage';
 import NewPostPage from '@/pages/dashboard/blog/NewPostPage';
 
 function App() {
+  const { trackingId } = useGoogleAnalytics();
+  
   return (
     <BrowserRouter>
       <ThemeProvider defaultTheme="light" storageKey="toti-theme">
         <AuthProvider>
+          {trackingId && <GoogleAnalytics trackingId={trackingId} />}
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Index />} />
