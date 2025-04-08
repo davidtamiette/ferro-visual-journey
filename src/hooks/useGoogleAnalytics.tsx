@@ -16,7 +16,11 @@ export const useGoogleAnalytics = () => {
           .limit(1);
         
         // Check if the column exists by examining if it's in the returned data structure
-        if (columnCheck && columnCheck.length > 0 && 'google_analytics_id' in columnCheck[0]) {
+        if (columnCheck && 
+            columnCheck.length > 0 && 
+            typeof columnCheck[0] === 'object' &&
+            columnCheck[0] !== null &&
+            'google_analytics_id' in columnCheck[0]) {
           // Column exists, fetch the value
           const { data, error } = await supabase
             .from('site_settings')
@@ -25,7 +29,10 @@ export const useGoogleAnalytics = () => {
           
           if (error) {
             console.error('Error fetching Google Analytics ID:', error);
-          } else if (data && typeof data.google_analytics_id === 'string') {
+          } else if (data && 
+                    typeof data === 'object' && 
+                    'google_analytics_id' in data && 
+                    typeof data.google_analytics_id === 'string') {
             setTrackingId(data.google_analytics_id);
           }
         } else {

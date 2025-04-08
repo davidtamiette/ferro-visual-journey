@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import AnimatedButton from './ui/AnimatedButton';
 import { ArrowDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   const [scrollIndicator, setScrollIndicator] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -41,6 +43,14 @@ const Hero = () => {
       clearTimeout(timer);
     };
   }, []);
+
+  const handleRequestQuote = () => {
+    navigate('/contato');
+  };
+
+  const handleExploreServices = () => {
+    navigate('/servicos');
+  };
 
   return (
     <section 
@@ -122,8 +132,8 @@ const Hero = () => {
             )}
             style={{ animationDelay: "800ms" }}
           >
-            <AnimatedButton glass>Solicitar Orçamento</AnimatedButton>
-            <AnimatedButton variant="outline">Conheça Nossos Serviços</AnimatedButton>
+            <AnimatedButton onClick={handleRequestQuote} glass>Solicitar Orçamento</AnimatedButton>
+            <AnimatedButton onClick={handleExploreServices} variant="outline">Conheça Nossos Serviços</AnimatedButton>
           </div>
         </div>
       </div>

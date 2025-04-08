@@ -293,7 +293,11 @@ const ContactPage = () => {
                     </p>
                   </div>
                   
-                  <AnimatedButton type="submit" className="w-full sm:w-auto" glass disabled={isSubmitting}>
+                  <AnimatedButton 
+                    type="submit" 
+                    className="w-full sm:w-auto bg-toti-teal text-white hover:bg-toti-teal/90" 
+                    disabled={isSubmitting}
+                  >
                     <span className="flex items-center">
                       {isSubmitting ? 'Enviando...' : 'Enviar mensagem'}
                       <Send className="ml-2 h-4 w-4" />

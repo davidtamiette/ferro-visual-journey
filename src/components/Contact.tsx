@@ -1,10 +1,13 @@
+
 import React, { useState } from 'react';
 import AnimatedButton from './ui/AnimatedButton';
 import { useScrollAnimation } from '@/lib/animations';
 import { Phone, Mail, MapPin, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 const Contact = () => {
+  const { toast } = useToast();
   const { ref, isVisible } = useScrollAnimation();
   const [formState, setFormState] = useState({
     name: '',
@@ -41,11 +44,46 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Validate form inputs
+    if (!formState.name.trim()) {
+      toast({
+        title: "Campo obrigatório",
+        description: "Por favor, informe seu nome.",
+        variant: "destructive"
+      });
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (!formState.email.trim() || !/\S+@\S+\.\S+/.test(formState.email)) {
+      toast({
+        title: "Email inválido",
+        description: "Por favor, informe um email válido.",
+        variant: "destructive"
+      });
+      setIsSubmitting(false);
+      return;
+    }
+    
+    if (!formState.message.trim()) {
+      toast({
+        title: "Campo obrigatório",
+        description: "Por favor, escreva sua mensagem.",
+        variant: "destructive"
+      });
+      setIsSubmitting(false);
+      return;
+    }
+    
     // Simulate form submission with delay
     setTimeout(() => {
       console.log('Form submitted:', formState);
       // Here you would typically send the form data to a server
-      alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+      toast({
+        title: "Mensagem enviada!",
+        description: "Entraremos em contato em breve.",
+        variant: "success"
+      });
       setFormState({
         name: '',
         email: '',
@@ -158,10 +196,9 @@ const Contact = () => {
               <AnimatedButton 
                 type="submit" 
                 className={cn(
-                  "w-full sm:w-auto relative overflow-hidden",
+                  "w-full sm:w-auto relative overflow-hidden bg-toti-teal text-white hover:bg-toti-teal/90",
                   isSubmitting && "pointer-events-none"
                 )} 
-                glass
               >
                 <span className={cn(
                   "flex items-center transition-transform duration-300",
