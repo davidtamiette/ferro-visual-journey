@@ -15,17 +15,56 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { supabase } from '@/integrations/supabase/client';
 
 interface NavbarProps {
   activeSection?: string;
 }
 
+interface SiteSettings {
+  company_name: string;
+  logo_url: string | null;
+}
+
 const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>({
+    company_name: 'Ferro Velho Toti',
+    logo_url: null
+  });
   
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  
+  // Fetch site settings
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('company_name, logo_url')
+          .single();
+        
+        if (error && error.code !== 'PGRST116') {
+          // PGRST116 is the "no rows returned" error code
+          console.error('Error fetching site settings:', error);
+          return;
+        }
+        
+        if (data) {
+          setSiteSettings({
+            company_name: data.company_name || 'Ferro Velho Toti',
+            logo_url: data.logo_url
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching site settings:', error);
+      }
+    };
+    
+    fetchSettings();
+  }, []);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -73,12 +112,22 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
-              <img
-                src="/placeholder.svg"
-                alt="Ferro Velho Toti"
-                className="h-8 w-8"
-              />
-              <span className="text-lg font-semibold">Ferro Velho Toti</span>
+              {siteSettings.logo_url ? (
+                <img
+                  src={siteSettings.logo_url}
+                  alt={siteSettings.company_name}
+                  className="h-8 max-w-[120px] object-contain"
+                />
+              ) : (
+                <>
+                  <img
+                    src="/placeholder.svg"
+                    alt="Ferro Velho Toti"
+                    className="h-8 w-8"
+                  />
+                  <span className="text-lg font-semibold">{siteSettings.company_name}</span>
+                </>
+              )}
             </Link>
           </div>
 

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -13,10 +13,47 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { supabase } from '@/integrations/supabase/client';
+
+interface SiteSettings {
+  company_name: string;
+  logo_url: string | null;
+}
 
 const DashboardHeader = () => {
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>({
+    company_name: 'Dashboard Administrativo',
+    logo_url: null
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('company_name, logo_url')
+          .single();
+        
+        if (error && error.code !== 'PGRST116') {
+          console.error('Error fetching site settings:', error);
+          return;
+        }
+        
+        if (data) {
+          setSiteSettings({
+            company_name: data.company_name || 'Dashboard Administrativo',
+            logo_url: data.logo_url
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching site settings:', error);
+      }
+    };
+    
+    fetchSettings();
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
@@ -25,8 +62,19 @@ const DashboardHeader = () => {
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
-      <div className="flex-1 text-lg font-semibold">
-        Dashboard Administrativo
+      <div className="flex-1 flex items-center">
+        {siteSettings.logo_url ? (
+          <div className="flex items-center gap-2">
+            <img
+              src={siteSettings.logo_url}
+              alt={siteSettings.company_name}
+              className="h-8 max-w-[120px] object-contain"
+            />
+            <span className="text-lg font-semibold hidden sm:inline-block">Dashboard</span>
+          </div>
+        ) : (
+          <div className="text-lg font-semibold">Dashboard Administrativo</div>
+        )}
       </div>
       
       <div className="flex items-center gap-4">

@@ -21,6 +21,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/ui/tabs';
+import SiteSettingsForm from '@/components/dashboard/settings/SiteSettingsForm';
 
 const SettingsPage = () => {
   const { user, profile } = useAuth();
@@ -134,6 +135,7 @@ const SettingsPage = () => {
         <TabsList>
           <TabsTrigger value="profile">Perfil</TabsTrigger>
           <TabsTrigger value="security">Segurança</TabsTrigger>
+          <TabsTrigger value="site">Site</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile" className="space-y-4">
@@ -239,6 +241,10 @@ const SettingsPage = () => {
               </CardFooter>
             </form>
           </Card>
+        </TabsContent>
+        
+        <TabsContent value="site" className="space-y-4">
+          <SiteSettingsForm />
         </TabsContent>
       </Tabs>
     </div>

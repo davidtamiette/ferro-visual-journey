@@ -24,6 +24,7 @@ import SettingsPage from '@/pages/dashboard/SettingsPage';
 import AnalyticsPage from '@/pages/dashboard/AnalyticsPage';
 import ContentPage from '@/pages/dashboard/ContentPage';
 import BlogPostsPage from '@/pages/dashboard/blog/BlogPostsPage'; 
+import NewPostPage from '@/pages/dashboard/blog/NewPostPage';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
               <Route path="analytics" element={<AnalyticsPage />} />
               <Route path="content" element={<ContentPage />} />
               <Route path="blog/posts" element={<BlogPostsPage />} />
+              <Route path="blog/posts/new" element={<NewPostPage />} />
             </Route>
             
             {/* 404 */}
