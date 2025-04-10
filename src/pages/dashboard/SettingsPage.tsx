@@ -72,10 +72,8 @@ const SettingsPage = () => {
         </TabsContent>
         
         <TabsContent value="analytics" className="space-y-4 mt-4">
-          <GoogleAnalyticsForm 
-            initialData={settings || { google_analytics_id: null }} 
-            onUpdate={fetchSettings} 
-          />
+          {/* Pass correct props to the form component */}
+          <GoogleAnalyticsForm />
         </TabsContent>
         
         <TabsContent value="users" className="space-y-4 mt-4">

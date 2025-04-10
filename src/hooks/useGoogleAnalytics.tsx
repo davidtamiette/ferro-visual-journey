@@ -18,8 +18,8 @@ export const useGoogleAnalytics = () => {
     const fetchGASettings = async () => {
       try {
         const { data, error } = await supabase
-          .from('settings')
-          .select('value')
+          .from('site_settings')
+          .select('*')
           .eq('key', 'google_analytics')
           .single();
 
@@ -48,7 +48,7 @@ export const useGoogleAnalytics = () => {
   const updateGASettings = async (settings: GASettings) => {
     try {
       const { error } = await supabase
-        .from('settings')
+        .from('site_settings')
         .update({ value: JSON.stringify(settings) })
         .eq('key', 'google_analytics');
 

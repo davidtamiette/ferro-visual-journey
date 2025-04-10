@@ -43,7 +43,7 @@ const AutoPartsPopup = () => {
           <X size={20} />
         </button>
         
-        <div className="text-center mb-2">
+        <div className="text-center mb-4">
           <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 text-amber-600 mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
@@ -51,11 +51,11 @@ const AutoPartsPopup = () => {
               <line x1="12" y1="17" x2="12.01" y2="17"></line>
             </svg>
           </div>
-          <h3 className="text-xl font-bold text-toti-navy dark:text-white">Aviso Importante</h3>
+          <h3 className="text-2xl font-bold text-toti-navy dark:text-white">Aviso Importante</h3>
         </div>
         
-        <p className="text-toti-slate dark:text-gray-300 text-center mb-6">
-          Ferro Velho Toti <strong>não trabalha com sucata de automóveis</strong>. Somos especializados em reciclagem de metais para empresas e indústrias.
+        <p className="text-toti-slate dark:text-gray-300 text-center text-xl font-medium mb-6">
+          Ferro Velho Toti <strong>não trabalha com sucata de automóveis</strong>.
         </p>
         
         <div className="text-center">
