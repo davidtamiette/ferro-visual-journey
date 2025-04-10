@@ -13,12 +13,12 @@ const ContactInfo = () => {
     {
       icon: <Phone className="h-5 w-5 text-toti-teal" />,
       title: 'Telefone',
-      details: '(31) 99946-0492',
+      details: '(31) 3532-5072',
     },
     {
       icon: <Mail className="h-5 w-5 text-toti-teal" />,
       title: 'Email',
-      details: 'contato@ferrovelhototi.com.br',
+      details: 'comercial@ferrovelhototi.com.br',
     },
     {
       icon: <MapPin className="h-5 w-5 text-toti-teal" />,

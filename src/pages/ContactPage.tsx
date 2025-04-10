@@ -119,8 +119,8 @@ const ContactPage = () => {
               "mainEntity": {
                 "@type": "Organization",
                 "name": "Ferro Velho Toti",
-                "telephone": "(31) 99946-0492",
-                "email": "contato@ferrovelhototi.com.br",
+                "telephone": "(31) 3532-5072",
+                "email": "comercial@ferrovelhototi.com.br",
                 "address": {
                   "@type": "PostalAddress",
                   "streetAddress": "R. do Rosário, 1165 - Angola",
@@ -133,14 +133,8 @@ const ContactPage = () => {
                   {
                     "@type": "OpeningHoursSpecification",
                     "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-                    "opens": "08:00",
-                    "closes": "18:00"
-                  },
-                  {
-                    "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": "Saturday",
-                    "opens": "08:00",
-                    "closes": "12:00"
+                    "opens": "07:30",
+                    "closes": "17:00"
                   }
                 ]
               }
@@ -164,14 +158,14 @@ const ContactPage = () => {
               </p>
               
               <div className="flex flex-wrap justify-center gap-4 mt-8 animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                <a href="tel:+5531999460492" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
+                <a href="tel:+553135325072" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
                   <Phone className="h-5 w-5 text-toti-teal" />
-                  <span>(31) 99946-0492</span>
+                  <span>(31) 3532-5072</span>
                 </a>
                 
-                <a href="mailto:contato@ferrovelhototi.com.br" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
+                <a href="mailto:comercial@ferrovelhototi.com.br" className="flex items-center gap-2 bg-white dark:bg-toti-navy/50 px-4 py-2 rounded-lg text-toti-navy dark:text-white hover:bg-toti-navy/5 dark:hover:bg-toti-navy/70 transition-colors">
                   <Mail className="h-5 w-5 text-toti-teal" />
-                  <span>contato@ferrovelhototi.com.br</span>
+                  <span>comercial@ferrovelhototi.com.br</span>
                 </a>
               </div>
             </div>
@@ -295,7 +289,7 @@ const ContactPage = () => {
                   
                   <AnimatedButton 
                     type="submit" 
-                    className="w-full sm:w-auto bg-toti-teal text-white hover:bg-toti-teal/90" 
+                    className="w-full sm:w-auto bg-toti-teal text-white hover:bg-toti-teal/90 contrast-125" 
                     disabled={isSubmitting}
                   >
                     <span className="flex items-center">
@@ -318,7 +312,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <h3 className="font-medium text-toti-navy dark:text-white">Telefone</h3>
-                        <p className="text-toti-slate dark:text-gray-300">(31) 99946-0492</p>
+                        <p className="text-toti-slate dark:text-gray-300">(31) 3532-5072</p>
                       </div>
                     </div>
                     
@@ -328,7 +322,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <h3 className="font-medium text-toti-navy dark:text-white">Email</h3>
-                        <p className="text-toti-slate dark:text-gray-300">contato@ferrovelhototi.com.br</p>
+                        <p className="text-toti-slate dark:text-gray-300">comercial@ferrovelhototi.com.br</p>
                       </div>
                     </div>
                     
@@ -353,9 +347,7 @@ const ContactPage = () => {
                       </div>
                       <div>
                         <h3 className="font-medium text-toti-navy dark:text-white">Horário de Atendimento</h3>
-                        <p className="text-toti-slate dark:text-gray-300">Segunda - Sexta: 8:00 - 18:00</p>
-                        <p className="text-toti-slate dark:text-gray-300">Sábados: 8:00 - 12:00</p>
-                        <p className="text-toti-slate dark:text-gray-300">Domingos e Feriados: Fechado</p>
+                        <p className="text-toti-slate dark:text-gray-300">Segunda - Sexta: 7:30 - 17:00</p>
                       </div>
                     </div>
                   </div>

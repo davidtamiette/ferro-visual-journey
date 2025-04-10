@@ -1,4 +1,6 @@
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Services from '@/components/Services';
 import Footer from '@/components/Footer';
@@ -8,6 +10,12 @@ import { Helmet } from 'react-helmet';
 import { ArrowRight, AlertCircle, CheckCircle } from 'lucide-react';
 
 const ServicesPage = () => {
+  const navigate = useNavigate();
+  
+  const handleRequestQuote = () => {
+    navigate('/contact', { state: { subject: 'Orçamento' } });
+  };
+  
   const detailedServices = [
     {
       id: 'compra-sucatas',
@@ -287,7 +295,7 @@ const ServicesPage = () => {
                           </div>
                         )}
                         
-                        <AnimatedButton glass>
+                        <AnimatedButton glass onClick={handleRequestQuote}>
                           <span className="flex items-center">
                             Solicitar Orçamento
                             <ArrowRight className="ml-2 h-4 w-4" />

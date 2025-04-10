@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import FeatureCard from './ui/FeatureCard';
 import AnimatedButton from './ui/AnimatedButton';
 import { useScrollAnimation } from '@/lib/animations';
@@ -7,6 +8,11 @@ import { cn } from '@/lib/utils';
 
 const Services = () => {
   const { ref, isVisible } = useScrollAnimation();
+  const navigate = useNavigate();
+  
+  const handleRequestQuote = () => {
+    navigate('/contact', { state: { subject: 'Orçamento' } });
+  };
   
   const services = [
     {
@@ -93,6 +99,11 @@ const Services = () => {
                 </div>
               </div>
               <p className="text-toti-slate dark:text-gray-300 mb-6 flex-grow">{service.description}</p>
+              {index === 0 && (
+                <AnimatedButton onClick={handleRequestQuote} className="mt-auto">
+                  <span>Solicitar Orçamento</span>
+                </AnimatedButton>
+              )}
             </FeatureCard>
           ))}
         </div>

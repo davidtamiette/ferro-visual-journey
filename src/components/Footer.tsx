@@ -11,8 +11,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Company info */}
           <div>
-            <h3 className="text-xl font-bold mb-6 selection:bg-toti-teal/70 selection:text-white">Ferro Velho <span className="text-toti-teal">Toti</span></h3>
-            <p className="text-white/70 mb-6 max-w-xs selection:bg-toti-teal/70 selection:text-white">
+            <h3 className="text-xl font-bold mb-6 selection:bg-toti-teal/70 selection:text-toti-navy">Ferro Velho <span className="text-toti-teal">Toti</span></h3>
+            <p className="text-white/70 mb-6 max-w-xs selection:bg-toti-teal/70 selection:text-toti-navy">
               Especialistas em reciclagem de metais, oferecendo soluções sustentáveis para 
               empresas e indústrias desde 1995.
             </p>
@@ -26,7 +26,7 @@ const Footer = () => {
               <a href="#" className="text-white/70 hover:text-toti-teal transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
               </a>
-              <a href="mailto:contato@ferrovelhototi.com.br" className="text-white/70 hover:text-toti-teal transition-colors" aria-label="Email">
+              <a href="mailto:comercial@ferrovelhototi.com.br" className="text-white/70 hover:text-toti-teal transition-colors" aria-label="Email">
                 <Mail size={20} />
               </a>
             </div>
@@ -34,36 +34,36 @@ const Footer = () => {
           
           {/* Links */}
           <div>
-            <h4 className="text-lg font-medium mb-6 selection:bg-toti-teal/70 selection:text-white">Links Rápidos</h4>
+            <h4 className="text-lg font-medium mb-6 selection:bg-toti-teal/70 selection:text-toti-navy">Links Rápidos</h4>
             <nav className="space-y-3">
-              <a href="/" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-white">Home</a>
-              <a href="/sobre" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-white">Sobre Nós</a>
-              <a href="/servicos" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-white">Serviços</a>
-              <a href="/contato" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-white">Contato</a>
-              <a href="/blog" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-white">Blog</a>
-              <a href="/privacidade" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-white">Política de Privacidade</a>
+              <a href="/" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-toti-navy">Home</a>
+              <a href="/about" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-toti-navy">Sobre Nós</a>
+              <a href="/services" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-toti-navy">Serviços</a>
+              <a href="/contact" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-toti-navy">Contato</a>
+              <a href="/blog" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-toti-navy">Blog</a>
+              <a href="/privacidade" className="block text-white/70 hover:text-toti-teal transition-colors selection:bg-toti-teal/70 selection:text-toti-navy">Política de Privacidade</a>
             </nav>
           </div>
           
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-medium mb-6 selection:bg-toti-teal/70 selection:text-white">Contato</h4>
+            <h4 className="text-lg font-medium mb-6 selection:bg-toti-teal/70 selection:text-toti-navy">Contato</h4>
             <address className="not-italic space-y-3 text-white/70">
-              <p className="selection:bg-toti-teal/70 selection:text-white">R. do Rosário, 1165 - Angola</p>
-              <p className="selection:bg-toti-teal/70 selection:text-white">Betim - MG</p>
-              <p className="selection:bg-toti-teal/70 selection:text-white">CEP: 32604-115</p>
-              <p className="pt-2 selection:bg-toti-teal/70 selection:text-white">Telefone: (31) 99946-0492</p>
-              <p className="selection:bg-toti-teal/70 selection:text-white">Email: contato@ferrovelhototi.com.br</p>
+              <p className="selection:bg-toti-teal/70 selection:text-toti-navy">R. do Rosário, 1165 - Angola</p>
+              <p className="selection:bg-toti-teal/70 selection:text-toti-navy">Betim - MG</p>
+              <p className="selection:bg-toti-teal/70 selection:text-toti-navy">CEP: 32604-115</p>
+              <p className="pt-2 selection:bg-toti-teal/70 selection:text-toti-navy">Telefone: (31) 3532-5072</p>
+              <p className="selection:bg-toti-teal/70 selection:text-toti-navy">Email: comercial@ferrovelhototi.com.br</p>
             </address>
           </div>
         </div>
         
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-white/60 text-sm selection:bg-toti-teal/70 selection:text-white">
+          <p className="text-white/60 text-sm selection:bg-toti-teal/70 selection:text-toti-navy">
             &copy; {currentYear} Ferro Velho Toti. Todos os direitos reservados.
           </p>
-          <p className="text-white/60 text-sm mt-4 md:mt-0 selection:bg-toti-teal/70 selection:text-white">
-            Desenvolvido com ♥ por <a href="#" className="text-toti-teal hover:underline selection:bg-toti-teal/70 selection:text-white">Lovable</a>
+          <p className="text-white/60 text-sm mt-4 md:mt-0 selection:bg-toti-teal/70 selection:text-toti-navy">
+            Desenvolvido com ♥ por <a href="#" className="text-toti-teal hover:underline selection:bg-toti-teal/70 selection:text-toti-navy">Lovable</a>
           </p>
         </div>
       </div>

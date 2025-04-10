@@ -8,15 +8,7 @@ const BusinessHours = () => {
       <div className="space-y-2">
         <p className="flex justify-between">
           <span>Segunda - Sexta:</span>
-          <span>08:00 - 18:00</span>
-        </p>
-        <p className="flex justify-between">
-          <span>Sábados:</span>
-          <span>08:00 - 12:00</span>
-        </p>
-        <p className="flex justify-between">
-          <span>Domingos e Feriados:</span>
-          <span>Fechado</span>
+          <span>7:30 - 17:00</span>
         </p>
       </div>
     </div>
