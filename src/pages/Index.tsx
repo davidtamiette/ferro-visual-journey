@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
@@ -8,6 +9,7 @@ import RecentBlogPosts from '@/components/RecentBlogPosts';
 import Footer from '@/components/Footer';
 import { Helmet } from 'react-helmet';
 import { cn } from '@/lib/utils';
+import AutoPartsPopup from '@/components/AutoPartsPopup';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -88,7 +90,7 @@ const Index = () => {
               "description": "Especialistas em reciclagem de metais, oferecendo serviços de compra de sucatas, coleta, transporte e gestão de resíduos.",
               "@id": "https://ferrovelhototi.com.br",
               "url": "https://ferrovelhototi.com.br",
-              "telephone": "+5531999460492",
+              "telephone": "+553135325072",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "R. do Rosário, 1165 - Angola",
@@ -101,7 +103,7 @@ const Index = () => {
                 {
                   "@type": "OpeningHoursSpecification",
                   "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-                  "opens": "08:00",
+                  "opens": "07:30",
                   "closes": "17:00"
                 }
               ]
@@ -151,6 +153,7 @@ const Index = () => {
         </div>
       </main>
       <Footer />
+      <AutoPartsPopup />
     </div>
   );
 };

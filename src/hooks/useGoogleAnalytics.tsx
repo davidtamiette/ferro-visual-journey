@@ -1,54 +1,86 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+interface GASettings {
+  trackingId: string;
+  enabled: boolean;
+}
 
 export const useGoogleAnalytics = () => {
   const [trackingId, setTrackingId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [enabled, setEnabled] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    const fetchGoogleAnalyticsSettings = async () => {
+    const fetchGASettings = async () => {
       try {
-        // First check if the column exists
-        const { data: columnCheck, error: columnError } = await supabase
-          .from('site_settings')
-          .select('*')
-          .limit(1);
-        
-        // Check if the column exists by examining if it's in the returned data structure
-        if (columnCheck && 
-            columnCheck.length > 0 && 
-            typeof columnCheck[0] === 'object' &&
-            columnCheck[0] !== null &&
-            'google_analytics_id' in columnCheck[0]) {
-          // Column exists, fetch the value
-          const { data, error } = await supabase
-            .from('site_settings')
-            .select('google_analytics_id')
-            .single();
-          
-          if (error) {
-            console.error('Error fetching Google Analytics ID:', error);
-          } else if (data && 
-                    typeof data === 'object' && 
-                    data !== null &&
-                    'google_analytics_id' in data && 
-                    typeof data.google_analytics_id === 'string') {
-            setTrackingId(data.google_analytics_id);
-          }
-        } else {
-          console.log('google_analytics_id column not found in site_settings table');
-          // Leave trackingId as null since the column doesn't exist yet
+        const { data, error } = await supabase
+          .from('settings')
+          .select('value')
+          .eq('key', 'google_analytics')
+          .single();
+
+        if (error) {
+          console.error('Error fetching Google Analytics settings:', error);
+          setIsLoading(false);
+          return;
         }
+
+        if (data && data.value) {
+          const settings = JSON.parse(data.value) as GASettings;
+          setTrackingId(settings.trackingId || null);
+          setEnabled(settings.enabled || false);
+        }
+
+        setIsLoading(false);
       } catch (error) {
-        console.error('Failed to fetch Google Analytics settings:', error);
-      } finally {
+        console.error('Failed to parse Google Analytics settings:', error);
         setIsLoading(false);
       }
     };
-    
-    fetchGoogleAnalyticsSettings();
+
+    fetchGASettings();
   }, []);
 
-  return { trackingId, isLoading };
+  const updateGASettings = async (settings: GASettings) => {
+    try {
+      const { error } = await supabase
+        .from('settings')
+        .update({ value: JSON.stringify(settings) })
+        .eq('key', 'google_analytics');
+
+      if (error) {
+        console.error('Error updating Google Analytics settings:', error);
+        toast({
+          title: 'Erro',
+          description: 'Não foi possível salvar as configurações do Google Analytics.',
+          variant: 'destructive',
+        });
+        return false;
+      }
+
+      setTrackingId(settings.trackingId);
+      setEnabled(settings.enabled);
+      
+      toast({
+        title: 'Sucesso',
+        description: 'Configurações do Google Analytics atualizadas com sucesso.',
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Failed to update Google Analytics settings:', error);
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível salvar as configurações do Google Analytics.',
+        variant: 'destructive',
+      });
+      return false;
+    }
+  };
+
+  return { trackingId, enabled, isLoading, updateGASettings };
 };

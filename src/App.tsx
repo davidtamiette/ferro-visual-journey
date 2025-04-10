@@ -11,6 +11,7 @@ import Index from '@/pages/Index';
 import AboutPage from '@/pages/AboutPage';
 import ServicesPage from '@/pages/ServicesPage';
 import ContactPage from '@/pages/ContactPage';
+import PrivacyPage from '@/pages/PrivacyPage';
 import AuthPage from '@/pages/AuthPage';
 import NotFound from '@/pages/NotFound';
 
@@ -45,6 +46,7 @@ function App() {
             <Route path="/servicos" element={<ServicesPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/contato" element={<ContactPage />} />
+            <Route path="/privacidade" element={<PrivacyPage />} />
             <Route path="/auth" element={<AuthPage />} />
             
             {/* Blog Routes */}
