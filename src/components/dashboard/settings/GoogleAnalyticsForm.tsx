@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
@@ -19,8 +19,15 @@ export interface GoogleAnalyticsFormProps {
 
 const GoogleAnalyticsForm: React.FC<GoogleAnalyticsFormProps> = ({ onUpdate }) => {
   const { trackingId: initialTrackingId, isLoading, updateGASettings } = useGoogleAnalytics();
-  const [trackingId, setTrackingId] = useState<string>(initialTrackingId || '');
+  const [trackingId, setTrackingId] = useState<string>('');
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Update the input field when we get the initial trackingId
+  useEffect(() => {
+    if (initialTrackingId !== null) {
+      setTrackingId(initialTrackingId);
+    }
+  }, [initialTrackingId]);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

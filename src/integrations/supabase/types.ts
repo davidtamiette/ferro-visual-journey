@@ -207,6 +207,7 @@ export type Database = {
           company_name: string
           contact_email: string | null
           contact_phone: string | null
+          google_analytics_id: string | null
           id: string
           logo_url: string | null
           primary_color: string | null
@@ -219,6 +220,7 @@ export type Database = {
           company_name: string
           contact_email?: string | null
           contact_phone?: string | null
+          google_analytics_id?: string | null
           id?: string
           logo_url?: string | null
           primary_color?: string | null
@@ -231,6 +233,7 @@ export type Database = {
           company_name?: string
           contact_email?: string | null
           contact_phone?: string | null
+          google_analytics_id?: string | null
           id?: string
           logo_url?: string | null
           primary_color?: string | null
