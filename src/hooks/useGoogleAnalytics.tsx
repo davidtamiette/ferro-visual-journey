@@ -24,8 +24,8 @@ export const useGoogleAnalytics = () => {
           return;
         }
 
-        // Check if the data has a 'google_analytics_id' field
-        if (data && data.google_analytics_id !== undefined) {
+        // Check if the data exists and has the expected field
+        if (data) {
           // Get the tracking ID from the data
           const gaId = data.google_analytics_id || null;
           setTrackingId(gaId);
