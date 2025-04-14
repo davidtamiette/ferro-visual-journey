@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import AnimatedButton from '../ui/AnimatedButton';
 import { Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -20,7 +21,7 @@ const ContactForm = () => {
     setFormState(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
@@ -55,23 +56,39 @@ const ContactForm = () => {
       return;
     }
     
-    // Simulate form submission with delay
-    setTimeout(() => {
-      console.log('Form submitted:', formState);
-      // Here you would typically send the form data to a server
+    try {
+      // Call the edge function to send email
+      const response = await supabase.functions.invoke('send-contact-email', {
+        body: JSON.stringify(formState)
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
       toast({
         title: "Mensagem enviada!",
         description: "Entraremos em contato em breve.",
         variant: "default"
       });
+
+      // Reset form
       setFormState({
         name: '',
         email: '',
         phone: '',
         message: '',
       });
+    } catch (error) {
+      console.error('Error sending contact form:', error);
+      toast({
+        title: "Erro ao enviar mensagem",
+        description: "Por favor, tente novamente mais tarde.",
+        variant: "destructive"
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
