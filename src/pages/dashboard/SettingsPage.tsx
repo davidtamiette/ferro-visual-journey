@@ -73,7 +73,7 @@ const SettingsPage = () => {
         </TabsContent>
         
         <TabsContent value="analytics" className="space-y-4 mt-4">
-          <GoogleAnalyticsForm />
+          <GoogleAnalyticsForm onUpdate={fetchSettings} />
         </TabsContent>
         
         <TabsContent value="users" className="space-y-4 mt-4">

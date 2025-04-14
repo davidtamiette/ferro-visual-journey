@@ -1,127 +1,89 @@
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useToast } from '@/hooks/use-toast';
-import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
+import { 
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card';
+import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
+import { Loader2 } from 'lucide-react';
 
-const formSchema = z.object({
-  tracking_id: z
-    .string()
-    .min(1, { message: 'O ID do Google Analytics é obrigatório' })
-    .regex(/^G-[A-Z0-9]+$/i, { 
-      message: 'ID do Google Analytics inválido. Deve ter o formato G-XXXXXXXXXX' 
-    }),
-  enabled: z.boolean().default(true)
-});
+export interface GoogleAnalyticsFormProps {
+  onUpdate?: () => Promise<void>;
+}
 
-const GoogleAnalyticsForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { trackingId, enabled, updateGASettings } = useGoogleAnalytics();
+const GoogleAnalyticsForm: React.FC<GoogleAnalyticsFormProps> = ({ onUpdate }) => {
+  const { trackingId: initialTrackingId, isLoading, updateGASettings } = useGoogleAnalytics();
+  const [trackingId, setTrackingId] = useState<string>(initialTrackingId || '');
+  const [isSaving, setIsSaving] = useState(false);
   
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      tracking_id: trackingId || '',
-      enabled: enabled
-    },
-  });
-  
-  // Update form values when data is loaded
-  useState(() => {
-    if (trackingId) {
-      form.setValue('tracking_id', trackingId);
-      form.setValue('enabled', enabled);
-    }
-  });
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSaving(true);
     
     try {
-      // Only store the tracking ID if enabled is true
-      const idToSave = values.enabled ? values.tracking_id : '';
-      await updateGASettings(idToSave);
+      const result = await updateGASettings(trackingId);
+      if (result && onUpdate) {
+        await onUpdate();
+      }
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
-
+  
+  if (isLoading) {
+    return (
+      <Card>
+        <CardContent className="pt-6 flex justify-center items-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
+    );
+  }
+  
   return (
     <Card>
       <CardHeader>
         <CardTitle>Google Analytics</CardTitle>
         <CardDescription>
-          Configure o rastreamento do Google Analytics 4 para o seu site.
+          Configure o Google Analytics para rastrear visitantes no seu site.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="tracking_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>ID do Google Analytics</FormLabel>
-                  <FormControl>
-                    <Input 
-                      placeholder="G-XXXXXXXXXX" 
-                      {...field} 
-                      value={field.value || ''} 
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Digite o ID do Google Analytics 4 (formato G-XXXXXXXXXX)
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
+      <form onSubmit={handleSubmit}>
+        <CardContent>
+          <div className="space-y-2">
+            <label htmlFor="tracking-id" className="text-sm font-medium">
+              ID de Rastreamento
+            </label>
+            <Input
+              id="tracking-id"
+              placeholder="Exemplo: G-XXXXXXXXXX"
+              value={trackingId}
+              onChange={(e) => setTrackingId(e.target.value)}
             />
-            
-            <FormField
-              control={form.control}
-              name="enabled"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">
-                      Ativar rastreamento
-                    </FormLabel>
-                    <FormDescription>
-                      Ative ou desative o rastreamento de análises no site
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Salvando..." : "Salvar configurações"}
-            </Button>
-          </form>
-        </Form>
-      </CardContent>
+            <p className="text-xs text-muted-foreground">
+              O ID de rastreamento do Google Analytics 4 começa com "G-".
+            </p>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button type="submit" disabled={isSaving}>
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Salvando...
+              </>
+            ) : (
+              'Salvar Configurações'
+            )}
+          </Button>
+        </CardFooter>
+      </form>
     </Card>
   );
 };

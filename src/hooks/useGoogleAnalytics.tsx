@@ -24,10 +24,13 @@ export const useGoogleAnalytics = () => {
           return;
         }
 
-        if (data && data.google_analytics_id) {
-          setTrackingId(data.google_analytics_id);
-          // We consider it enabled if there's a tracking ID
-          setEnabled(!!data.google_analytics_id);
+        // Check if the data has a 'google_analytics_id' field
+        // In SQLite the fields are case insensitive but let's be explicit
+        if (data) {
+          // Create a more flexible check that works even if the field doesn't exist
+          const gaId = data.google_analytics_id || null;
+          setTrackingId(gaId);
+          setEnabled(!!gaId);
         }
 
         setIsLoading(false);

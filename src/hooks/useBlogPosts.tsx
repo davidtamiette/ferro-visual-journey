@@ -38,13 +38,10 @@ export const useBlogPosts = (postsPerPage = 10) => {
       const from = (currentPage - 1) * postsPerPage;
       const to = from + postsPerPage - 1;
       
+      // Modificamos a consulta para primeiro obter os posts básicos
       let query = supabase
         .from('blog_posts')
-        .select(`
-          *,
-          profiles:author_id(full_name),
-          blog_categories:category_id(name, slug)
-        `)
+        .select(`*`)
         .order('created_at', { ascending: false })
         .range(from, to);
       
@@ -62,8 +59,36 @@ export const useBlogPosts = (postsPerPage = 10) => {
       
       if (error) throw error;
       
-      // Format the posts data - ensure status is properly typed
-      const formattedPosts = data.map(post => {
+      // Para cada post obtido, buscamos informações adicionais separadamente
+      const formattedPosts = await Promise.all(data.map(async post => {
+        // Buscar autor (se existir author_id)
+        let author_name = 'Autor Desconhecido';
+        if (post.author_id) {
+          const { data: authorData } = await supabase
+            .from('profiles')
+            .select('full_name')
+            .eq('id', post.author_id)
+            .maybeSingle();
+          
+          if (authorData && authorData.full_name) {
+            author_name = authorData.full_name;
+          }
+        }
+        
+        // Buscar categoria (se existir category_id)
+        let category_name = 'Sem Categoria';
+        if (post.category_id) {
+          const { data: categoryData } = await supabase
+            .from('blog_categories')
+            .select('name')
+            .eq('id', post.category_id)
+            .maybeSingle();
+          
+          if (categoryData && categoryData.name) {
+            category_name = categoryData.name;
+          }
+        }
+        
         // Ensure status is one of the allowed values or default to "draft"
         let typedStatus: 'draft' | 'published' | 'archived' = 'draft';
         if (post.status === 'published' || post.status === 'archived') {
@@ -72,11 +97,11 @@ export const useBlogPosts = (postsPerPage = 10) => {
         
         return {
           ...post,
-          author_name: post.profiles?.full_name || 'Autor Desconhecido',
-          category_name: post.blog_categories?.name || 'Sem Categoria',
+          author_name,
+          category_name,
           status: typedStatus
         };
-      }) as Post[];
+      })) as Post[];
       
       setPosts(formattedPosts);
     } catch (error) {
