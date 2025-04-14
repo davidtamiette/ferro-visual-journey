@@ -3,11 +3,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-interface GASettings {
-  trackingId: string;
-  enabled: boolean;
-}
-
 export const useGoogleAnalytics = () => {
   const [trackingId, setTrackingId] = useState<string | null>(null);
   const [enabled, setEnabled] = useState<boolean>(false);
@@ -20,7 +15,7 @@ export const useGoogleAnalytics = () => {
         const { data, error } = await supabase
           .from('site_settings')
           .select('*')
-          .eq('key', 'google_analytics')
+          .limit(1)
           .single();
 
         if (error) {
@@ -29,10 +24,10 @@ export const useGoogleAnalytics = () => {
           return;
         }
 
-        if (data && data.value) {
-          const settings = JSON.parse(data.value) as GASettings;
-          setTrackingId(settings.trackingId || null);
-          setEnabled(settings.enabled || false);
+        if (data && data.google_analytics_id) {
+          setTrackingId(data.google_analytics_id);
+          // We consider it enabled if there's a tracking ID
+          setEnabled(!!data.google_analytics_id);
         }
 
         setIsLoading(false);
@@ -45,15 +40,38 @@ export const useGoogleAnalytics = () => {
     fetchGASettings();
   }, []);
 
-  const updateGASettings = async (settings: GASettings) => {
+  const updateGASettings = async (trackingId: string) => {
     try {
-      const { error } = await supabase
+      // Get existing settings first
+      const { data: existingData } = await supabase
         .from('site_settings')
-        .update({ value: JSON.stringify(settings) })
-        .eq('key', 'google_analytics');
+        .select('id')
+        .limit(1);
 
-      if (error) {
-        console.error('Error updating Google Analytics settings:', error);
+      let result;
+      
+      if (existingData && existingData.length > 0) {
+        // Update existing settings
+        result = await supabase
+          .from('site_settings')
+          .update({ 
+            google_analytics_id: trackingId,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingData[0].id);
+      } else {
+        // Create new settings if none exist
+        result = await supabase
+          .from('site_settings')
+          .insert({
+            google_analytics_id: trackingId,
+            company_name: 'Ferro Velho Toti', // Default value for required field
+            updated_at: new Date().toISOString()
+          });
+      }
+
+      if (result.error) {
+        console.error('Error updating Google Analytics settings:', result.error);
         toast({
           title: 'Erro',
           description: 'Não foi possível salvar as configurações do Google Analytics.',
@@ -62,8 +80,8 @@ export const useGoogleAnalytics = () => {
         return false;
       }
 
-      setTrackingId(settings.trackingId);
-      setEnabled(settings.enabled);
+      setTrackingId(trackingId);
+      setEnabled(!!trackingId);
       
       toast({
         title: 'Sucesso',

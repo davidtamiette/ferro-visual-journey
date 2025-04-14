@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useGoogleAnalytics } from '@/hooks/useGoogleAnalytics';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,82 +17,45 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
 
 const formSchema = z.object({
-  google_analytics_id: z
+  tracking_id: z
     .string()
     .min(1, { message: 'O ID do Google Analytics é obrigatório' })
     .regex(/^G-[A-Z0-9]+$/i, { 
       message: 'ID do Google Analytics inválido. Deve ter o formato G-XXXXXXXXXX' 
     }),
+  enabled: z.boolean().default(true)
 });
 
-interface GoogleAnalyticsFormProps {
-  initialData: {
-    google_analytics_id?: string | null;
-    [key: string]: any;
-  };
-  onUpdate: () => void;
-}
-
-const GoogleAnalyticsForm = ({ initialData, onUpdate }: GoogleAnalyticsFormProps) => {
-  const { toast } = useToast();
+const GoogleAnalyticsForm = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const { trackingId, enabled, updateGASettings } = useGoogleAnalytics();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      google_analytics_id: initialData?.google_analytics_id || '',
+      tracking_id: trackingId || '',
+      enabled: enabled
     },
+  });
+  
+  // Update form values when data is loaded
+  useState(() => {
+    if (trackingId) {
+      form.setValue('tracking_id', trackingId);
+      form.setValue('enabled', enabled);
+    }
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     
     try {
-      // Check if settings already exist
-      const { data: existingSettings } = await supabase
-        .from('site_settings')
-        .select('id')
-        .limit(1);
-      
-      let result;
-      
-      if (existingSettings && existingSettings.length > 0) {
-        // Update existing settings
-        result = await supabase
-          .from('site_settings')
-          .update({
-            google_analytics_id: values.google_analytics_id,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', existingSettings[0].id);
-      } else {
-        // Insert new settings
-        result = await supabase
-          .from('site_settings')
-          .insert({
-            google_analytics_id: values.google_analytics_id,
-            company_name: 'Ferro Velho Toti', // Default value for required field
-            updated_at: new Date().toISOString(),
-          })
-          .select();
-      }
-      
-      if (result.error) throw result.error;
-      
-      toast({
-        title: "Configurações atualizadas",
-        description: "As configurações do Google Analytics foram salvas com sucesso.",
-      });
-      
-      onUpdate();
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao salvar",
-        description: error.message || "Ocorreu um erro ao salvar as configurações.",
-      });
+      // Only store the tracking ID if enabled is true
+      const idToSave = values.enabled ? values.tracking_id : '';
+      await updateGASettings(idToSave);
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +74,7 @@ const GoogleAnalyticsForm = ({ initialData, onUpdate }: GoogleAnalyticsFormProps
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
-              name="google_analytics_id"
+              name="tracking_id"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>ID do Google Analytics</FormLabel>
@@ -129,6 +92,30 @@ const GoogleAnalyticsForm = ({ initialData, onUpdate }: GoogleAnalyticsFormProps
                 </FormItem>
               )}
             />
+            
+            <FormField
+              control={form.control}
+              name="enabled"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">
+                      Ativar rastreamento
+                    </FormLabel>
+                    <FormDescription>
+                      Ative ou desative o rastreamento de análises no site
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Salvando..." : "Salvar configurações"}
             </Button>

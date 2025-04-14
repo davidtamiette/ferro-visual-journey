@@ -17,6 +17,7 @@ const SettingsPage = () => {
       const { data, error } = await supabase
         .from('site_settings')
         .select('*')
+        .limit(1)
         .single();
 
       if (error && error.code !== 'PGRST116') {
@@ -68,11 +69,10 @@ const SettingsPage = () => {
         </TabsList>
         
         <TabsContent value="site" className="space-y-4 mt-4">
-          <SiteSettingsForm initialData={settings} onUpdate={fetchSettings} />
+          <SiteSettingsForm />
         </TabsContent>
         
         <TabsContent value="analytics" className="space-y-4 mt-4">
-          {/* Pass correct props to the form component */}
           <GoogleAnalyticsForm />
         </TabsContent>
         

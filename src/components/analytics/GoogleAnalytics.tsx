@@ -15,12 +15,16 @@ const GoogleAnalytics = ({ trackingId }: GoogleAnalyticsProps) => {
     if (!window.GA_INITIALIZED) {
       ReactGA.initialize(trackingId);
       window.GA_INITIALIZED = true;
+      console.log('Google Analytics initialized with ID:', trackingId);
     }
   }, [trackingId]);
   
   useEffect(() => {
     // Track page views whenever location changes
-    ReactGA.send({ hitType: "pageview", page: location.pathname });
+    if (window.GA_INITIALIZED) {
+      ReactGA.send({ hitType: "pageview", page: location.pathname });
+      console.log('Pageview tracked:', location.pathname);
+    }
   }, [location]);
 
   return null; // This component doesn't render anything
