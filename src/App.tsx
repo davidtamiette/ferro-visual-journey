@@ -28,6 +28,7 @@ import AnalyticsPage from '@/pages/dashboard/AnalyticsPage';
 import ContentPage from '@/pages/dashboard/ContentPage';
 import BlogPostsPage from '@/pages/dashboard/blog/BlogPostsPage'; 
 import NewPostPage from '@/pages/dashboard/blog/NewPostPage';
+import EditPostPage from '@/pages/dashboard/blog/EditPostPage';
 
 function App() {
   const { trackingId, enabled, isLoading } = useGoogleAnalytics();
@@ -65,6 +66,7 @@ function App() {
               <Route path="content" element={<ContentPage />} />
               <Route path="blog/posts" element={<BlogPostsPage />} />
               <Route path="blog/posts/new" element={<NewPostPage />} />
+              <Route path="blog/posts/edit/:postId" element={<EditPostPage />} />
             </Route>
             
             {/* 404 */}

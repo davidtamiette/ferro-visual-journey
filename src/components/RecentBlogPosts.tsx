@@ -17,6 +17,7 @@ const RecentBlogPosts = () => {
     const fetchRecentPosts = async () => {
       setIsLoading(true);
       try {
+        console.log('Fetching recent posts...');
         const { data, error } = await supabase
           .from('blog_posts')
           .select(`
@@ -33,6 +34,7 @@ const RecentBlogPosts = () => {
           return;
         }
 
+        console.log('Recent posts fetched:', data);
         setPosts(data as Post[]);
       } catch (error) {
         console.error('Error fetching recent posts:', error);

@@ -38,10 +38,13 @@ export const useBlogPosts = (postsPerPage = 10) => {
       const from = (currentPage - 1) * postsPerPage;
       const to = from + postsPerPage - 1;
       
-      // Modificamos a consulta para primeiro obter os posts básicos
       let query = supabase
         .from('blog_posts')
-        .select(`*`)
+        .select(`
+          *,
+          profiles(full_name),
+          blog_categories(name)
+        `)
         .order('created_at', { ascending: false })
         .range(from, to);
       
@@ -59,49 +62,17 @@ export const useBlogPosts = (postsPerPage = 10) => {
       
       if (error) throw error;
       
-      // Para cada post obtido, buscamos informações adicionais separadamente
-      const formattedPosts = await Promise.all(data.map(async post => {
-        // Buscar autor (se existir author_id)
-        let author_name = 'Autor Desconhecido';
-        if (post.author_id) {
-          const { data: authorData } = await supabase
-            .from('profiles')
-            .select('full_name')
-            .eq('id', post.author_id)
-            .maybeSingle();
-          
-          if (authorData && authorData.full_name) {
-            author_name = authorData.full_name;
-          }
-        }
-        
-        // Buscar categoria (se existir category_id)
-        let category_name = 'Sem Categoria';
-        if (post.category_id) {
-          const { data: categoryData } = await supabase
-            .from('blog_categories')
-            .select('name')
-            .eq('id', post.category_id)
-            .maybeSingle();
-          
-          if (categoryData && categoryData.name) {
-            category_name = categoryData.name;
-          }
-        }
-        
-        // Ensure status is one of the allowed values or default to "draft"
-        let typedStatus: 'draft' | 'published' | 'archived' = 'draft';
-        if (post.status === 'published' || post.status === 'archived') {
-          typedStatus = post.status as 'published' | 'archived';
-        }
-        
+      const formattedPosts = data.map(post => {
         return {
           ...post,
-          author_name,
-          category_name,
-          status: typedStatus
+          author_name: post.profiles?.full_name || 'Autor Desconhecido',
+          category_name: post.blog_categories?.name || 'Sem Categoria',
+          // Ensure status is one of the allowed values or default to "draft"
+          status: (post.status === 'published' || post.status === 'archived') 
+            ? post.status as 'published' | 'archived' 
+            : 'draft'
         };
-      })) as Post[];
+      }) as Post[];
       
       setPosts(formattedPosts);
     } catch (error) {

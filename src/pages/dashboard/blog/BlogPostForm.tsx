@@ -38,7 +38,6 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-// Create a schema for form validation
 const formSchema = z.object({
   title: z.string().min(2, 'O título deve ter pelo menos 2 caracteres'),
   slug: z.string().min(2, 'O slug deve ter pelo menos 2 caracteres')
@@ -68,7 +67,6 @@ const BlogPostForm = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   
-  // Initialize form with default values
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,13 +83,11 @@ const BlogPostForm = () => {
     }
   });
   
-  // Load post data if in edit mode
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       
       try {
-        // Fetch categories
         const { data: categoriesData, error: categoriesError } = await supabase
           .from('blog_categories')
           .select('*')
@@ -100,7 +96,6 @@ const BlogPostForm = () => {
         if (categoriesError) throw categoriesError;
         setCategories(categoriesData || []);
         
-        // Fetch all tags
         const { data: tagsData, error: tagsError } = await supabase
           .from('blog_tags')
           .select('*')
@@ -109,7 +104,6 @@ const BlogPostForm = () => {
         if (tagsError) throw tagsError;
         setAllTags(tagsData || []);
         
-        // If in edit mode, fetch the post data
         if (isEditMode && postId) {
           const { data: post, error: postError } = await supabase
             .from('blog_posts')
@@ -120,7 +114,6 @@ const BlogPostForm = () => {
           if (postError) throw postError;
           
           if (post) {
-            // Set form values
             form.reset({
               title: post.title,
               slug: post.slug,
@@ -136,7 +129,6 @@ const BlogPostForm = () => {
             
             setImagePreview(post.featured_image);
             
-            // Fetch tags associated with this post
             const { data: postTags, error: postTagsError } = await supabase
               .from('blog_posts_tags')
               .select('tag_id')
@@ -163,7 +155,6 @@ const BlogPostForm = () => {
     fetchData();
   }, [isEditMode, postId, form]);
   
-  // Generate slug from title
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
@@ -175,19 +166,16 @@ const BlogPostForm = () => {
       .trim();
   };
   
-  // Handle title change to auto-generate slug if slug is empty
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
     form.setValue('title', title);
     
-    // Only auto-generate slug if it's empty or if we're creating a new post
     if (!isEditMode || !form.getValues('slug')) {
       const slug = generateSlug(title);
       form.setValue('slug', slug);
     }
   };
   
-  // Handle image upload
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     
@@ -205,21 +193,21 @@ const BlogPostForm = () => {
     setIsUploading(true);
     
     try {
-      // Upload the file to Supabase Storage
       const fileExt = file.name.split('.').pop();
       const fileName = `post-cover-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
       
       const { data, error } = await supabase.storage
         .from('blog')
-        .upload(filePath, file);
+        .upload(fileName, file);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Storage upload error:', error);
+        throw error;
+      }
       
-      // Get the public URL
       const { data: urlData } = supabase.storage
         .from('blog')
-        .getPublicUrl(filePath);
+        .getPublicUrl(fileName);
       
       const imageUrl = urlData.publicUrl;
       form.setValue('featured_image', imageUrl);
@@ -241,13 +229,11 @@ const BlogPostForm = () => {
     }
   };
   
-  // Handle image removal
   const handleImageRemove = () => {
     form.setValue('featured_image', null);
     setImagePreview(null);
   };
   
-  // Handle tag selection
   const handleTagToggle = (tagId: string) => {
     setSelectedTags(prev => {
       if (prev.includes(tagId)) {
@@ -258,7 +244,6 @@ const BlogPostForm = () => {
     });
   };
   
-  // Handle form submission
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (!user) {
       toast({
@@ -272,13 +257,11 @@ const BlogPostForm = () => {
     setIsSaving(true);
     
     try {
-      // Check if the status was changed to 'published' and set published_at if it was
       let published_at = null;
       if (data.status === 'published') {
         published_at = new Date().toISOString();
       }
       
-      // Prepare post data
       const postData = {
         title: data.title,
         slug: data.slug,
@@ -297,7 +280,6 @@ const BlogPostForm = () => {
       let newPostId;
       
       if (isEditMode) {
-        // Update existing post
         const { data: updatedPost, error } = await supabase
           .from('blog_posts')
           .update(postData)
@@ -313,7 +295,6 @@ const BlogPostForm = () => {
           description: "As alterações no post foram salvas com sucesso."
         });
       } else {
-        // Create new post
         const { data: newPost, error } = await supabase
           .from('blog_posts')
           .insert(postData)
@@ -329,15 +310,12 @@ const BlogPostForm = () => {
         });
       }
       
-      // Update tags for the post
       if (newPostId) {
-        // First, delete all existing tag associations
         await supabase
           .from('blog_posts_tags')
           .delete()
           .eq('post_id', newPostId);
         
-        // Then, add the new tag associations
         if (selectedTags.length > 0) {
           const tagAssociations = selectedTags.map(tagId => ({
             post_id: newPostId,
@@ -352,7 +330,6 @@ const BlogPostForm = () => {
         }
       }
       
-      // Redirect to posts list
       navigate('/dashboard/blog/posts');
     } catch (error: any) {
       console.error('Error saving post:', error);
@@ -426,7 +403,6 @@ const BlogPostForm = () => {
             </TabsList>
             
             <TabsContent value="content" className="space-y-6">
-              {/* Title */}
               <FormField
                 control={form.control}
                 name="title"
@@ -445,7 +421,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* Slug */}
               <FormField
                 control={form.control}
                 name="slug"
@@ -466,7 +441,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* Summary */}
               <FormField
                 control={form.control}
                 name="summary"
@@ -488,7 +462,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* Content */}
               <FormField
                 control={form.control}
                 name="content"
@@ -510,7 +483,6 @@ const BlogPostForm = () => {
             </TabsContent>
             
             <TabsContent value="settings" className="space-y-6">
-              {/* Status */}
               <FormField
                 control={form.control}
                 name="status"
@@ -540,7 +512,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* Category */}
               <FormField
                 control={form.control}
                 name="category_id"
@@ -572,7 +543,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* Tags */}
               <div className="space-y-2">
                 <FormLabel>Tags</FormLabel>
                 <div className="flex flex-wrap gap-2 p-4 border rounded-md">
@@ -597,7 +567,6 @@ const BlogPostForm = () => {
                 </FormDescription>
               </div>
               
-              {/* Featured Image */}
               <FormField
                 control={form.control}
                 name="featured_image"
@@ -665,7 +634,6 @@ const BlogPostForm = () => {
             </TabsContent>
             
             <TabsContent value="seo" className="space-y-6">
-              {/* SEO Title */}
               <FormField
                 control={form.control}
                 name="seo_title"
@@ -686,7 +654,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* SEO Description */}
               <FormField
                 control={form.control}
                 name="seo_description"
@@ -708,7 +675,6 @@ const BlogPostForm = () => {
                 )}
               />
               
-              {/* SEO Keywords */}
               <FormField
                 control={form.control}
                 name="seo_keywords"

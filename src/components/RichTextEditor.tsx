@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -84,18 +83,20 @@ const RichTextEditor = ({ value, onChange, placeholder = 'Comece a escrever...',
         // Upload the file to Supabase Storage
         const fileExt = file.name.split('.').pop();
         const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-        const filePath = `${fileName}`;
         
         const { data, error } = await supabase.storage
           .from('blog')
-          .upload(filePath, file);
+          .upload(fileName, file);
         
-        if (error) throw error;
+        if (error) {
+          console.error('Storage upload error:', error);
+          throw error;
+        }
         
         // Get the public URL
         const { data: urlData } = supabase.storage
           .from('blog')
-          .getPublicUrl(filePath);
+          .getPublicUrl(fileName);
         
         // Insert the image at cursor position
         const imageUrl = urlData.publicUrl;
