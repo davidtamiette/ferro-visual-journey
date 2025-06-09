@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -117,7 +118,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
               <img
                 src={logoUrl}
                 alt="Ferro Velho Toti"
-                className="h-8 w-auto max-w-[100px] sm:h-10 sm:max-w-[120px] object-contain"
+                className="h-10 w-auto max-w-[130px] sm:h-13 sm:max-w-[156px] object-contain"
               />
             </Link>
           </div>
