@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -17,15 +17,6 @@ const Footer = () => {
               empresas e indústrias desde 1995.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-white hover:text-toti-teal transition-colors" aria-label="Facebook">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-white hover:text-toti-teal transition-colors" aria-label="Instagram">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className="text-white hover:text-toti-teal transition-colors" aria-label="LinkedIn">
-                <Linkedin size={20} />
-              </a>
               <a href="mailto:comercial@ferrovelhototi.com.br" className="text-white hover:text-toti-teal transition-colors" aria-label="Email">
                 <Mail size={20} />
               </a>
@@ -63,7 +54,7 @@ const Footer = () => {
             &copy; {currentYear} Ferro Velho Toti. Todos os direitos reservados.
           </p>
           <p className="text-white text-sm mt-4 md:mt-0 selection:bg-toti-teal/70 selection:text-toti-navy">
-            Desenvolvido com ♥ por <a href="#" className="text-toti-teal hover:underline selection:bg-toti-teal/70 selection:text-toti-navy">Lovable</a>
+            Desenvolvido por <a href="https://cognitivaai.com.br" target="_blank" rel="noopener noreferrer" className="text-toti-teal hover:underline selection:bg-toti-teal/70 selection:text-toti-navy">Cognitiva AI</a>
           </p>
         </div>
       </div>
