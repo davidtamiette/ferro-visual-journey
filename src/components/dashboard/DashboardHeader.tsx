@@ -70,7 +70,7 @@ const DashboardHeader = () => {
           <img
             src={logoUrl}
             alt="Ferro Velho Toti"
-            className="h-8 max-w-[120px] object-contain"
+            className="object-contain"
           />
           <span className="text-lg font-semibold hidden sm:inline-block">Dashboard</span>
         </div>

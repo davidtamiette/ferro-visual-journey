@@ -118,7 +118,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
               <img
                 src={logoUrl}
                 alt="Ferro Velho Toti"
-                className="h-10 max-w-[150px] object-contain"
+                className="object-contain"
               />
             </Link>
           </div>
