@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -34,7 +33,7 @@ const ServicesPage = () => {
       id: 'coleta-transporte',
       title: 'Coleta e Transporte',
       subtitle: 'Logística Completa',
-      description: 'Realizamos a coleta e transporte dos materiais com agilidade e segurança, utilizando veículos adequados e equipe especializada. Oferecemos serviços especializados no transporte de resíduos de classes I e II, assegurando a destinação correta desses materiais em áreas devidamente licenciadas para transbordo, triagem e aterros.',
+      description: 'Realizamos a coleta e transporte de materiais da sua empresa com agilidade e segurança, utilizando veículos adequados e equipe especializada. Oferecemos serviços especializados no transporte de resíduos de classes I e II, assegurando a destinação correta desses materiais em áreas devidamente licenciadas para transbordo, triagem e aterros.',
       benefits: [
         'Frota própria e especializada',
         'Equipe treinada e uniformizada',

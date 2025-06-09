@@ -25,7 +25,7 @@ const Services = () => {
     {
       title: 'Coleta e Transporte',
       subtitle: 'Logística Completa',
-      description: 'Realizamos a coleta e transporte dos materiais com agilidade e segurança, utilizando veículos adequados e equipe especializada. Prestamos serviços especializados no transporte de resíduos classes I e II.',
+      description: 'Realizamos a coleta e transporte de materiais da sua empresa com agilidade e segurança, utilizando veículos adequados e equipe especializada. Prestamos serviços especializados no transporte de resíduos classes I e II.',
       delay: 200,
       icon: '🚚'
     },
