@@ -60,21 +60,20 @@ const DashboardHeader = () => {
     navigate('/');
   };
 
+  // Use the provided logo URL
+  const logoUrl = "https://oqcicjjjicazrfgdgynl.supabase.co/storage/v1/object/public/logo//logo-ferrovelhototi.png";
+
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
       <div className="flex-1 flex items-center">
-        {siteSettings.logo_url ? (
-          <div className="flex items-center gap-2">
-            <img
-              src={siteSettings.logo_url}
-              alt={siteSettings.company_name}
-              className="h-8 max-w-[120px] object-contain"
-            />
-            <span className="text-lg font-semibold hidden sm:inline-block">Dashboard</span>
-          </div>
-        ) : (
-          <div className="text-lg font-semibold">Dashboard Administrativo</div>
-        )}
+        <div className="flex items-center gap-2">
+          <img
+            src={logoUrl}
+            alt="Ferro Velho Toti"
+            className="h-8 max-w-[120px] object-contain"
+          />
+          <span className="text-lg font-semibold hidden sm:inline-block">Dashboard</span>
+        </div>
       </div>
       
       <div className="flex items-center gap-4">

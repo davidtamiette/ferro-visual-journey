@@ -26,8 +26,8 @@ export const useGoogleAnalytics = () => {
 
         // Check if the data exists and has the expected field
         if (data) {
-          // Get the tracking ID from the data
-          const gaId = data.google_analytics_id || null;
+          // Get the tracking ID from the data - using 'any' type to access dynamic properties
+          const gaId = (data as any).google_analytics_id || null;
           setTrackingId(gaId);
           setEnabled(!!gaId);
         }
@@ -59,7 +59,7 @@ export const useGoogleAnalytics = () => {
           .update({ 
             google_analytics_id: trackingId,
             updated_at: new Date().toISOString()
-          })
+          } as any)
           .eq('id', existingData[0].id);
       } else {
         // Create new settings if none exist
@@ -69,7 +69,7 @@ export const useGoogleAnalytics = () => {
             google_analytics_id: trackingId,
             company_name: 'Ferro Velho Toti', // Default value for required field
             updated_at: new Date().toISOString()
-          });
+          } as any);
       }
 
       if (result.error) {

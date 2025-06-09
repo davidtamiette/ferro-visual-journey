@@ -100,6 +100,9 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
     navigate('/');
   };
   
+  // Use the provided logo URL
+  const logoUrl = "https://oqcicjjjicazrfgdgynl.supabase.co/storage/v1/object/public/logo//logo-ferrovelhototi.png";
+  
   return (
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
@@ -111,23 +114,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection }) => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2">
-              {siteSettings.logo_url ? (
-                <img
-                  src={siteSettings.logo_url}
-                  alt={siteSettings.company_name}
-                  className="h-8 max-w-[120px] object-contain"
-                />
-              ) : (
-                <>
-                  <img
-                    src="/placeholder.svg"
-                    alt="Ferro Velho Toti"
-                    className="h-8 w-8"
-                  />
-                  <span className="text-lg font-semibold">{siteSettings.company_name}</span>
-                </>
-              )}
+            <Link to="/" className="flex items-center">
+              <img
+                src={logoUrl}
+                alt="Ferro Velho Toti"
+                className="h-10 max-w-[150px] object-contain"
+              />
             </Link>
           </div>
 

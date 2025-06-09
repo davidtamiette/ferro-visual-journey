@@ -7,6 +7,9 @@ import { cn } from '@/lib/utils';
 const SidebarHeader = () => {
   const { collapsed } = useSidebar();
   
+  // Use the provided logo URL
+  const logoUrl = "https://oqcicjjjicazrfgdgynl.supabase.co/storage/v1/object/public/logo//logo-ferrovelhototi.png";
+  
   return (
     <div className="sticky top-0 z-20 flex h-16 items-center gap-2 border-b bg-background px-4">
       <Link 
@@ -16,12 +19,19 @@ const SidebarHeader = () => {
           collapsed ? "justify-center w-full" : ""
         )}
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-          <span className="text-primary-foreground text-xl font-bold">T</span>
-        </div>
-        
-        {!collapsed && (
-          <span className="text-xl font-semibold">Toti Admin</span>
+        {collapsed ? (
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+            <span className="text-primary-foreground text-xl font-bold">T</span>
+          </div>
+        ) : (
+          <>
+            <img
+              src={logoUrl}
+              alt="Ferro Velho Toti"
+              className="h-8 max-w-[120px] object-contain"
+            />
+            <span className="text-lg font-semibold">Admin</span>
+          </>
         )}
       </Link>
     </div>
