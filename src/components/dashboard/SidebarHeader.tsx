@@ -28,7 +28,7 @@ const SidebarHeader = () => {
             <img
               src={logoUrl}
               alt="Ferro Velho Toti"
-              className="h-8 w-auto max-w-[104px] object-contain"
+              className="h-10 w-auto max-w-[125px] object-contain"
             />
             <span className="text-lg font-semibold">Admin</span>
           </>
